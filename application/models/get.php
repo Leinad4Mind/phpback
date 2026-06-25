@@ -105,6 +105,57 @@ class Get extends CI_Model
         return true;
     }
 
+    public function getFilteredIdeas($filters)
+    {
+        $builder = $this->db->table('ideas');
+        $builder->select('ideas.*');
+    
+        // Join مع جدول الوسوم إذا تم الفلترة على Tag
+        if (!empty($filters['tag'])) {
+            $builder->join('idea_tags', 'ideas.id = idea_tags.idea_id');
+            $builder->where('idea_tags.tag_id', $filters['tag']);
+        }
+    
+        // فلترة حسب الفئة
+        if (!empty($filters['category'])) {
+            $builder->where('ideas.categoryid', (int)$filters['category']);
+        }
+    
+        // فلترة حسب الحالة (status) ممكن تكون قيمة واحدة أو أكثر
+        if (!empty($filters['status'])) {
+            if (is_array($filters['status'])) {
+                $builder->whereIn('ideas.status', $filters['status']);
+            } else {
+                $builder->where('ideas.status', $filters['status']);
+            }
+        }
+    
+        // ترتيب حسب التصويت أو التاريخ
+        if (!empty($filters['sort'])) {
+            if ($filters['sort'] === 'votes') {
+                $builder->orderBy('ideas.votes', 'DESC');
+            } elseif ($filters['sort'] === 'date') {
+                $builder->orderBy('ideas.created_at', 'DESC');
+            }
+        } else {
+            $builder->orderBy('ideas.created_at', 'DESC');
+        }
+    
+        // pagination
+        if (!empty($filters['limit']) && isset($filters['page'])) {
+            $limit = (int)$filters['limit'];
+            $offset = ((int)$filters['page'] - 1) * $limit;
+            $builder->limit($limit, $offset);
+        }
+    
+        $results = $builder->get()->getResult();
+    
+        return $this->decorateIdeas($results);
+    }
+
+    
+
+
     public function getIdeasByCategory($category, $order, $type, $page){
         $page = (int) $page;
     	$category = (int) $category;

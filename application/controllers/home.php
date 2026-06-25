@@ -33,12 +33,32 @@ class Home extends CI_Controller {
         $data['welcomeTitle'] = $this->get->getSetting('welcometext-title');
         $data['welcomeDescription'] = $this->get->getSetting('welcometext-description');
 
-        $data['ideas'] = array(
-            'completed' => $this->get->getIdeas('id', 1, 0, 10, array('completed')),
-            'started' => $this->get->getIdeas('id', 1, 0, 10, array('started')),
-            'planned' => $this->get->getIdeas('id', 1, 0, 10, array('planned')),
-            'considered' => $this->get->getIdeas('id', 1, 0, 10, array('considered')),
-        );
+              //  قراءة الفلاتر من الرابط
+              $filters = [
+                'category' => $this->input->get('category'),
+                'status' => $this->input->get('status', TRUE), // Support array
+                'tag' => $this->input->get('tag'),
+                'sort' => $this->input->get('sort'),
+                'limit' => 10,
+                'page' => $this->input->get('page') ?? 1
+            ];
+            //جلب الأفكار بناء على الفلاتر
+            $data['ideas_filtered'] = $this->get->getFilteredIdeas($filters);
+        
+            // لجعل الكود الحالي يعمل مؤقتًا إن لم تكن هناك فلاتر
+            if (empty($filters['status']) && empty($filters['tag']) && empty($filters['category'])) {
+                $data['ideas'] = array(
+                    'completed' => $this->get->getIdeas('id', 1, 0, 10, array('completed')),
+                    'started' => $this->get->getIdeas('id', 1, 0, 10, array('started')),
+                    'planned' => $this->get->getIdeas('id', 1, 0, 10, array('planned')),
+                    'considered' => $this->get->getIdeas('id', 1, 0, 10, array('considered')),
+                );
+            }
+        
+            // تمرير الفلاتر إلى الواجهة
+            $data['filters'] = $filters;
+    
+    
 
 		$this->load->view('_templates/header', $data);
 		$this->load->view('home/index', $data);
