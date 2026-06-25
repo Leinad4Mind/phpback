@@ -41,6 +41,22 @@
 $route['default_controller'] = "Home";
 $route['404_override'] = '';
 
+// $route->get('tags', 'TagController::index');
+// $route->get('tags/create', 'TagController::create');
+// $route->post('tags/store', 'TagController::store');
+
+// $route->get('/migrate-attachments', function () {
+//     $migrate = \Config\Services::migrations();
+//     $migrate->latest();
+//     return 'Migration done!';
+// });
+
+// $route->group('admin', ['filter' => 'role'], function($routes) {
+//     $route->get('/', 'Admin::index');
+//     // You can add more routes here that require the 'admin' role
+// });
+
+
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/VisualAppeal/PHP-Auto-Update.svg?branch=master)](https://travis-ci.org/VisualAppeal/PHP-Auto-Update)
+
 With this library your users can automatically update their instance of your application to the newest version. I created it as a proof of concept and don't know if it is used somewhere. So please use this library with caution because it can potentially make your users software nonfunctional if something goes wrong.
 
 ## Installation
@@ -29,7 +31,7 @@ use \VisualAppeal\AutoUpdate;
 
 // Download the zip update files to `__DIR__ . '/temp'`
 // Copy the contents of the zip file to the current directory `__DIR__`
-// The update process should last 60 seconds
+// The update process should last 60 seconds max
 $update = new AutoUpdate(__DIR__ . '/temp', __DIR__, 60);
 $update->setCurrentVersion('0.1.0'); // Current version of your application. This value should be from a database or another file which will be updated with the installation of a new version
 $update->setUpdateUrl('http://php-auto-update.app/update/'); //Replace the url with your server update url

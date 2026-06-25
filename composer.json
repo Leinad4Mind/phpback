@@ -1,5 +1,7 @@
 {
     "require": {
-        "visualappeal/php-auto-update": "^0.9.2"
+        "codeigniter4/framework": "^4.0",
+        "visualappeal/php-auto-update": "^0.9.2",
+        "kint-php/kint": "^3.3"
     }
 }

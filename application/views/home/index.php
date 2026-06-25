@@ -1,5 +1,10 @@
-	<div class="col-md-9">
 	
+	<div class="col-md-9">
+	<?php if (is_admin()): ?>
+      <p>You are an Admin 🎉</p>
+	    <!-- this button for admins-only -->
+		<a href="/admin/settings" class="btn btn-primary">Admin Settings</a>
+    <?php endif; ?>
 		<small>
 		<ol class="breadcrumb">
 		  <li class="active">Feedback</li>
@@ -12,6 +17,62 @@
 		
 		<br/>
 		
+
+		<!-- 🟡 Filter Form -->
+		<form method="GET" action="" class="form-inline" style="margin-bottom: 20px;">
+			<div class="form-group">
+				<label>Category:</label>
+				<input type="number" name="category" class="form-control input-sm" value="<?= htmlspecialchars($filters['category'] ?? '') ?>">
+			</div>
+
+			<div class="form-group">
+				<label>Status:</label>
+				<select name="status" class="form-control input-sm">
+					<option value="">-- All --</option>
+					<option value="completed" <?= ($filters['status'] == 'completed') ? 'selected' : '' ?>>Completed</option>
+					<option value="started" <?= ($filters['status'] == 'started') ? 'selected' : '' ?>>Started</option>
+					<option value="planned" <?= ($filters['status'] == 'planned') ? 'selected' : '' ?>>Planned</option>
+					<option value="considered" <?= ($filters['status'] == 'considered') ? 'selected' : '' ?>>Considered</option>
+				</select>
+			</div>
+
+			<div class="form-group">
+				<label>Tag ID:</label>
+				<input type="number" name="tag" class="form-control input-sm" value="<?= htmlspecialchars($filters['tag'] ?? '') ?>">
+			</div>
+
+			<div class="form-group">
+				<label>Sort:</label>
+				<select name="sort" class="form-control input-sm">
+					<option value="">Default</option>
+					<option value="votes" <?= ($filters['sort'] == 'votes') ? 'selected' : '' ?>>Votes</option>
+					<option value="date" <?= ($filters['sort'] == 'date') ? 'selected' : '' ?>>Date</option>
+				</select>
+			</div>
+
+			<button type="submit" class="btn btn-primary btn-sm">Apply Filters</button>
+		</form>
+
+<!-- //Show Filtered Results  -->
+		<?php if (!empty($ideas_filtered)): ?>
+			<h4>Filtered Ideas</h4>
+			<table class="table table-striped">
+				<?php foreach ($ideas_filtered as $idea): ?>
+					<tr>
+						<td>
+							<span class="label label-default"><?= htmlspecialchars($idea->status) ?></span>
+							<a href="<?= $idea->url; ?>">
+								<?= htmlspecialchars($idea->title) ?>
+							</a>
+							<small style="color: #888"> - Votes: <?= htmlspecialchars($idea->votes) ?> | <?= htmlspecialchars($idea->created_at) ?></small>
+						</td>
+					</tr>
+				<?php endforeach; ?>
+			</table>
+		<?php endif; ?>
+
+<!-- //Show Filtered Results  -->
+
 		<div class="col-md-6">
 			<div class="ideas-completed">
 				<h6><?= $lang['last_completed_ideas']; ?></h6>

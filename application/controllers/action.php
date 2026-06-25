@@ -27,6 +27,7 @@ class Action extends CI_Controller{
         $pass = $this->input->post('password', true);
         $pass2 = $this->input->post('password2', true);
         $name = $this->input->post('name', true);
+        $role = $this->input->post('role', 'admin');
 
         if($this->get->getSetting('recaptchapublic') != ""){
             $recaptcha = new \ReCaptcha\ReCaptcha($this->get->getSetting('recaptchaprivate'));
@@ -72,10 +73,15 @@ class Action extends CI_Controller{
         $email = $this->input->post('email', true);
         $pass = $this->input->post('password', true);
         $result = $this->get->login($email, $pass);
+        
 
         if ($result != 0) {
             $user = $this->get->getUser($result);
             $this->get->setSessionUserValues($user);
+
+            $_SESSION['user_id'] = $user->id;
+            $_SESSION['role_id'] = $user->role_id;
+            $_SESSION['username'] = $user->username;
 
             if(@isset($_POST['rememberme']) && $_POST['rememberme']){
                 $this->get->setSessionCookie();
@@ -191,6 +197,51 @@ class Action extends CI_Controller{
         }
         if(@isset($_SESSION['phpback_userid'])) {
             $this->post->add_idea($title, $desc, $_SESSION['phpback_userid'], $catid);
+
+            //handle uploaded file
+
+            $lastIdea = $this->get->getLastIdea(); // Get the inserted idea
+            
+            if (isset($_FILES['attachment']) && $_FILES['attachment']['error'] === UPLOAD_ERR_OK) {
+                $fileTmp  = $_FILES['attachment']['tmp_name'];
+                $fileName = basename($_FILES['attachment']['name']);
+                $fileType = mime_content_type($fileTmp);
+    
+                // Allowed MIME types
+                $allowedTypes = [
+                    'image/jpeg', 'image/png', 'image/gif',
+                    'application/pdf',
+                    'application/msword',
+                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+                ];
+    
+                if (in_array($fileType, $allowedTypes)) {
+                    $newName = uniqid() . '_' . $fileName;
+                    $uploadPath = WRITEPATH . 'uploads/';
+    
+                    // Make sure upload folder exists
+                    if (!is_dir($uploadPath)) {
+                        mkdir($uploadPath, 0755, true);
+                    }
+    
+                    move_uploaded_file($fileTmp, $uploadPath . $newName);
+    
+                    // ✅ Save attachment to DB
+                    $attachmentModel = new AttachmentModel();
+                    $attachmentModel->save([
+                        'idea_id'   => $lastIdea->id,
+                        'file_name' => $fileName,
+                        'file_path' => 'uploads/' . $newName,
+                        'file_type' => $fileType,
+                    ]);
+                }
+            }
+            //handle uploaded file
+
+
+
+
+
             $admins = $this->get->get_admin_users();
             $adminMails = array_map(function (\stdClass $admin) {
                 return $admin->email;
