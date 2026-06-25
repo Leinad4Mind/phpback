@@ -191,6 +191,51 @@ class Action extends CI_Controller{
         }
         if(@isset($_SESSION['phpback_userid'])) {
             $this->post->add_idea($title, $desc, $_SESSION['phpback_userid'], $catid);
+
+            //handle uploaded file
+
+            $lastIdea = $this->get->getLastIdea(); // Get the inserted idea
+            
+            if (isset($_FILES['attachment']) && $_FILES['attachment']['error'] === UPLOAD_ERR_OK) {
+                $fileTmp  = $_FILES['attachment']['tmp_name'];
+                $fileName = basename($_FILES['attachment']['name']);
+                $fileType = mime_content_type($fileTmp);
+    
+                // Allowed MIME types
+                $allowedTypes = [
+                    'image/jpeg', 'image/png', 'image/gif',
+                    'application/pdf',
+                    'application/msword',
+                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+                ];
+    
+                if (in_array($fileType, $allowedTypes)) {
+                    $newName = uniqid() . '_' . $fileName;
+                    $uploadPath = WRITEPATH . 'uploads/';
+    
+                    // Make sure upload folder exists
+                    if (!is_dir($uploadPath)) {
+                        mkdir($uploadPath, 0755, true);
+                    }
+    
+                    move_uploaded_file($fileTmp, $uploadPath . $newName);
+    
+                    // ✅ Save attachment to DB
+                    $attachmentModel = new AttachmentModel();
+                    $attachmentModel->save([
+                        'idea_id'   => $lastIdea->id,
+                        'file_name' => $fileName,
+                        'file_path' => 'uploads/' . $newName,
+                        'file_type' => $fileType,
+                    ]);
+                }
+            }
+            //handle uploaded file
+
+
+
+
+
             $admins = $this->get->get_admin_users();
             $adminMails = array_map(function (\stdClass $admin) {
                 return $admin->email;

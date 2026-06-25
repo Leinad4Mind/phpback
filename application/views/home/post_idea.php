@@ -20,7 +20,7 @@
 			break;
 	}?></p>
 	<?php endif; ?>
-	<form name="post-idea-form" method="post" action="<?php echo base_url() . 'action/newidea'?>">
+	<form name="post-idea-form" method="post" action="<?php echo base_url() . 'action/newidea'?>" enctype="multipart/form-data">
 	  <div class="form-group">
 	    <label for="exampleInputEmail1"><?php echo $lang['label_idea_title']; ?></label>
 	    <input type="text" class="form-control" name="title" value="<?php if(@isset($POST['title'])) echo $POST['title'];?>" minlength="9" maxlength="100" required>
@@ -41,6 +41,9 @@
         <label for="tags">Tags (separated by commas):</label>
         <input type="text" class="form-control" name="tags" id="tags" placeholder="e.g. ui, performance, api">
       </div>
+
+	  <label for="attachment">Upload Attachment (image or document only):</label>
+    <input type="file" name="attachment" id="attachment" accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx">
 
 	  <button type="submit" class="btn btn-primary"><?php echo $lang['label_submit'];?></button>
 	</form>

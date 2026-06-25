@@ -45,6 +45,11 @@ $route['404_override'] = '';
 // $route->get('tags/create', 'TagController::create');
 // $route->post('tags/store', 'TagController::store');
 
+// $route->get('/migrate-attachments', function () {
+//     $migrate = \Config\Services::migrations();
+//     $migrate->latest();
+//     return 'Migration done!';
+// });
 
 
 /* End of file routes.php */
