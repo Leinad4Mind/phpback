@@ -27,6 +27,7 @@ class Action extends CI_Controller{
         $pass = $this->input->post('password', true);
         $pass2 = $this->input->post('password2', true);
         $name = $this->input->post('name', true);
+        $role = $this->input->post('role', 'admin');
 
         if($this->get->getSetting('recaptchapublic') != ""){
             $recaptcha = new \ReCaptcha\ReCaptcha($this->get->getSetting('recaptchaprivate'));
@@ -72,10 +73,15 @@ class Action extends CI_Controller{
         $email = $this->input->post('email', true);
         $pass = $this->input->post('password', true);
         $result = $this->get->login($email, $pass);
+        
 
         if ($result != 0) {
             $user = $this->get->getUser($result);
             $this->get->setSessionUserValues($user);
+
+            $_SESSION['user_id'] = $user->id;
+            $_SESSION['role_id'] = $user->role_id;
+            $_SESSION['username'] = $user->username;
 
             if(@isset($_POST['rememberme']) && $_POST['rememberme']){
                 $this->get->setSessionCookie();

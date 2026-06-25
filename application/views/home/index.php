@@ -1,5 +1,10 @@
-	<div class="col-md-9">
 	
+	<div class="col-md-9">
+	<?php if (is_admin()): ?>
+      <p>You are an Admin 🎉</p>
+	    <!-- this button for admins-only -->
+		<a href="/admin/settings" class="btn btn-primary">Admin Settings</a>
+    <?php endif; ?>
 		<small>
 		<ol class="breadcrumb">
 		  <li class="active">Feedback</li>

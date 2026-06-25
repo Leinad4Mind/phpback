@@ -51,6 +51,12 @@ $route['404_override'] = '';
 //     return 'Migration done!';
 // });
 
+// $route->group('admin', ['filter' => 'role'], function($routes) {
+//     $route->get('/', 'Admin::index');
+//     // You can add more routes here that require the 'admin' role
+// });
+
+
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */
