@@ -18,6 +18,8 @@ class Home extends CI_Controller {
 		$this->load->helper('url');
 		$this->load->model('get');
 		$this->load->model('post');
+        $this->load->model('tag');
+
 
 		$this->lang->load('default', $this->get->getSetting('language'));
 

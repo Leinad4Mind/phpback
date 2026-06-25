@@ -41,6 +41,11 @@
 $route['default_controller'] = "Home";
 $route['404_override'] = '';
 
+// $route->get('tags', 'TagController::index');
+// $route->get('tags/create', 'TagController::create');
+// $route->post('tags/store', 'TagController::store');
+
+
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

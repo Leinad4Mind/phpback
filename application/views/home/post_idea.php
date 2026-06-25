@@ -37,7 +37,11 @@
 	  <div class="form-group">
 	  <label><?php echo $lang['label_description'];?></label>
 	    <textarea class="form-control" rows="4" name="description" minlength="20" maxlength="1500" required><?php if(@isset($POST['desc'])) echo $POST['desc'];?></textarea>
-	  </div>
+	  </div><div class="form-group">
+        <label for="tags">Tags (separated by commas):</label>
+        <input type="text" class="form-control" name="tags" id="tags" placeholder="e.g. ui, performance, api">
+      </div>
+
 	  <button type="submit" class="btn btn-primary"><?php echo $lang['label_submit'];?></button>
 	</form>
 	<?php endif; ?>

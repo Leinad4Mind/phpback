@@ -112,6 +112,14 @@
 					<?php endif; ?>
 				</li>
 				<li>
+
+				<?php $tags = $this->Tag_model->get_tags_for_idea($idea->id); ?>
+                <?php foreach($tags as $tag): ?>
+                    <span class="badge badge-info"><?= htmlspecialchars($tag->name) ?></span>
+                <?php endforeach; ?>
+
+				</li>
+				<li>
 					<button type="submit" class="btn btn-danger btn-sm" style="width:130px" <?php $temp = base_url() . 'adminaction/deleteidea/' . $idea->id;?> onclick="popup_sure('<?php echo $lang['text_sure_delete_idea']; ?>','<?php echo $temp; ?>');"><?php echo $lang['label_delete_idea']; ?></button>
 				</li>
 				<li>
