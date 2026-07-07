@@ -9,8 +9,8 @@ This repository has been **migrated from the legacy CodeIgniter 2 codebase to Co
 Please, visit the project website for more information: [http://www.phpback.org/](http://www.phpback.org/)
 
 ## Requirements
-* PHP 8.1+
-* MySQL 5.7+ / MariaDB 10.3+ (or PostgreSQL / SQLite for development)
+* PHP 8.2+ (PHP 8.4 recommended)
+* MySQL 8.0+ / MariaDB 11.4+ (or PostgreSQL / SQLite for development)
 * Composer
 
 ## Installation
@@ -31,7 +31,7 @@ Please, visit the project website for more information: [http://www.phpback.org/
    # Table prefix — existing 1.3.x installs use `voice_`; leave empty for none.
    database.default.DBPrefix =
    ```
-   Works with MySQL 5.7+/8 and MariaDB 10.3+/11.x.
+   Works with MySQL 8.0+ and MariaDB 11.4+.
 3. Point your web server's document root at the `public/` directory. (On shared
    hosting the included root `.htaccess` forwards requests into `public/`.)
 4. Open `https://your-domain/install` in a browser and follow the installer. It
@@ -56,4 +56,4 @@ transparently re-hashed on the next login).
 ## License
 PHPBack is licensed under GPLv3 (see `LICENSE.TXT`). Built with the CodeIgniter 4 framework.
 
-`Ivan Diaz <ivan@phpback.org> © 2014`
+`Ivan Diaz <ivan@phpback.org> © 2014-2017 / Leinad4Mind © 2026-present`
