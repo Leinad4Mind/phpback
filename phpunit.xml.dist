@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/codeigniter4/framework/system/Test/bootstrap.php"
+         backupGlobals="false"
+         beStrictAboutOutputDuringTests="true"
+         colors="true"
+         columns="max"
+         failOnRisky="true"
+         failOnWarning="true"
+         cacheDirectory="build/.phpunit.cache"
+         stopOnError="false"
+         stopOnFailure="false">
+    <testsuites>
+        <testsuite name="unit">
+            <directory>tests/unit</directory>
+        </testsuite>
+        <testsuite name="feature">
+            <directory>tests/feature</directory>
+        </testsuite>
+        <testsuite name="database">
+            <directory>tests/database</directory>
+        </testsuite>
+    </testsuites>
+
+    <source>
+        <include>
+            <directory suffix=".php">app</directory>
+        </include>
+        <exclude>
+            <directory suffix=".php">app/Views</directory>
+        </exclude>
+    </source>
+
+    <php>
+        <server name="app.baseURL" value="http://localhost:8080/"/>
+        <const name="HOMEPATH" value="./"/>
+        <const name="CONFIGPATH" value="./app/Config/"/>
+        <const name="PUBLICPATH" value="./public/"/>
+        <env name="CI_ENVIRONMENT" value="testing"/>
+        <!-- Optional: point at a real MariaDB to run tests/database against it -->
+        <!-- <env name="database.tests.hostname" value="127.0.0.1"/> -->
+    </php>
+</phpunit>

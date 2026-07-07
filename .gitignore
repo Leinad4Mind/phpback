@@ -27,3 +27,6 @@ sftp-config.json
 .DS_Store
 Thumbs.db
 *.sql
+
+# Build / test artifacts
+/build/
