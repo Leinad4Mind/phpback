@@ -1,0 +1,121 @@
+<?php
+
+/**
+ * PHPBack English translations (merged default + log strings).
+ *
+ * Loaded as a plain array by BaseController::langArray() and exposed to the
+ * views as $lang, keeping the legacy $lang['key'] usage in templates.
+ */
+
+return [
+    // Labels
+    'label_activity'          => 'Activity',
+    'label_ban_user'          => 'Ban user',
+    'label_categories'        => 'Categories',
+    'label_category'          => 'Category',
+    'label_change_password'   => 'Change Password',
+    'label_change_status'     => 'Change status',
+    'label_commented'         => 'Commented in',
+    'label_comments'          => 'Comments',
+    'label_date'              => 'Date',
+    'label_delete_comment'    => 'Delete comment',
+    'label_delete_idea'       => 'Delete idea',
+    'label_delete_votes'      => 'Delete votes',
+    'label_description'       => 'Description',
+    'label_idea'              => 'Idea',
+    'label_idea_approve'      => 'Approve idea',
+    'label_idea_title'        => 'Idea title',
+    'label_ideas'             => 'Ideas',
+    'label_log'               => 'Log',
+    'label_log_in'            => 'Log in',
+    'label_log_out'           => 'Log out',
+    'label_logged_as'         => 'Logged in as',
+    'label_post_new_idea'     => 'Post a new idea',
+    'label_profiles'          => 'Profiles',
+    'label_registration'      => 'Register',
+    'label_registration_form' => 'Registration Form',
+    'label_reset_votes'       => 'Reset votes',
+    'label_search'            => 'Search',
+    'label_sign_in'           => 'Sign in',
+    'label_status'            => 'Status',
+    'label_submit'            => 'Submit',
+    'label_tags'              => 'Tags',
+    'label_attachment'        => 'Attachment',
+    'label_attachments'       => 'Attachments',
+    'label_vote'              => 'Vote',
+    'label_votes'             => 'Votes',
+
+    // Free text
+    'text_shared_this_idea'    => 'shared this idea',
+    'text_flag_comment'        => 'flag comment',
+    'text_create_an_account'   => 'Or Create an account',
+    'text_registration_success'=> 'Registration successful',
+    'text_select_category'     => 'Select category...',
+    'text_nothing_found'       => 'Nothing was found...',
+    'text_votes_left'          => 'votes left.',
+    'text_sure_delete_idea'    => 'Are you sure you want to delete this idea?',
+    'text_sure_delete_comment' => 'Are you sure you want to delete this comment?',
+
+    // Idea statuses
+    'idea_completed'  => 'Completed',
+    'idea_started'    => 'Started',
+    'idea_planned'    => 'Planned',
+    'idea_considered' => 'Considered',
+    'idea_declined'   => 'Declined',
+    'idea_new'        => 'Under Review',
+
+    'last_completed_ideas'  => 'Last Completed Ideas',
+    'last_started_ideas'    => 'Last Started Ideas',
+    'last_planned_ideas'    => 'Last Planned Ideas',
+    'last_considered_ideas' => 'Last Considered Ideas',
+
+    // Forms
+    'form_remember'           => 'Remember Me',
+    'form_full_name'          => 'Full name',
+    'form_email'              => 'Email address',
+    'form_password'           => 'Password',
+    'form_repeat_password'    => 'Repeat Password',
+    'form_password_old'       => 'Old password',
+    'form_password_new'       => 'New password',
+    'from_password_new_repeat'=> 'Repeat new password',
+
+    // Errors / messages
+    'error_login_to_post'  => 'You must log in to post a new idea',
+    'error_login'          => 'Invalid Password or Email',
+    'error_recaptcha'      => 'Invalid Recaptcha code',
+    'error_name'           => 'Invalid Name',
+    'error_email'          => 'Invalid Email',
+    'error_password'       => 'Password must have at least 6 characters',
+    'error_password_old'   => 'Old password is wrong',
+    'error_passwords'      => 'Passwords do not match',
+    'error_email_exists'   => 'Email already exists',
+    'error_banned'         => 'You have been banned for %s days',
+    'error_banned_inf'     => 'You have been banned indefinitely',
+    'error_title'          => 'Title is too short',
+    'error_category'       => 'Please, select a category',
+    'error_description'    => 'Description is too short',
+    'error_toomany'        => 'Too many attempts. Please try again later.',
+    'error_upload'         => 'The attached file is not allowed (type or size).',
+    'message_password_changed' => 'Your password has been changed.',
+
+    // Log strings
+    'log_commented'                => 'Idea %s commented',
+    'log_comment_deleted'          => 'Deleted comment %s',
+    'log_idea_approved'            => 'Approved idea %s',
+    'log_idea_deleted'             => 'Deleted idea %s',
+    'log_idea_status'              => 'Changed status of idea %s1 to %s2',
+    'log_user_registered'          => 'User registered',
+    'log_new_idea'                 => 'New idea created',
+    'log_idea_voted'               => 'Idea %s1 voted with %s2 votes',
+    'log_user_banned'              => 'Banned user %s1 for %s2 days',
+    'log_user_was_banned'          => 'User %s has been banned',
+    'log_user_unbanned'            => 'Disabled ban for user %s',
+    'log_settings'                 => 'Settings have been edited',
+    'log_user_admin'               => 'User has been updated to administrator',
+    'log_category_created'         => 'category has been created',
+    'log_category_description'     => 'description was updated',
+    'log_category_changed'         => "Category '%s1' changed to '%s2'",
+    'log_category_deleted'         => 'Category %s deleted',
+    'log_new_idea_mail_content'    => 'A new idea has been posted in your feedback system %s. To find it, click the following link : %s.',
+    'log_new_comment_mail_content' => 'A new comment has been posted in your feedback system %s. To find it, click the following link : %s.',
+];

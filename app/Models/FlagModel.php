@@ -41,15 +41,18 @@ class FlagModel extends Model
     }
 
     /**
-     * Aggregates flagged comments with their flag counts.
+     * Flagged comments enriched with their content/author and flag count.
+     * Each row exposes: id, content, userid, ideaid, votes.
      *
      * @return list<object>
      */
     public function flaggedComments(): array
     {
-        return $this->select('toflagid, COUNT(*) AS votes')
-            ->groupBy('toflagid')
+        return $this->db->table('flags')
+            ->select('flags.toflagid AS id, comments.content, comments.userid, comments.ideaid, COUNT(*) AS votes')
+            ->join('comments', 'comments.id = flags.toflagid')
+            ->groupBy('flags.toflagid, comments.content, comments.userid, comments.ideaid')
             ->orderBy('votes', 'DESC')
-            ->findAll();
+            ->get()->getResult();
     }
 }
