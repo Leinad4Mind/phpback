@@ -10,7 +10,7 @@ use App\Models\SettingModel;
 use App\Models\TagModel;
 use App\Models\UserModel;
 use App\Models\VoteModel;
-use CodeIgniter\Files\File;
+use CodeIgniter\HTTP\Files\UploadedFile;
 
 class Action extends BaseController
 {
@@ -186,6 +186,14 @@ class Action extends BaseController
             return redirect()->to('home/postidea/errordesc')->withInput();
         }
 
+        // Validate any attachment BEFORE creating the idea, so a bad file never
+        // leaves a half-created idea behind.
+        $file      = $this->request->getFile('attachment');
+        $hasUpload = $file !== null && $file->isValid() && $file->getError() !== UPLOAD_ERR_NO_FILE;
+        if ($hasUpload && ($uploadError = $this->validateAttachment($file)) !== null) {
+            return redirect()->to('home/postidea/' . $uploadError)->withInput();
+        }
+
         $ideas  = model(IdeaModel::class);
         $ideaId = $ideas->addIdea($title, $desc, $userId, $catId);
         if ($ideaId === false) {
@@ -202,10 +210,8 @@ class Action extends BaseController
             $tagModel->attachToIdea($ideaId, $tagIds);
         }
 
-        // Attachment (optional, validated)
-        $error = $this->handleAttachment($ideaId);
-        if ($error !== null) {
-            return redirect()->to('home/postidea/' . $error)->withInput();
+        if ($hasUpload) {
+            $this->storeAttachment($ideaId, $file);
         }
 
         $this->notifyAdminsOfNewIdea($ideas->getIdea($ideaId));
@@ -255,44 +261,51 @@ class Action extends BaseController
     /* ------------------------------------------------------------------ */
 
     /**
-     * Validates and stores an uploaded attachment. Returns null on success (or
-     * when there is no upload), or an error code string on failure.
+     * Validates an uploaded attachment against the size, extension and detected
+     * MIME allowlists. Returns an error code string, or null when acceptable.
      */
-    private function handleAttachment(int $ideaId): ?string
+    private function validateAttachment(UploadedFile $file): ?string
     {
-        $file = $this->request->getFile('attachment');
-        if ($file === null || ! $file->isValid() || $file->getError() === UPLOAD_ERR_NO_FILE) {
-            return null;
-        }
-
         if ($file->getSize() > self::MAX_UPLOAD_BYTES) {
             return 'errorsize';
         }
 
-        $ext  = strtolower($file->getExtension() ?: pathinfo($file->getName(), PATHINFO_EXTENSION));
-        $mime = $file->getMimeType();
+        $ext  = strtolower((string) $file->getClientExtension());
+        $mime = (string) $file->getMimeType(); // detected from file content (finfo)
+
         if (! in_array($ext, self::ALLOWED_EXT, true) || ! in_array($mime, self::ALLOWED_MIME, true)) {
             return 'errorfile';
         }
 
+        return null;
+    }
+
+    /**
+     * Moves a validated upload into writable/uploads (outside the web root) and
+     * records it. The stored path uses a random name; the original name is kept
+     * only for display/download.
+     */
+    private function storeAttachment(int $ideaId, UploadedFile $file): void
+    {
         $dir = WRITEPATH . 'uploads';
         if (! is_dir($dir)) {
             mkdir($dir, 0755, true);
         }
 
-        $newName = $file->getRandomName();
+        $mime     = (string) $file->getMimeType();
+        $origName = basename((string) $file->getClientName());
+        $size     = (int) $file->getSize();
+        $newName  = $file->getRandomName();
         $file->move($dir, $newName);
 
         model(AttachmentModel::class)->insert([
             'idea_id'    => $ideaId,
-            'file_name'  => $file->getName(),
+            'file_name'  => $origName,
             'file_path'  => $newName,
             'file_type'  => $mime,
-            'file_size'  => $file instanceof File ? (int) filesize($dir . DIRECTORY_SEPARATOR . $newName) : 0,
+            'file_size'  => $size,
             'created_at' => date('Y-m-d H:i:s'),
         ]);
-
-        return null;
     }
 
     private function verifyRecaptcha(): bool
