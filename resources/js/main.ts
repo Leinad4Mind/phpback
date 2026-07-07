@@ -1,8 +1,11 @@
 import '../css/app.css';
 import { createApp, type Component } from 'vue';
+import ThemeToggle from './components/ThemeToggle.vue';
 
 // Define a registry of island components
-const components: Record<string, Component> = {};
+const components: Record<string, Component> = {
+    ThemeToggle,
+};
 
 // Scan the DOM for island mount points
 document.addEventListener('DOMContentLoaded', () => {
