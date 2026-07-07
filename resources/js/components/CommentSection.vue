@@ -1,17 +1,24 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { initCsrf, postForm, type JsonResponse } from '@/lib/csrf'
+
+interface Comment {
+  id: number
+  user: string
+  userid: number
+  date: string
+  content: string
+}
+
+interface CommentResponse extends JsonResponse {
+  comment?: Comment
+}
 
 const props = defineProps<{
   ideaId: number
   isLoggedIn: boolean
   isAdmin: boolean
-  initialComments: Array<{
-    id: number
-    user: string
-    userid: number
-    date: string
-    content: string
-  }>
+  initialComments: Comment[]
   csrfTokenName: string
   initialCsrfHash: string
   submitUrl: string
@@ -20,40 +27,35 @@ const props = defineProps<{
   baseUrl: string
 }>()
 
+initCsrf(props.csrfTokenName, props.initialCsrfHash)
+
 const comments = ref(props.initialComments)
-const csrfHash = ref(props.initialCsrfHash)
 const newCommentContent = ref('')
 const isSubmitting = ref(false)
+const errorMessage = ref('')
+
+function profileUrl(userid: number): string {
+  return `${props.baseUrl.replace(/\/$/, '')}/home/profile/${userid}`
+}
 
 async function submitComment() {
   if (isSubmitting.value || !newCommentContent.value.trim()) return
   isSubmitting.value = true
+  errorMessage.value = ''
 
   try {
-    const formData = new FormData()
-    formData.append('idea_id', props.ideaId.toString())
-    formData.append('content', newCommentContent.value)
-    formData.append(props.csrfTokenName, csrfHash.value)
-
-    const response = await fetch(props.submitUrl, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest'
-      },
-      body: formData
+    const data = await postForm<CommentResponse>(props.submitUrl, {
+      idea_id: props.ideaId,
+      content: newCommentContent.value,
     })
-    
-    if (response.ok) {
-      const data = await response.json()
-      if (data.success && data.comment) {
-        comments.value.push(data.comment)
-        newCommentContent.value = ''
-      }
-      if (data.csrfHash) csrfHash.value = data.csrfHash
+    if (data.success && data.comment) {
+      comments.value.push(data.comment)
+      newCommentContent.value = ''
+    } else {
+      errorMessage.value = data.error || 'Could not post your comment.'
     }
   } catch (error) {
-    console.error('Failed to submit comment:', error)
+    errorMessage.value = error instanceof Error ? error.message : 'Could not post your comment.'
   } finally {
     isSubmitting.value = false
   }
@@ -61,60 +63,36 @@ async function submitComment() {
 
 async function deleteComment(id: number) {
   if (!confirm('Are you sure you want to delete this comment?')) return
-  
-  try {
-    const formData = new FormData()
-    formData.append('id', id.toString())
-    formData.append(props.csrfTokenName, csrfHash.value)
+  errorMessage.value = ''
 
-    const response = await fetch(props.deleteUrl, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest'
-      },
-      body: formData
-    })
-    
-    if (response.ok) {
-      const data = await response.json()
-      if (data.success) {
-        comments.value = comments.value.filter(c => c.id !== id)
-      }
-      if (data.csrfHash) csrfHash.value = data.csrfHash
+  try {
+    const data = await postForm<JsonResponse>(props.deleteUrl, { id })
+    if (data.success) {
+      comments.value = comments.value.filter(c => c.id !== id)
+    } else {
+      errorMessage.value = data.error || 'Could not delete the comment.'
     }
   } catch (error) {
-    console.error('Failed to delete comment:', error)
+    errorMessage.value = error instanceof Error ? error.message : 'Could not delete the comment.'
   }
 }
 
 async function flagComment(id: number) {
   if (!confirm('Flag this comment as inappropriate?')) return
+  errorMessage.value = ''
 
   try {
-    const formData = new FormData()
-    formData.append('cid', id.toString())
-    formData.append('idea_id', props.ideaId.toString())
-    formData.append(props.csrfTokenName, csrfHash.value)
-
-    const response = await fetch(props.flagUrl, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest'
-      },
-      body: formData
+    const data = await postForm<JsonResponse>(props.flagUrl, {
+      cid: id,
+      idea_id: props.ideaId,
     })
-    
-    if (response.ok) {
-      const data = await response.json()
-      if (data.success) {
-        alert('Comment flagged for review.')
-      }
-      if (data.csrfHash) csrfHash.value = data.csrfHash
+    if (data.success) {
+      alert('Comment flagged for review.')
+    } else {
+      errorMessage.value = data.error || 'Could not flag the comment.'
     }
   } catch (error) {
-    console.error('Failed to flag comment:', error)
+    errorMessage.value = error instanceof Error ? error.message : 'Could not flag the comment.'
   }
 }
 
@@ -136,23 +114,27 @@ function getInitial(name: string) {
       <form @submit.prevent="submitComment" class="space-y-4">
         <div>
           <label class="block text-sm font-medium mb-2">Leave a comment</label>
-          <textarea 
-            v-model="newCommentContent" 
-            required 
-            rows="4" 
+          <textarea
+            v-model="newCommentContent"
+            required
+            rows="4"
             :disabled="isSubmitting"
             class="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50"
           ></textarea>
         </div>
-        <button 
-          type="submit" 
+        <button
+          type="submit"
           :disabled="isSubmitting"
-          class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 disabled:opacity-50"
+          class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 disabled:opacity-50 cursor-pointer"
         >
           {{ isSubmitting ? 'Submitting...' : 'Submit' }}
         </button>
       </form>
     </div>
+
+    <p v-if="errorMessage" class="text-destructive text-sm mb-4" role="alert">
+      {{ errorMessage }}
+    </p>
 
     <div class="space-y-4">
       <div v-for="comment in comments" :key="comment.id" class="bg-background border rounded-lg p-4 shadow-sm relative group">
@@ -161,18 +143,18 @@ function getInitial(name: string) {
             {{ getInitial(comment.user) }}
           </div>
           <div>
-            <a :href="`${props.baseUrl}home/profile/${comment.userid}`" class="font-semibold text-sm hover:underline text-foreground">{{ comment.user }}</a>
+            <a :href="profileUrl(comment.userid)" class="font-semibold text-sm hover:underline text-foreground">{{ comment.user }}</a>
             <div class="text-xs text-muted-foreground">{{ comment.date }}</div>
           </div>
-          
+
           <div class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
             <template v-if="props.isAdmin">
-              <button @click="deleteComment(comment.id)" class="text-xs text-destructive hover:underline p-1">
+              <button @click="deleteComment(comment.id)" class="text-xs text-destructive hover:underline p-1 cursor-pointer">
                 Delete
               </button>
             </template>
             <template v-else-if="props.isLoggedIn">
-              <button @click="flagComment(comment.id)" class="text-xs text-muted-foreground hover:text-destructive hover:underline p-1 flex items-center gap-1">
+              <button @click="flagComment(comment.id)" class="text-xs text-muted-foreground hover:text-destructive hover:underline p-1 flex items-center gap-1 cursor-pointer">
                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"></path>
                 </svg>
@@ -183,7 +165,7 @@ function getInitial(name: string) {
         </div>
         <div class="text-sm whitespace-pre-wrap text-foreground/90 pl-11">{{ comment.content }}</div>
       </div>
-      
+
       <div v-if="comments.length === 0" class="text-center py-12 text-muted-foreground bg-muted/20 rounded-lg border border-dashed">
         <svg class="w-12 h-12 mx-auto mb-3 text-muted-foreground/50" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>

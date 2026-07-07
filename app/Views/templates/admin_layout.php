@@ -6,6 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <link rel="icon" type="image/x-icon" href="<?= base_url('favicon.ico') ?>" sizes="16x16">
+    <script>
+        // Apply the theme before any CSS/JS loads to avoid a flash of the wrong theme.
+        (function () {
+            try {
+                var theme = localStorage.getItem('theme');
+                if (theme === 'dark' || (theme !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.classList.add('dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
     <?= vite_tags() ?>
 </head>
 <body class="bg-muted min-h-screen flex flex-col font-sans antialiased dark:bg-background">
@@ -38,7 +49,9 @@
 
                 <!-- Right side -->
                 <div class="flex items-center gap-4">
-                    <div data-vue-component="ThemeToggle"></div>
+                    <div data-vue-component="ThemeToggle" data-props="<?= esc(json_encode([
+                        'buttonClass' => 'text-slate-300 hover:text-white hover:bg-slate-800',
+                    ]), 'attr') ?>"></div>
                     
                     <div class="flex items-center gap-3 text-sm">
                         <span class="text-slate-400">Signed in as</span>

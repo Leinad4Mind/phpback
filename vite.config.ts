@@ -13,7 +13,9 @@ export default defineConfig(({ command }) => ({
       '@': resolve(__dirname, './resources/js'),
     },
   },
-  base: command === 'serve' ? '' : '/dist/',
+  base: command === 'serve' ? '' : './',
+  // Never copy public/ (the CI4 webroot) into the build output.
+  publicDir: false,
   build: {
     outDir: 'public/dist',
     emptyOutDir: true,

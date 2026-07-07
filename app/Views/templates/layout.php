@@ -6,6 +6,17 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta charset="UTF-8">
     <link rel="icon" type="image/x-icon" href="<?= base_url('favicon.ico') ?>" sizes="16x16">
+    <script>
+        // Apply the theme before any CSS/JS loads to avoid a flash of the wrong theme.
+        (function () {
+            try {
+                var theme = localStorage.getItem('theme');
+                if (theme === 'dark' || (theme !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.classList.add('dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
     <?= vite_tags() ?>
 </head>
 <body class="bg-background text-foreground min-h-screen flex flex-col font-sans antialiased">

@@ -15,22 +15,24 @@ const components: Record<string, Component> = {
     AdminStatusSelect,
 };
 
-// Scan the DOM for island mount points
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('[data-vue-component]').forEach(el => {
+export function mountIslands(root: ParentNode = document): void {
+    root.querySelectorAll('[data-vue-component]').forEach(el => {
         const compName = el.getAttribute('data-vue-component');
         if (compName && components[compName]) {
-            const props = JSON.parse(el.getAttribute('data-props') || '{}');
+            let props: Record<string, unknown> = {};
+            try {
+                props = JSON.parse(el.getAttribute('data-props') || '{}');
+            } catch (error) {
+                console.error(`Invalid data-props JSON for Vue component ${compName}.`, error);
+                return;
+            }
             createApp(components[compName], props).mount(el);
         } else {
             console.warn(`Vue component ${compName} not found in registry.`);
         }
     });
+}
 
-    // Handle Dark Mode toggle early (if not handled by inline script in head)
-    if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.add('dark');
-    } else {
-        document.documentElement.classList.remove('dark');
-    }
-});
+// Scan the DOM for island mount points. (The dark-mode class is applied by an
+// inline script in the layout <head> to avoid a flash of the wrong theme.)
+document.addEventListener('DOMContentLoaded', () => mountIslands());

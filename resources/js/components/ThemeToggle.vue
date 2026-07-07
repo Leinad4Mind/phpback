@@ -9,6 +9,11 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Moon, Sun } from 'lucide-vue-next'
 
+const props = defineProps<{
+  /** Extra classes for the trigger button, e.g. to fit a dark header bar. */
+  buttonClass?: string
+}>()
+
 const isDark = useDark({
   valueDark: 'dark',
   valueLight: 'light',
@@ -30,7 +35,7 @@ function setTheme(theme: 'light' | 'dark' | 'system') {
 <template>
   <DropdownMenu>
     <DropdownMenuTrigger as-child>
-      <Button variant="ghost" size="icon" class="h-9 w-9 text-slate-400 hover:text-slate-50 border-none outline-none">
+      <Button variant="ghost" size="icon" class="h-9 w-9 border-none outline-none cursor-pointer" :class="props.buttonClass || 'text-muted-foreground hover:text-foreground'">
         <Sun class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
         <Moon class="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
         <span class="sr-only">Toggle theme</span>
