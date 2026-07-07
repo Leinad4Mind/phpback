@@ -15,8 +15,8 @@ class SettingsSeeder extends Seeder
         $defaults = [
             'title'                   => 'PHPBack',
             'language'                => 'english',
-            'max_results'             => '20',
-            'maxvotes'                => '10',
+            'max_results'             => '10',
+            'maxvotes'                => '20',
             'welcometext-title'       => 'Welcome to our feedback',
             'welcometext-description' => 'Share your ideas and vote for the ones you like the most.',
             'mainmail'                => 'noreply@example.com',
