@@ -33,3 +33,6 @@ Thumbs.db
 
 # Build / test artifacts
 /build/
+
+# Claude Code local session settings
+/.claude/

@@ -6,25 +6,14 @@
     <p class="text-muted-foreground mt-1 text-sm">Manage user accounts and moderate access to the platform.</p>
 </div>
 
-<div class="border-b mb-6">
-    <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="users-tabs">
-        <li class="mr-2">
-            <button type="button" onclick="showUsersTab('new-users', this)" class="users-tab inline-block p-4 border-b-2 border-primary text-primary rounded-t-lg active">
-                Active Users
-            </button>
-        </li>
-        <li class="mr-2">
-            <button type="button" onclick="showUsersTab('banned', this)" class="users-tab inline-block p-4 border-b-2 border-transparent hover:text-foreground hover:border-muted-foreground rounded-t-lg text-muted-foreground">
-                Banned List
-            </button>
-        </li>
-        <li class="mr-2">
-            <button type="button" onclick="showUsersTab('ban-user', this)" class="users-tab inline-block p-4 border-b-2 border-transparent hover:text-foreground hover:border-muted-foreground rounded-t-lg text-muted-foreground">
-                Ban User
-            </button>
-        </li>
-    </ul>
-</div>
+<div data-vue-component="TabNav" data-props="<?= esc(json_encode([
+    'tabs' => [
+        ['id' => 'new-users', 'label' => 'Active Users'],
+        ['id' => 'banned', 'label' => 'Banned List'],
+        ['id' => 'ban-user', 'label' => 'Ban User'],
+    ],
+    'initialTab' => isset($idban) ? 'ban-user' : null,
+]), 'attr') ?>"></div>
 
 <!-- New Users Tab -->
 <div id="new-users-panel" class="users-panel block">
@@ -149,31 +138,5 @@
         </form>
     </div>
 </div>
-
-<script>
-function showUsersTab(panelId, btn) {
-    document.querySelectorAll('.users-panel').forEach(p => {
-        p.classList.remove('block');
-        p.classList.add('hidden');
-    });
-    document.getElementById(panelId + '-panel').classList.remove('hidden');
-    document.getElementById(panelId + '-panel').classList.add('block');
-    
-    document.querySelectorAll('.users-tab').forEach(t => {
-        t.classList.remove('border-primary', 'text-primary', 'active');
-        t.classList.add('border-transparent', 'text-muted-foreground');
-    });
-    btn.classList.remove('border-transparent', 'text-muted-foreground');
-    btn.classList.add('border-primary', 'text-primary', 'active');
-}
-
-// Auto-switch to Ban User tab if $idban is set
-<?php if (isset($idban)): ?>
-document.addEventListener('DOMContentLoaded', () => {
-    const banTabBtn = document.querySelector('.users-tab:nth-child(3) button') || document.querySelectorAll('.users-tab')[2];
-    if(banTabBtn) showUsersTab('ban-user', banTabBtn);
-});
-<?php endif; ?>
-</script>
 
 <?= $this->endSection() ?>

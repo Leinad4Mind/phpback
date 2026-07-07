@@ -9,25 +9,13 @@
     <p class="text-muted-foreground mt-1 text-sm">Configure global application settings and manage categories.</p>
 </div>
 
-<div class="border-b mb-6">
-    <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="system-tabs">
-        <li class="mr-2">
-            <button type="button" onclick="showSystemTab('general', this)" class="system-tab inline-block p-4 border-b-2 border-primary text-primary rounded-t-lg active">
-                General Settings
-            </button>
-        </li>
-        <li class="mr-2">
-            <button type="button" onclick="showSystemTab('admin', this)" class="system-tab inline-block p-4 border-b-2 border-transparent hover:text-foreground hover:border-muted-foreground rounded-t-lg text-muted-foreground">
-                Admin Management
-            </button>
-        </li>
-        <li class="mr-2">
-            <button type="button" onclick="showSystemTab('categories', this)" class="system-tab inline-block p-4 border-b-2 border-transparent hover:text-foreground hover:border-muted-foreground rounded-t-lg text-muted-foreground">
-                Categories
-            </button>
-        </li>
-    </ul>
-</div>
+<div data-vue-component="TabNav" data-props="<?= esc(json_encode([
+    'tabs' => [
+        ['id' => 'general', 'label' => 'General Settings'],
+        ['id' => 'admin', 'label' => 'Admin Management'],
+        ['id' => 'categories', 'label' => 'Categories'],
+    ],
+]), 'attr') ?>"></div>
 
 <!-- General Settings Tab -->
 <div id="general-panel" class="system-panel block">
@@ -186,23 +174,5 @@
 
     </div>
 </div>
-
-<script>
-function showSystemTab(panelId, btn) {
-    document.querySelectorAll('.system-panel').forEach(p => {
-        p.classList.remove('block');
-        p.classList.add('hidden');
-    });
-    document.getElementById(panelId + '-panel').classList.remove('hidden');
-    document.getElementById(panelId + '-panel').classList.add('block');
-    
-    document.querySelectorAll('.system-tab').forEach(t => {
-        t.classList.remove('border-primary', 'text-primary', 'active');
-        t.classList.add('border-transparent', 'text-muted-foreground');
-    });
-    btn.classList.remove('border-transparent', 'text-muted-foreground');
-    btn.classList.add('border-primary', 'text-primary', 'active');
-}
-</script>
 
 <?= $this->endSection() ?>

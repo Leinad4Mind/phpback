@@ -8,29 +8,14 @@
     </div>
 </div>
 
-<div class="border-b mb-6">
-    <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="ideas-tabs">
-        <li class="mr-2">
-            <button type="button" onclick="showIdeasTab('new-ideas', this)" class="ideas-tab inline-flex items-center gap-2 p-4 border-b-2 border-primary text-primary rounded-t-lg active">
-                New Ideas
-                <span class="bg-primary/20 text-primary text-xs rounded-full px-2 py-0.5"><?= (int) $newideas_num ?></span>
-            </button>
-        </li>
-        <li class="mr-2">
-            <button type="button" onclick="showIdeasTab('all-ideas', this)" class="ideas-tab inline-flex items-center gap-2 p-4 border-b-2 border-transparent hover:text-foreground hover:border-muted-foreground rounded-t-lg text-muted-foreground">
-                All Ideas
-            </button>
-        </li>
-        <li class="mr-2">
-            <button type="button" onclick="showIdeasTab('flagged-comments', this)" class="ideas-tab inline-flex items-center gap-2 p-4 border-b-2 border-transparent hover:text-foreground hover:border-muted-foreground rounded-t-lg text-muted-foreground">
-                Flagged Comments
-                <?php if(count($flags) > 0): ?>
-                    <span class="bg-destructive/20 text-destructive text-xs rounded-full px-2 py-0.5"><?= count($flags) ?></span>
-                <?php endif; ?>
-            </button>
-        </li>
-    </ul>
-</div>
+<div data-vue-component="TabNav" data-props="<?= esc(json_encode([
+    'tabs' => [
+        ['id' => 'new-ideas', 'label' => 'New Ideas', 'count' => (int) $newideas_num, 'countClass' => 'bg-primary/20 text-primary'],
+        ['id' => 'all-ideas', 'label' => 'All Ideas'],
+        ['id' => 'flagged-comments', 'label' => 'Flagged Comments', 'count' => count($flags) > 0 ? count($flags) : null, 'countClass' => 'bg-destructive/20 text-destructive'],
+    ],
+    'initialTab' => ! empty($toall) ? 'all-ideas' : null,
+]), 'attr') ?>"></div>
 
 <!-- New Ideas Tab -->
 <div id="new-ideas-panel" class="ideas-panel block">
@@ -236,31 +221,5 @@
         </div>
     </div>
 </div>
-
-<script>
-function showIdeasTab(panelId, btn) {
-    document.querySelectorAll('.ideas-panel').forEach(p => {
-        p.classList.remove('block');
-        p.classList.add('hidden');
-    });
-    document.getElementById(panelId + '-panel').classList.remove('hidden');
-    document.getElementById(panelId + '-panel').classList.add('block');
-    
-    document.querySelectorAll('.ideas-tab').forEach(t => {
-        t.classList.remove('border-primary', 'text-primary', 'active');
-        t.classList.add('border-transparent', 'text-muted-foreground');
-    });
-    btn.classList.remove('border-transparent', 'text-muted-foreground');
-    btn.classList.add('border-primary', 'text-primary', 'active');
-}
-
-// Auto-switch to All Ideas if search was performed
-<?php if (! empty($toall)): ?>
-document.addEventListener('DOMContentLoaded', () => {
-    const allIdeasBtn = document.querySelector('.ideas-tab:nth-child(2) button') || document.querySelectorAll('.ideas-tab')[1];
-    if(allIdeasBtn) showIdeasTab('all-ideas', allIdeasBtn);
-});
-<?php endif; ?>
-</script>
 
 <?= $this->endSection() ?>

@@ -5,6 +5,7 @@ import VoteButton from './components/VoteButton.vue';
 import CommentSection from './components/CommentSection.vue';
 import TagsInputIsland from './components/TagsInputIsland.vue';
 import AdminStatusSelect from './components/AdminStatusSelect.vue';
+import TabNav from './components/TabNav.vue';
 
 // Define a registry of island components
 const components: Record<string, Component> = {
@@ -13,6 +14,7 @@ const components: Record<string, Component> = {
     CommentSection,
     TagsInputIsland,
     AdminStatusSelect,
+    TabNav,
 };
 
 export function mountIslands(root: ParentNode = document): void {

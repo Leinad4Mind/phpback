@@ -73,28 +73,15 @@
         </div>
     <?php endif; ?>
 
-    <!-- Simple Vanilla JS Tab Implementation (Will be upgraded to Vue Island later) -->
-    <div class="border-b mb-6">
-        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="settings-tabs">
-            <li class="mr-2">
-                <button type="button" onclick="showSettingsTab('reset-votes', this)" class="settings-tab inline-block p-4 border-b-2 border-primary text-primary rounded-t-lg active">
-                    <?= esc($lang['label_reset_votes']) ?>
-                </button>
-            </li>
-            <li class="mr-2">
-                <button type="button" onclick="showSettingsTab('change-password', this)" class="settings-tab inline-block p-4 border-b-2 border-transparent hover:text-foreground hover:border-muted-foreground rounded-t-lg text-muted-foreground">
-                    <?= esc($lang['label_change_password']) ?>
-                </button>
-            </li>
-            <?php if (is_admin(1)): ?>
-            <li class="mr-2">
-                <a href="<?= base_url('admin') ?>" target="_blank" class="inline-block p-4 border-b-2 border-transparent hover:text-foreground hover:border-muted-foreground rounded-t-lg text-muted-foreground">
-                    ADMIN PANEL
-                </a>
-            </li>
-            <?php endif; ?>
-        </ul>
-    </div>
+    <div data-vue-component="TabNav" data-props="<?= esc(json_encode([
+        'tabs' => [
+            ['id' => 'reset-votes', 'label' => $lang['label_reset_votes']],
+            ['id' => 'change-password', 'label' => $lang['label_change_password']],
+        ],
+        'links' => is_admin(1) ? [
+            ['label' => 'ADMIN PANEL', 'href' => base_url('admin'), 'external' => true],
+        ] : [],
+    ]), 'attr') ?>"></div>
 
     <div id="reset-votes-panel" class="settings-panel block">
         <div class="overflow-x-auto">
@@ -160,27 +147,13 @@
 <?php endif; ?>
 
 <div class="bg-card text-card-foreground rounded-lg border shadow-sm p-6">
-    <!-- Simple Vanilla JS Tab Implementation for User Activity -->
-    <div class="border-b mb-6">
-        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="activity-tabs">
-            <li class="mr-2">
-                <button type="button" onclick="showActivityTab('activity', this)" class="activity-tab inline-block p-4 border-b-2 border-primary text-primary rounded-t-lg active">
-                    <?= esc($lang['label_activity']) ?>
-                </button>
-            </li>
-            <li class="mr-2">
-                <button type="button" onclick="showActivityTab('ideas', this)" class="activity-tab inline-block p-4 border-b-2 border-transparent hover:text-foreground hover:border-muted-foreground rounded-t-lg text-muted-foreground flex items-center gap-2">
-                    <?= esc($lang['label_ideas']) ?>
-                    <span class="bg-muted-foreground/20 text-foreground text-xs rounded-full px-2 py-0.5"><?= count($ideas) ?></span>
-                </button>
-            </li>
-            <li class="mr-2">
-                <button type="button" onclick="showActivityTab('comments', this)" class="activity-tab inline-block p-4 border-b-2 border-transparent hover:text-foreground hover:border-muted-foreground rounded-t-lg text-muted-foreground">
-                    <?= esc($lang['label_comments']) ?>
-                </button>
-            </li>
-        </ul>
-    </div>
+    <div data-vue-component="TabNav" data-props="<?= esc(json_encode([
+        'tabs' => [
+            ['id' => 'activity', 'label' => $lang['label_activity']],
+            ['id' => 'ideas', 'label' => $lang['label_ideas'], 'count' => count($ideas)],
+            ['id' => 'comments', 'label' => $lang['label_comments']],
+        ],
+    ]), 'attr') ?>"></div>
 
     <div id="activity-panel" class="activity-panel block">
         <div class="overflow-x-auto">
@@ -276,39 +249,6 @@
 </div>
 
 <script>
-// Simple Vanilla JS tab logic to replace the old showtable/showtable4 from header.php
-function showSettingsTab(panelId, btn) {
-    document.querySelectorAll('.settings-panel').forEach(p => {
-        p.classList.remove('block');
-        p.classList.add('hidden');
-    });
-    document.getElementById(panelId + '-panel').classList.remove('hidden');
-    document.getElementById(panelId + '-panel').classList.add('block');
-    
-    document.querySelectorAll('.settings-tab').forEach(t => {
-        t.classList.remove('border-primary', 'text-primary', 'active');
-        t.classList.add('border-transparent', 'text-muted-foreground');
-    });
-    btn.classList.remove('border-transparent', 'text-muted-foreground');
-    btn.classList.add('border-primary', 'text-primary', 'active');
-}
-
-function showActivityTab(panelId, btn) {
-    document.querySelectorAll('.activity-panel').forEach(p => {
-        p.classList.remove('block');
-        p.classList.add('hidden');
-    });
-    document.getElementById(panelId + '-panel').classList.remove('hidden');
-    document.getElementById(panelId + '-panel').classList.add('block');
-    
-    document.querySelectorAll('.activity-tab').forEach(t => {
-        t.classList.remove('border-primary', 'text-primary', 'active');
-        t.classList.add('border-transparent', 'text-muted-foreground');
-    });
-    btn.classList.remove('border-transparent', 'text-muted-foreground');
-    btn.classList.add('border-primary', 'text-primary', 'active');
-}
-
 function validatePasswordForm() {
     var pass = document.forms["password-change-form"]["new"].value;
     var passVerify = document.forms["password-change-form"]["rnew"].value;

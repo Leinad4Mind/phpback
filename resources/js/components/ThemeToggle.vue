@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useDark, useToggle } from '@vueuse/core'
+import { useDark } from '@vueuse/core'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -19,8 +19,6 @@ const isDark = useDark({
   valueLight: 'light',
   storageKey: 'theme',
 })
-
-const toggleDark = useToggle(isDark)
 
 function setTheme(theme: 'light' | 'dark' | 'system') {
   if (theme === 'system') {
