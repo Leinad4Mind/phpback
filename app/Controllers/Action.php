@@ -190,7 +190,8 @@ class Action extends BaseController
 
         // Notify the user WITHOUT ever emailing the password itself.
         $title = (string) (model(SettingModel::class)->get('title') ?: 'PHPBack');
-        $this->sendMail("Your password has been changed.\n", "Password changed - {$title}", $user->email);
+        $body  = ($this->lang('message_password_changed') ?: 'Your password has been changed.') . "\n";
+        $this->sendMail($body, ($this->lang('label_change_password') ?: 'Password changed') . " - {$title}", $user->email);
 
         return redirect()->to($back)->with('message', 'passwordchanged');
     }

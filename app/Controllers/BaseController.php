@@ -56,7 +56,8 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * Translation array for the configured language (falls back to English).
+     * Translation array for the configured language, merged over English so
+     * keys missing from a language pack fall back to the English string.
      *
      * @return array<string, string>
      */
@@ -70,12 +71,32 @@ abstract class BaseController extends Controller
         $language = (string) model(SettingModel::class)->get('language') ?: 'english';
         $base     = APPPATH . 'Language' . DIRECTORY_SEPARATOR . 'phpback' . DIRECTORY_SEPARATOR;
 
+        $english = is_file($base . 'english.php') ? require $base . 'english.php' : [];
+
         $file = $base . preg_replace('/[^a-z\-]/', '', strtolower($language)) . '.php';
-        if (! is_file($file)) {
-            $file = $base . 'english.php';
+        if (! is_file($file) || $file === $base . 'english.php') {
+            return $cache = $english;
         }
 
-        return $cache = is_file($file) ? require $file : [];
+        return $cache = array_merge($english, require $file);
+    }
+
+    /**
+     * Language packs available in app/Language/phpback, as slug => native name.
+     *
+     * @return array<string, string>
+     */
+    protected function availableLanguages(): array
+    {
+        $languages = [];
+        foreach (glob(APPPATH . 'Language/phpback/*.php') ?: [] as $file) {
+            $pack = require $file;
+            $slug = basename($file, '.php');
+            $languages[$slug] = (string) ($pack['lang_name'] ?? ucfirst($slug));
+        }
+        ksort($languages);
+
+        return $languages;
     }
 
     /**
@@ -85,10 +106,14 @@ abstract class BaseController extends Controller
      */
     protected function defaultData(): array
     {
+        $lang = $this->langArray();
+
         return [
             'title'      => (string) model(SettingModel::class)->get('title'),
             'categories' => model(CategoryModel::class)->getAllKeyed(),
-            'lang'       => $this->langArray(),
+            'lang'       => $lang,
+            'langCode'   => (string) ($lang['lang_code'] ?? 'en'),
+            'langDir'    => (string) ($lang['lang_dir'] ?? 'ltr'),
         ];
     }
 

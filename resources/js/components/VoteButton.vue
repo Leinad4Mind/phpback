@@ -21,6 +21,12 @@ const props = defineProps<{
   initialCsrfHash: string
   voteUrl: string
   unvoteUrl: string
+  labels?: {
+    votes?: string
+    vote?: string
+    removeVote?: string
+    error?: string
+  }
 }>()
 
 initCsrf(props.csrfTokenName, props.initialCsrfHash)
@@ -30,6 +36,10 @@ const userVoteId = ref<number | null>(props.initialUserVoteId)
 const userVoteAmount = ref(props.initialUserVoteAmount)
 const isLoading = ref(false)
 const errorMessage = ref('')
+
+function genericError(): string {
+  return props.labels?.error || 'Something went wrong. Please try again.'
+}
 
 async function vote(amount: number) {
   if (isLoading.value || userVoteAmount.value === amount) return
@@ -46,10 +56,10 @@ async function vote(amount: number) {
       userVoteId.value = data.userVoteId
       userVoteAmount.value = data.votes
     } else {
-      errorMessage.value = data.error || 'Could not save your vote.'
+      errorMessage.value = data.error || genericError()
     }
-  } catch (error) {
-    errorMessage.value = error instanceof Error ? error.message : 'Could not save your vote.'
+  } catch {
+    errorMessage.value = genericError()
   } finally {
     isLoading.value = false
   }
@@ -69,10 +79,10 @@ async function unvote() {
       userVoteId.value = null
       userVoteAmount.value = 0
     } else {
-      errorMessage.value = data.error || 'Could not remove your vote.'
+      errorMessage.value = data.error || genericError()
     }
-  } catch (error) {
-    errorMessage.value = error instanceof Error ? error.message : 'Could not remove your vote.'
+  } catch {
+    errorMessage.value = genericError()
   } finally {
     isLoading.value = false
   }
@@ -82,7 +92,7 @@ async function unvote() {
 <template>
   <div class="flex flex-col items-center sm:w-24 shrink-0 bg-muted/30 rounded-lg p-4 border border-dashed transition-opacity" :class="{'opacity-50 pointer-events-none': isLoading}">
     <div class="text-3xl font-bold text-primary mb-1">{{ totalVotes.toLocaleString() }}</div>
-    <div class="text-xs uppercase tracking-wider text-muted-foreground font-semibold mb-4">Votes</div>
+    <div class="text-xs uppercase tracking-wider text-muted-foreground font-semibold mb-4">{{ props.labels?.votes || 'Votes' }}</div>
 
     <div class="flex w-full overflow-hidden rounded-md border shadow-sm transition-colors">
       <button
@@ -105,9 +115,9 @@ async function unvote() {
         @click="unvote"
         class="text-destructive hover:underline focus:outline-none focus:underline cursor-pointer"
       >
-        Remove Vote
+        {{ props.labels?.removeVote || 'Remove vote' }}
       </button>
-      <span v-else class="text-muted-foreground">Vote</span>
+      <span v-else class="text-muted-foreground">{{ props.labels?.vote || 'Vote' }}</span>
     </div>
 
     <p v-if="errorMessage" class="text-destructive text-xs text-center mt-2" role="alert">

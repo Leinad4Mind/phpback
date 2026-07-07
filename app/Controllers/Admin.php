@@ -121,6 +121,7 @@ class Admin extends BaseController
         $data['adminusers']  = model(UserModel::class)->getAdmins();
         $data['categories']  = model(CategoryModel::class)->getAllKeyed();
         $data['version']     = self::VERSION;
+        $data['availableLanguages'] = $this->availableLanguages();
 
         return view('admin/dashboard/system', $data);
     }

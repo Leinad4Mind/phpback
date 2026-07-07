@@ -8,7 +8,7 @@
 <nav class="flex text-sm text-muted-foreground mb-6" aria-label="Breadcrumb">
     <ol class="inline-flex items-center space-x-1 md:space-x-3">
         <li class="inline-flex items-center">
-            <a href="<?= base_url() ?>" class="hover:text-foreground transition-colors">Feedback</a>
+            <a href="<?= base_url() ?>" class="hover:text-foreground transition-colors"><?= esc($lang['label_feedback']) ?></a>
         </li>
         <li>
             <div class="flex items-center">
@@ -79,7 +79,7 @@
             ['id' => 'change-password', 'label' => $lang['label_change_password']],
         ],
         'links' => is_admin(1) ? [
-            ['label' => 'ADMIN PANEL', 'href' => base_url('admin'), 'external' => true],
+            ['label' => mb_strtoupper($lang['label_admin_panel']), 'href' => base_url('admin'), 'external' => true],
         ] : [],
     ]), 'attr') ?>"></div>
 
@@ -88,9 +88,9 @@
             <table class="w-full text-sm text-left">
                 <thead class="text-xs text-muted-foreground uppercase bg-muted/50 border-b">
                     <tr>
-                        <th scope="col" class="px-4 py-3">Idea</th>
-                        <th scope="col" class="px-4 py-3 w-24">Votes</th>
-                        <th scope="col" class="px-4 py-3 w-32 text-right">Actions</th>
+                        <th scope="col" class="px-4 py-3"><?= esc($lang['label_idea']) ?></th>
+                        <th scope="col" class="px-4 py-3 w-24"><?= esc($lang['label_votes']) ?></th>
+                        <th scope="col" class="px-4 py-3 w-32 text-right"><?= esc($lang['label_actions']) ?></th>
                     </tr>
                 </thead>
                 <tbody class="divide-y">
@@ -112,7 +112,7 @@
                     <?php endforeach; ?>
                     <?php if (empty($votes)): ?>
                         <tr>
-                            <td colspan="3" class="px-4 py-8 text-center text-muted-foreground">You haven't voted on any ideas yet.</td>
+                            <td colspan="3" class="px-4 py-8 text-center text-muted-foreground"><?= esc($lang['text_no_votes_cast']) ?></td>
                         </tr>
                     <?php endif; ?>
                 </tbody>
@@ -240,7 +240,7 @@
                     </tr>
                     <?php endforeach; ?>
                     <?php if (empty($comments)): ?>
-                        <tr><td colspan="2" class="px-4 py-8 text-center text-muted-foreground">No comments found.</td></tr>
+                        <tr><td colspan="2" class="px-4 py-8 text-center text-muted-foreground"><?= esc($lang['text_no_comments_found']) ?></td></tr>
                     <?php endif; ?>
                 </tbody>
             </table>

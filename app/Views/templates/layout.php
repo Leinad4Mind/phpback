@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= esc($langCode ?? 'en', 'attr') ?>" dir="<?= esc($langDir ?? 'ltr', 'attr') ?>">
 <head>
     <title><?= esc($title) ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -29,7 +29,14 @@
             </h1>
             
             <div class="flex items-center gap-4">
-                <div data-vue-component="ThemeToggle"></div>
+                <div data-vue-component="ThemeToggle" data-props="<?= esc(json_encode([
+                    'labels' => [
+                        'light'  => $lang['label_theme_light'],
+                        'dark'   => $lang['label_theme_dark'],
+                        'system' => $lang['label_theme_system'],
+                        'toggle' => $lang['label_toggle_theme'],
+                    ],
+                ]), 'attr') ?>"></div>
                 <?php if (is_logged_in()): ?>
                     <div class="text-sm">
                         <span class="text-muted-foreground"><?= esc($lang['label_logged_as']) ?></span>
@@ -68,7 +75,7 @@
                     <?= csrf_field() ?>
                     <input type="search" name="query" placeholder="<?= esc($lang['label_search']) ?>" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
                     <button type="submit" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
-                        Search
+                        <?= esc($lang['label_search']) ?>
                     </button>
                 </form>
             </div>

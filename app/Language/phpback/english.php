@@ -8,6 +8,11 @@
  */
 
 return [
+    // Language metadata (used for <html lang>, text direction and the admin language picker)
+    'lang_code' => 'en',
+    'lang_dir'  => 'ltr',
+    'lang_name' => 'English',
+
     // Labels
     'label_activity'          => 'Activity',
     'label_ban_user'          => 'Ban user',
@@ -44,6 +49,41 @@ return [
     'label_attachments'       => 'Attachments',
     'label_vote'              => 'Vote',
     'label_votes'             => 'Votes',
+
+    // Redesign / UI additions (Tailwind + Vue islands)
+    'label_feedback'          => 'Feedback',
+    'label_admin_panel'       => 'Admin Panel',
+    'label_admin_actions'     => 'Admin Actions',
+    'label_remove_vote'       => 'Remove vote',
+    'label_delete'            => 'Delete',
+    'label_flag'              => 'Flag',
+    'label_theme_light'       => 'Light',
+    'label_theme_dark'        => 'Dark',
+    'label_theme_system'      => 'System',
+    'label_toggle_theme'      => 'Toggle theme',
+    'label_tag'               => 'Tag',
+    'label_sort'              => 'Sort',
+    'label_apply_filters'     => 'Apply Filters',
+    'label_filtered_ideas'    => 'Filtered Ideas',
+    'label_actions'           => 'Actions',
+    'text_admin_greeting'     => 'You are an Admin',
+    'text_login_to_vote'      => 'Log in to vote',
+    'text_leave_comment'      => 'Leave a comment',
+    'text_submitting'         => 'Submitting...',
+    'text_no_comments'        => 'No comments yet. Be the first to share your thoughts!',
+    'text_sure_flag_comment'  => 'Flag this comment as inappropriate?',
+    'text_comment_flagged'    => 'Comment flagged for review.',
+    'text_add_tag'            => 'Add a tag...',
+    'text_press_enter_to_add' => 'press enter to add',
+    'text_attachment_hint'    => 'image or document, max 5MB',
+    'text_all'                => 'All',
+    'text_default'            => 'Default',
+    'text_no_votes_cast'      => "You haven't voted on any ideas yet.",
+    'text_no_comments_found'  => 'No comments found.',
+    'text_login_credentials'  => 'Enter your credentials to access your account',
+    'text_no_account'         => "Don't have an account?",
+    'text_register_cta'       => 'Create an account to participate in the community',
+    'error_request_failed'    => 'Something went wrong. Please try again.',
 
     // Free text
     'text_shared_this_idea'    => 'shared this idea',

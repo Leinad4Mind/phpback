@@ -5,7 +5,7 @@
 <nav class="flex text-sm text-muted-foreground mb-6" aria-label="Breadcrumb">
     <ol class="inline-flex items-center space-x-1 md:space-x-3">
         <li class="inline-flex items-center">
-            <a href="<?= base_url() ?>" class="hover:text-foreground transition-colors">Feedback</a>
+            <a href="<?= base_url() ?>" class="hover:text-foreground transition-colors"><?= esc($lang['label_feedback']) ?></a>
         </li>
         <li aria-current="page">
             <div class="flex items-center">
@@ -22,7 +22,7 @@
     <div class="bg-card text-card-foreground rounded-lg border shadow-sm p-6 mb-8">
         <div class="mb-6 text-center">
             <h2 class="text-2xl font-bold tracking-tight"><?= esc($lang['label_registration_form']) ?></h2>
-            <p class="text-sm text-muted-foreground mt-2">Create an account to participate in the community</p>
+            <p class="text-sm text-muted-foreground mt-2"><?= esc($lang['text_register_cta']) ?></p>
         </div>
 
         <?php

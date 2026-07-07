@@ -5,7 +5,7 @@
 <nav class="flex text-sm text-muted-foreground mb-6" aria-label="Breadcrumb">
     <ol class="inline-flex items-center space-x-1 md:space-x-3">
         <li class="inline-flex items-center">
-            <a href="<?= base_url() ?>" class="hover:text-foreground transition-colors">Feedback</a>
+            <a href="<?= base_url() ?>" class="hover:text-foreground transition-colors"><?= esc($lang['label_feedback']) ?></a>
         </li>
         <li aria-current="page">
             <div class="flex items-center">
@@ -22,7 +22,7 @@
     <div class="bg-card text-card-foreground rounded-lg border shadow-sm p-6 mb-8">
         <div class="mb-6 text-center">
             <h2 class="text-2xl font-bold tracking-tight"><?= esc($lang['label_log_in']) ?></h2>
-            <p class="text-sm text-muted-foreground mt-2">Enter your credentials to access your account</p>
+            <p class="text-sm text-muted-foreground mt-2"><?= esc($lang['text_login_credentials']) ?></p>
         </div>
 
         <?php if ($error === 'errorlogin'): ?>
@@ -73,7 +73,7 @@
         </form>
 
         <div class="mt-6 text-center text-sm">
-            <span class="text-muted-foreground">Don't have an account?</span>
+            <span class="text-muted-foreground"><?= esc($lang['text_no_account']) ?></span>
             <a href="<?= base_url('home/register') ?>" class="font-medium text-primary hover:underline ml-1">
                 <?= esc($lang['text_create_an_account']) ?>
             </a>

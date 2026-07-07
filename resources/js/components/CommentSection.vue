@@ -25,6 +25,19 @@ const props = defineProps<{
   deleteUrl: string
   flagUrl: string
   baseUrl: string
+  labels?: {
+    comments?: string
+    leaveComment?: string
+    submit?: string
+    submitting?: string
+    delete?: string
+    flag?: string
+    noComments?: string
+    sureDelete?: string
+    sureFlag?: string
+    flagged?: string
+    error?: string
+  }
 }>()
 
 initCsrf(props.csrfTokenName, props.initialCsrfHash)
@@ -33,6 +46,10 @@ const comments = ref(props.initialComments)
 const newCommentContent = ref('')
 const isSubmitting = ref(false)
 const errorMessage = ref('')
+
+function genericError(): string {
+  return props.labels?.error || 'Something went wrong. Please try again.'
+}
 
 function profileUrl(userid: number): string {
   return `${props.baseUrl.replace(/\/$/, '')}/home/profile/${userid}`
@@ -52,17 +69,17 @@ async function submitComment() {
       comments.value.push(data.comment)
       newCommentContent.value = ''
     } else {
-      errorMessage.value = data.error || 'Could not post your comment.'
+      errorMessage.value = data.error || genericError()
     }
-  } catch (error) {
-    errorMessage.value = error instanceof Error ? error.message : 'Could not post your comment.'
+  } catch {
+    errorMessage.value = genericError()
   } finally {
     isSubmitting.value = false
   }
 }
 
 async function deleteComment(id: number) {
-  if (!confirm('Are you sure you want to delete this comment?')) return
+  if (!confirm(props.labels?.sureDelete || 'Are you sure you want to delete this comment?')) return
   errorMessage.value = ''
 
   try {
@@ -70,15 +87,15 @@ async function deleteComment(id: number) {
     if (data.success) {
       comments.value = comments.value.filter(c => c.id !== id)
     } else {
-      errorMessage.value = data.error || 'Could not delete the comment.'
+      errorMessage.value = data.error || genericError()
     }
-  } catch (error) {
-    errorMessage.value = error instanceof Error ? error.message : 'Could not delete the comment.'
+  } catch {
+    errorMessage.value = genericError()
   }
 }
 
 async function flagComment(id: number) {
-  if (!confirm('Flag this comment as inappropriate?')) return
+  if (!confirm(props.labels?.sureFlag || 'Flag this comment as inappropriate?')) return
   errorMessage.value = ''
 
   try {
@@ -87,12 +104,12 @@ async function flagComment(id: number) {
       idea_id: props.ideaId,
     })
     if (data.success) {
-      alert('Comment flagged for review.')
+      alert(props.labels?.flagged || 'Comment flagged for review.')
     } else {
-      errorMessage.value = data.error || 'Could not flag the comment.'
+      errorMessage.value = data.error || genericError()
     }
-  } catch (error) {
-    errorMessage.value = error instanceof Error ? error.message : 'Could not flag the comment.'
+  } catch {
+    errorMessage.value = genericError()
   }
 }
 
@@ -107,13 +124,13 @@ function getInitial(name: string) {
       <svg class="w-5 h-5 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"></path>
       </svg>
-      Comments ({{ comments.length }})
+      {{ props.labels?.comments || 'Comments' }} ({{ comments.length }})
     </h3>
 
     <div v-if="props.isLoggedIn" class="bg-card text-card-foreground border rounded-lg p-4 mb-8 shadow-sm">
       <form @submit.prevent="submitComment" class="space-y-4">
         <div>
-          <label class="block text-sm font-medium mb-2">Leave a comment</label>
+          <label class="block text-sm font-medium mb-2">{{ props.labels?.leaveComment || 'Leave a comment' }}</label>
           <textarea
             v-model="newCommentContent"
             required
@@ -127,7 +144,7 @@ function getInitial(name: string) {
           :disabled="isSubmitting"
           class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 disabled:opacity-50 cursor-pointer"
         >
-          {{ isSubmitting ? 'Submitting...' : 'Submit' }}
+          {{ isSubmitting ? (props.labels?.submitting || 'Submitting...') : (props.labels?.submit || 'Submit') }}
         </button>
       </form>
     </div>
@@ -150,7 +167,7 @@ function getInitial(name: string) {
           <div class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
             <template v-if="props.isAdmin">
               <button @click="deleteComment(comment.id)" class="text-xs text-destructive hover:underline p-1 cursor-pointer">
-                Delete
+                {{ props.labels?.delete || 'Delete' }}
               </button>
             </template>
             <template v-else-if="props.isLoggedIn">
@@ -158,7 +175,7 @@ function getInitial(name: string) {
                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"></path>
                 </svg>
-                Flag
+                {{ props.labels?.flag || 'Flag' }}
               </button>
             </template>
           </div>
@@ -170,7 +187,7 @@ function getInitial(name: string) {
         <svg class="w-12 h-12 mx-auto mb-3 text-muted-foreground/50" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
         </svg>
-        <p>No comments yet. Be the first to share your thoughts!</p>
+        <p>{{ props.labels?.noComments || 'No comments yet. Be the first to share your thoughts!' }}</p>
       </div>
     </div>
   </div>

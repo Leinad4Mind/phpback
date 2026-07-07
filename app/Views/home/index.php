@@ -3,15 +3,15 @@
 
 <?php if (is_admin(1)): ?>
     <div class="mb-6 p-4 bg-primary/10 text-primary border border-primary/20 rounded-lg flex items-center justify-between">
-        <span>You are an Admin 🎉</span>
+        <span><?= esc($lang['text_admin_greeting']) ?> 🎉</span>
         <a href="<?= base_url('admin/dashboard') ?>" class="text-sm font-medium bg-primary text-primary-foreground px-3 py-1.5 rounded-md hover:bg-primary/90">
-            Admin Panel
+            <?= esc($lang['label_admin_panel']) ?>
         </a>
     </div>
 <?php endif; ?>
 
 <div class="mb-6">
-    <small class="text-muted-foreground uppercase tracking-wider font-semibold">Feedback</small>
+    <small class="text-muted-foreground uppercase tracking-wider font-semibold"><?= esc($lang['label_feedback']) ?></small>
     <h2 class="text-3xl font-bold tracking-tight mt-1"><?= esc($welcomeTitle) ?></h2>
     <div class="text-muted-foreground mt-2 text-lg"><?= esc($welcomeDescription) ?></div>
 </div>
@@ -19,38 +19,38 @@
 <!-- Filter form -->
 <form method="GET" action="<?= base_url('home') ?>" class="bg-card text-card-foreground border rounded-lg p-4 mb-8 flex flex-wrap gap-4 items-end">
     <div class="space-y-1 flex-1 min-w-[150px]">
-        <label class="text-sm font-medium">Category:</label>
+        <label class="text-sm font-medium"><?= esc($lang['label_category']) ?>:</label>
         <input type="number" name="category" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2" value="<?= esc($filters['category'] ?? '', 'attr') ?>">
     </div>
     <div class="space-y-1 flex-1 min-w-[150px]">
         <label class="text-sm font-medium"><?= esc($lang['label_status']) ?>:</label>
         <select name="status" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-            <option value="">-- All --</option>
+            <option value="">-- <?= esc($lang['text_all']) ?> --</option>
             <?php foreach (['completed', 'started', 'planned', 'considered', 'declined'] as $st): ?>
                 <option value="<?= $st ?>" <?= (($filters['status'] ?? '') === $st) ? 'selected' : '' ?>><?= esc($lang['idea_' . $st]) ?></option>
             <?php endforeach; ?>
         </select>
     </div>
     <div class="space-y-1 flex-1 min-w-[150px]">
-        <label class="text-sm font-medium">Tag ID:</label>
+        <label class="text-sm font-medium"><?= esc($lang['label_tag']) ?> ID:</label>
         <input type="number" name="tag" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2" value="<?= esc($filters['tag'] ?? '', 'attr') ?>">
     </div>
     <div class="space-y-1 flex-1 min-w-[150px]">
-        <label class="text-sm font-medium">Sort:</label>
+        <label class="text-sm font-medium"><?= esc($lang['label_sort']) ?>:</label>
         <select name="sort" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-            <option value="">Default</option>
-            <option value="votes" <?= (($filters['sort'] ?? '') === 'votes') ? 'selected' : '' ?>>Votes</option>
-            <option value="date" <?= (($filters['sort'] ?? '') === 'date') ? 'selected' : '' ?>>Date</option>
+            <option value=""><?= esc($lang['text_default']) ?></option>
+            <option value="votes" <?= (($filters['sort'] ?? '') === 'votes') ? 'selected' : '' ?>><?= esc($lang['label_votes']) ?></option>
+            <option value="date" <?= (($filters['sort'] ?? '') === 'date') ? 'selected' : '' ?>><?= esc($lang['label_date']) ?></option>
         </select>
     </div>
     <button type="submit" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-secondary text-secondary-foreground hover:bg-secondary/80 h-10 px-4 py-2">
-        Apply Filters
+        <?= esc($lang['label_apply_filters']) ?>
     </button>
 </form>
 
 <?php if ($hasFilter): ?>
     <div class="mb-8">
-        <h4 class="text-lg font-semibold mb-3">Filtered Ideas</h4>
+        <h4 class="text-lg font-semibold mb-3"><?= esc($lang['label_filtered_ideas']) ?></h4>
         <?php if (empty($ideas_filtered)): ?>
             <p class="text-muted-foreground text-sm"><?= esc($lang['text_nothing_found']) ?></p>
         <?php else: ?>

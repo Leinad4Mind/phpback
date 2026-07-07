@@ -5,7 +5,7 @@
 <nav class="flex text-sm text-muted-foreground mb-6" aria-label="Breadcrumb">
     <ol class="inline-flex items-center space-x-1 md:space-x-3">
         <li class="inline-flex items-center">
-            <a href="<?= base_url() ?>" class="hover:text-foreground transition-colors">Feedback</a>
+            <a href="<?= base_url() ?>" class="hover:text-foreground transition-colors"><?= esc($lang['label_feedback']) ?></a>
         </li>
         <li aria-current="page">
             <div class="flex items-center">
@@ -70,18 +70,18 @@
         
         <div class="space-y-2">
             <label for="tags" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                <?= esc($lang['label_tags']) ?> <span class="text-muted-foreground font-normal">(press enter to add)</span>
+                <?= esc($lang['label_tags']) ?> <span class="text-muted-foreground font-normal">(<?= esc($lang['text_press_enter_to_add']) ?>)</span>
             </label>
             <div data-vue-component="TagsInputIsland" data-props="<?= esc(json_encode([
                 'inputName' => 'tags',
-                'placeholder' => 'e.g. ui, performance, api',
+                'placeholder' => $lang['text_add_tag'],
                 'initialTags' => ''
             ]), 'attr') ?>"></div>
         </div>
         
         <div class="space-y-2">
             <label for="attachment" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                <?= esc($lang['label_attachment']) ?> <span class="text-muted-foreground font-normal">(image or document, max 5MB)</span>
+                <?= esc($lang['label_attachment']) ?> <span class="text-muted-foreground font-normal">(<?= esc($lang['text_attachment_hint']) ?>)</span>
             </label>
             <input type="file" name="attachment" id="attachment" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-secondary file:text-secondary-foreground file:h-full file:px-4 file:-mx-3 file:-my-2 file:mr-3 file:cursor-pointer hover:file:bg-secondary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2" accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx">
         </div>

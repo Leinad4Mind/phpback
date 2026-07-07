@@ -5,7 +5,7 @@
 <nav class="flex text-sm text-muted-foreground mb-6" aria-label="Breadcrumb">
     <ol class="inline-flex items-center space-x-1 md:space-x-3">
         <li class="inline-flex items-center">
-            <a href="<?= base_url() ?>" class="hover:text-foreground transition-colors">Feedback</a>
+            <a href="<?= base_url() ?>" class="hover:text-foreground transition-colors"><?= esc($lang['label_feedback']) ?></a>
         </li>
         <li aria-current="page">
             <div class="flex items-center">
@@ -21,7 +21,7 @@
 <div class="mb-8">
     <h2 class="text-3xl font-bold tracking-tight text-foreground"><?= esc($lang['label_search']) ?></h2>
     <?php if (isset($_POST['query'])): ?>
-        <p class="text-muted-foreground mt-2">Results for "<?= esc($_POST['query']) ?>"</p>
+        <p class="text-muted-foreground mt-2"><?= esc($lang['label_search']) ?>: "<?= esc($_POST['query']) ?>"</p>
     <?php endif; ?>
 </div>
 

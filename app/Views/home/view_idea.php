@@ -5,7 +5,7 @@
 <nav class="flex text-sm text-muted-foreground mb-6" aria-label="Breadcrumb">
     <ol class="inline-flex items-center space-x-1 md:space-x-3">
         <li class="inline-flex items-center">
-            <a href="<?= base_url() ?>" class="hover:text-foreground transition-colors">Feedback</a>
+            <a href="<?= base_url() ?>" class="hover:text-foreground transition-colors"><?= esc($lang['label_feedback']) ?></a>
         </li>
         <li>
             <div class="flex items-center">
@@ -39,7 +39,13 @@
             'csrfTokenName' => csrf_token(),
             'initialCsrfHash' => csrf_hash(),
             'voteUrl' => base_url('action/vote'),
-            'unvoteUrl' => base_url('action/unvote')
+            'unvoteUrl' => base_url('action/unvote'),
+            'labels' => [
+                'votes' => $lang['label_votes'],
+                'vote' => $lang['label_vote'],
+                'removeVote' => $lang['label_remove_vote'],
+                'error' => $lang['error_request_failed'],
+            ]
         ]), 'attr') ?>">
             <!-- Static fallback shown until the island mounts -->
             <div class="flex flex-col items-center sm:w-24 shrink-0 bg-muted/30 rounded-lg p-4 border border-dashed">
@@ -52,7 +58,7 @@
             <div class="text-3xl font-bold text-primary mb-1"><?= esc(number_format((int) $idea->votes)) ?></div>
             <div class="text-xs uppercase tracking-wider text-muted-foreground font-semibold mb-4"><?= esc($lang['label_votes']) ?></div>
             <div class="flex flex-col items-center w-full">
-                <a href="<?= base_url('home/login') ?>" class="text-[10px] uppercase font-semibold text-primary hover:underline">Log in to vote</a>
+                <a href="<?= base_url('home/login') ?>" class="text-[10px] uppercase font-semibold text-primary hover:underline"><?= esc($lang['text_login_to_vote']) ?></a>
             </div>
         </div>
         <?php endif; ?>
@@ -130,7 +136,7 @@
 <!-- Admin Actions -->
 <?php if (is_admin(1)): ?>
 <div class="bg-destructive/10 border-destructive/20 text-destructive-foreground rounded-lg border p-4 mb-8 sm:ml-32">
-    <h4 class="text-sm font-semibold text-destructive mb-3 uppercase tracking-wider">Admin Actions</h4>
+    <h4 class="text-sm font-semibold text-destructive mb-3 uppercase tracking-wider"><?= esc($lang['label_admin_actions']) ?></h4>
     <div class="flex flex-wrap gap-3 items-center">
         <?php if ($idea->status === 'new'): ?>
             <form method="post" action="<?= base_url('adminaction/approveidea') ?>">
@@ -152,7 +158,8 @@
                     'planned' => $lang['idea_planned'],
                     'started' => $lang['idea_started'],
                     'completed' => $lang['idea_completed']
-                ]
+                ],
+                'errorLabel' => $lang['error_request_failed']
             ]), 'attr') ?>"></div>
         <?php endif; ?>
         
@@ -189,7 +196,20 @@
     'submitUrl' => base_url('action/comment'),
     'deleteUrl' => base_url('adminaction/deletecomment'),
     'flagUrl' => base_url('action/flag'),
-    'baseUrl' => base_url()
+    'baseUrl' => base_url(),
+    'labels' => [
+        'comments' => $lang['label_comments'],
+        'leaveComment' => $lang['text_leave_comment'],
+        'submit' => $lang['label_submit'],
+        'submitting' => $lang['text_submitting'],
+        'delete' => $lang['label_delete'],
+        'flag' => $lang['label_flag'],
+        'noComments' => $lang['text_no_comments'],
+        'sureDelete' => $lang['text_sure_delete_comment'],
+        'sureFlag' => $lang['text_sure_flag_comment'],
+        'flagged' => $lang['text_comment_flagged'],
+        'error' => $lang['error_request_failed'],
+    ]
 ]), 'attr') ?>"></div>
 
 <?= $this->endSection() ?>

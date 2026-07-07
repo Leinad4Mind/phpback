@@ -27,7 +27,15 @@
                 <?php foreach ($settings as $setting): ?>
                 <div class="grid gap-2">
                     <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"><?= esc($setting->name) ?></label>
+                    <?php if ($setting->name === 'language' && ! empty($availableLanguages)): ?>
+                    <select name="setting-<?= (int) $setting->id ?>" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+                        <?php foreach ($availableLanguages as $slug => $nativeName): ?>
+                            <option value="<?= esc($slug, 'attr') ?>" <?= $setting->value === $slug ? 'selected' : '' ?>><?= esc($nativeName) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <?php else: ?>
                     <input type="text" name="setting-<?= (int) $setting->id ?>" value="<?= esc($setting->value, 'attr') ?>" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+                    <?php endif; ?>
                 </div>
                 <?php endforeach; ?>
             </div>

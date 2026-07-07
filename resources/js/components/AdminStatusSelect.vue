@@ -13,6 +13,7 @@ const props = defineProps<{
   initialCsrfHash: string
   updateUrl: string
   statuses: Record<string, string>
+  errorLabel?: string
 }>()
 
 initCsrf(props.csrfTokenName, props.initialCsrfHash)
@@ -38,11 +39,11 @@ async function changeStatus(event: Event) {
       currentStatus.value = data.newStatus
     } else {
       target.value = currentStatus.value
-      errorMessage.value = data.error || 'Failed to update status.'
+      errorMessage.value = data.error || props.errorLabel || 'Something went wrong. Please try again.'
     }
-  } catch (error) {
+  } catch {
     target.value = currentStatus.value
-    errorMessage.value = error instanceof Error ? error.message : 'Failed to update status.'
+    errorMessage.value = props.errorLabel || 'Something went wrong. Please try again.'
   } finally {
     isUpdating.value = false
   }
