@@ -6,6 +6,8 @@
 application/config/database.php
 
 # CodeIgniter 4 writable artifacts
+writable/*.sqlite
+writable/*.db
 writable/cache/*
 !writable/cache/index.html
 writable/debugbar/*
