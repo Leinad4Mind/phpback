@@ -42,3 +42,31 @@ if (! function_exists('is_admin')) {
         return is_logged_in() && (int) session()->get('isadmin') >= $level;
     }
 }
+
+if (! function_exists('phpback_login')) {
+    /**
+     * Establishes an authenticated session. Regenerates the session id first
+     * to prevent session fixation.
+     */
+    function phpback_login(object $user): void
+    {
+        $session = session();
+        $session->regenerate(true);
+        $session->set([
+            'isLoggedIn' => true,
+            'userid'     => (int) $user->id,
+            'username'   => $user->name,
+            'email'      => $user->email,
+            'isadmin'    => (int) $user->isadmin,
+            'role_id'    => (int) ($user->role_id ?? 0),
+            'role'       => ((int) $user->isadmin > 0 ? 'Admin' : 'User'),
+        ]);
+    }
+}
+
+if (! function_exists('phpback_logout')) {
+    function phpback_logout(): void
+    {
+        session()->destroy();
+    }
+}

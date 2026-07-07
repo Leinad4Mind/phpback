@@ -111,6 +111,17 @@ class IdeaModel extends Model
     }
 
     /**
+     * Every idea in a category, regardless of status (used when deleting a
+     * whole category).
+     *
+     * @return list<object>
+     */
+    public function allByCategory(int $categoryId): array
+    {
+        return $this->where('categoryid', $categoryId)->findAll();
+    }
+
+    /**
      * Homepage filters: category / status / tag / sort / pagination.
      *
      * @param array<string, mixed> $filters
