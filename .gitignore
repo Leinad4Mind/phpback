@@ -1,3 +1,26 @@
+# Dependencies (managed by Composer)
+/vendor/
+
+# Environment / secrets
+.env
 application/config/database.php
-sftp-config.json
+
+# CodeIgniter 4 writable artifacts
+writable/cache/*
+!writable/cache/index.html
+writable/debugbar/*
+!writable/debugbar/index.html
+writable/logs/*
+!writable/logs/index.html
+writable/session/*
+!writable/session/index.html
+writable/uploads/*
+!writable/uploads/index.html
+
+# Editor / OS
 .idea
+.vscode
+sftp-config.json
+*.log
+.DS_Store
+Thumbs.db
