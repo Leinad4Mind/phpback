@@ -301,7 +301,12 @@ class IdeaModel extends Model
             model(CategoryModel::class)->adjustCount((int) $idea->categoryid, -1);
         }
 
-        $this->delete($id); // FK cascade removes idea_tags + attachments rows
+        // Remove dependent rows explicitly (no DB-level FK on idea_id, for
+        // MySQL/MariaDB upgrade compatibility with the signed legacy ids).
+        $this->db->table('idea_tags')->where('idea_id', $id)->delete();
+        $this->db->table('attachments')->where('idea_id', $id)->delete();
+
+        $this->delete($id);
     }
 
     /**

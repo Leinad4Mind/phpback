@@ -23,7 +23,10 @@ class CreateIdeaTagsTable extends Migration
             'tag_id'  => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true],
         ]);
         $this->forge->addKey(['idea_id', 'tag_id'], true);
-        $this->forge->addForeignKey('idea_id', 'ideas', 'id', 'CASCADE', 'CASCADE');
+        // No FK on idea_id: the legacy 1.3.x `ideas.id` is signed INT, so an
+        // unsigned FK would fail on InnoDB during an upgrade (errno 150).
+        // Integrity is handled in IdeaModel::deleteIdea(). `tags` is always
+        // created fresh by us, so that FK is safe to keep.
         $this->forge->addForeignKey('tag_id', 'tags', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('idea_tags');
     }

@@ -23,7 +23,8 @@ class CreateAttachmentsTable extends Migration
         ]);
         $this->forge->addKey('id', true);
         $this->forge->addKey('idea_id');
-        $this->forge->addForeignKey('idea_id', 'ideas', 'id', 'CASCADE', 'CASCADE');
+        // No FK on idea_id (legacy `ideas.id` is signed INT -> InnoDB errno 150
+        // on upgrade). Rows are removed in IdeaModel::deleteIdea().
         $this->forge->createTable('attachments');
     }
 
