@@ -137,9 +137,12 @@ class Install extends BaseController
         $values = [
             'database.default.DBDriver' => (string) $this->request->getPost('db_driver') ?: 'MySQLi',
             'database.default.hostname' => (string) $this->request->getPost('db_host') ?: 'localhost',
+            'database.default.port'     => (string) ($this->request->getPost('db_port') ?: '3306'),
             'database.default.database' => (string) $this->request->getPost('db_name'),
             'database.default.username' => (string) $this->request->getPost('db_user'),
             'database.default.password' => (string) $this->request->getPost('db_pass'),
+            // Table prefix — existing PHPBack installs use `voice_`.
+            'database.default.DBPrefix' => (string) $this->request->getPost('db_prefix'),
         ];
 
         $envPath = ROOTPATH . '.env';

@@ -41,9 +41,12 @@
 				<option value="SQLite3">SQLite</option>
 			</select>
 			<label>Host</label><input name="db_host" value="localhost">
+			<label>Port</label><input name="db_port" value="3306">
 			<label>Database name</label><input name="db_name" required>
 			<label>Username</label><input name="db_user">
 			<label>Password</label><input type="password" name="db_pass">
+			<label>Table prefix</label><input name="db_prefix" value="voice_">
+			<small style="color:#7f8c8d">Existing PHPBack installs use <code>voice_</code>. Leave empty for none.</small>
 			<button type="submit">Save &amp; continue</button>
 		</form>
 

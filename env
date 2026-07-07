@@ -31,12 +31,13 @@
 #--------------------------------------------------------------------
 
 # database.default.hostname = localhost
-# database.default.database = ci4
+# database.default.database = phpback
 # database.default.username = root
 # database.default.password = root
 # database.default.DBDriver = MySQLi
-# database.default.DBPrefix =
 # database.default.port = 3306
+# Table prefix. Existing PHPBack (1.3.x) installs use `voice_`; leave empty for none.
+# database.default.DBPrefix = voice_
 
 # If you use MySQLi as tests, first update the values of Config\Database::$tests.
 # database.tests.hostname = localhost
