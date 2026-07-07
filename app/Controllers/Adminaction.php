@@ -64,7 +64,8 @@ class Adminaction extends BaseController
 
     public function deletecomment()
     {
-        $id       = (int) $this->request->getPost('id');
+        $id = (int) $this->request->getPost('id');
+
         $comments = model(CommentModel::class);
         $comment  = $comments->find($id);
 
@@ -75,7 +76,11 @@ class Adminaction extends BaseController
             $this->log(str_replace('%s', "#{$id}", (string) $this->lang('log_comment_deleted')));
         }
 
-        return redirect()->to('admin/ideas');
+        if ($this->request->isAJAX() || $this->request->getHeaderLine('Accept') === 'application/json') {
+            return $this->response->setJSON(['success' => true, 'csrfHash' => csrf_hash()]);
+        }
+
+        return redirect()->back();
     }
 
     public function deleteidea()
@@ -110,14 +115,21 @@ class Adminaction extends BaseController
         $id     = (int) $this->request->getPost('id');
         $status = (string) $this->request->getPost('status');
 
-        if (! in_array($status, IdeaModel::STATUSES, true)) {
+        if (! in_array($status, \App\Models\IdeaModel::STATUSES, true)) {
+            if ($this->request->isAJAX() || $this->request->getHeaderLine('Accept') === 'application/json') {
+                return $this->response->setJSON(['success' => false, 'error' => 'Invalid status']);
+            }
             return redirect()->to('home/idea/' . $id);
         }
 
-        model(IdeaModel::class)->changeStatus($id, $status);
+        model(\App\Models\IdeaModel::class)->changeStatus($id, $status);
         $this->log(str_replace(['%s1', '%s2'], ["#{$id}", $status], (string) $this->lang('log_idea_status')));
 
-        return redirect()->to('home/idea/' . $id);
+        if ($this->request->isAJAX() || $this->request->getHeaderLine('Accept') === 'application/json') {
+            return $this->response->setJSON(['success' => true, 'csrfHash' => csrf_hash(), 'newStatus' => $status]);
+        }
+
+        return redirect()->back();
     }
 
     public function editsettings()

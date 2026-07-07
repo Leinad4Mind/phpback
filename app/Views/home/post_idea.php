@@ -68,12 +68,15 @@
             <textarea name="description" rows="5" class="flex min-h-[120px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2" minlength="20" maxlength="1500" required><?= esc($POST['desc'] ?? '') ?></textarea>
         </div>
         
-        <!-- TagsInput Island will replace this in Phase 3.3 -->
         <div class="space-y-2">
             <label for="tags" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                <?= esc($lang['label_tags']) ?> <span class="text-muted-foreground font-normal">(separated by commas)</span>
+                <?= esc($lang['label_tags']) ?> <span class="text-muted-foreground font-normal">(press enter to add)</span>
             </label>
-            <input type="text" name="tags" id="tags" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2" placeholder="e.g. ui, performance, api">
+            <div data-vue-component="TagsInputIsland" data-props="<?= esc(json_encode([
+                'inputName' => 'tags',
+                'placeholder' => 'e.g. ui, performance, api',
+                'initialTags' => ''
+            ]), 'attr') ?>"></div>
         </div>
         
         <div class="space-y-2">

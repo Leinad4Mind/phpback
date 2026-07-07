@@ -115,10 +115,25 @@ class Action extends BaseController
                 'user',
                 $userId
             );
+            $success = true;
+        } else {
+            $success = false;
+        }
+
+        if ($this->request->isAJAX() || $this->request->getHeaderLine('Accept') === 'application/json') {
+            $newVote = model(VoteModel::class)->forUserAndIdea($userId, $ideaId);
+            $idea = model(IdeaModel::class)->getIdea($ideaId);
+            return $this->response->setJSON([
+                'success' => $success, 
+                'ideaId' => $ideaId, 
+                'votes' => $votes,
+                'totalVotes' => $idea ? (int) $idea->votes : 0,
+                'userVoteId' => $newVote ? (int) $newVote->id : null,
+                'csrfHash' => csrf_hash()
+            ]);
         }
 
         $idea = model(IdeaModel::class)->getIdea($ideaId);
-
         return redirect()->to($idea?->url ?? base_url('home'));
     }
 
@@ -126,6 +141,7 @@ class Action extends BaseController
     {
         $id     = (int) $this->request->getPost('id');
         $userId = current_user_id();
+        $success = false;
 
         $votes = model(VoteModel::class);
         $vote  = $votes->find($id);
@@ -134,6 +150,16 @@ class Action extends BaseController
             model(IdeaModel::class)->adjustVotes((int) $vote->ideaid, -(int) $vote->number);
             model(UserModel::class)->addVotes($userId, (int) $vote->number);
             $votes->delete($id);
+            $success = true;
+        }
+
+        if ($this->request->isAJAX() || $this->request->getHeaderLine('Accept') === 'application/json') {
+            $idea = $vote ? model(IdeaModel::class)->getIdea((int) $vote->ideaid) : null;
+            return $this->response->setJSON([
+                'success' => $success,
+                'totalVotes' => $idea ? (int) $idea->votes : 0,
+                'csrfHash' => csrf_hash()
+            ]);
         }
 
         return redirect()->to(base_url('home/profile/' . $userId));
@@ -226,12 +252,14 @@ class Action extends BaseController
         $userId  = current_user_id();
 
         if ($content === '') {
+            if ($this->request->isAJAX() || $this->request->getHeaderLine('Accept') === 'application/json') {
+                return $this->response->setJSON(['success' => false, 'error' => 'Empty content', 'csrfHash' => csrf_hash()]);
+            }
             $idea = model(IdeaModel::class)->getIdea($ideaId);
-
             return redirect()->to($idea?->url ?? base_url('home'));
         }
 
-        model(CommentModel::class)->add($ideaId, $content, $userId);
+        $id = model(CommentModel::class)->add($ideaId, $content, $userId);
         model(IdeaModel::class)->adjustComments($ideaId, +1);
         model(LogModel::class)->add(
             str_replace('%s', '#' . $ideaId, (string) $this->lang('log_commented')),
@@ -241,8 +269,22 @@ class Action extends BaseController
 
         $this->notifyCommentParticipants($ideaId);
 
-        $idea = model(IdeaModel::class)->getIdea($ideaId);
+        if ($this->request->isAJAX() || $this->request->getHeaderLine('Accept') === 'application/json') {
+            $user = model(UserModel::class)->find($userId);
+            return $this->response->setJSON([
+                'success' => true,
+                'comment' => [
+                    'id' => $id,
+                    'user' => $user->name,
+                    'userid' => $user->id,
+                    'date' => date('Y-m-d H:i:s'),
+                    'content' => $content
+                ],
+                'csrfHash' => csrf_hash()
+            ]);
+        }
 
+        $idea = model(IdeaModel::class)->getIdea($ideaId);
         return redirect()->to($idea?->url ?? base_url('home'));
     }
 
@@ -253,8 +295,11 @@ class Action extends BaseController
 
         model(\App\Models\FlagModel::class)->flag($commentId, current_user_id());
 
-        $idea = model(IdeaModel::class)->getIdea($ideaId);
+        if ($this->request->isAJAX() || $this->request->getHeaderLine('Accept') === 'application/json') {
+            return $this->response->setJSON(['success' => true, 'csrfHash' => csrf_hash()]);
+        }
 
+        $idea = model(IdeaModel::class)->getIdea($ideaId);
         return redirect()->to($idea?->url ?? base_url('home'));
     }
 

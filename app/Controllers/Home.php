@@ -117,6 +117,7 @@ class Home extends BaseController
         $data['comments']    = $comments;
         $data['tags']        = model(TagModel::class)->forIdea((int) $id);
         $data['attachments'] = model(AttachmentModel::class)->forIdea((int) $id);
+        $data['userVote']    = is_logged_in() ? model(VoteModel::class)->forUserAndIdea(current_user_id(), (int) $id) : null;
 
         return $this->render('home/view_idea', $data);
     }

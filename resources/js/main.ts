@@ -1,10 +1,18 @@
 import '../css/app.css';
 import { createApp, type Component } from 'vue';
 import ThemeToggle from './components/ThemeToggle.vue';
+import VoteButton from './components/VoteButton.vue';
+import CommentSection from './components/CommentSection.vue';
+import TagsInputIsland from './components/TagsInputIsland.vue';
+import AdminStatusSelect from './components/AdminStatusSelect.vue';
 
 // Define a registry of island components
 const components: Record<string, Component> = {
     ThemeToggle,
+    VoteButton,
+    CommentSection,
+    TagsInputIsland,
+    AdminStatusSelect,
 };
 
 // Scan the DOM for island mount points

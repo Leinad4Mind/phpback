@@ -40,8 +40,18 @@ jobs:
           coverage: none
           tools: composer:v2
 
-      - name: Install dependencies
+      - name: Install PHP dependencies
         run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install JS dependencies & Build
+        run: |
+          npm ci
+          npm run build
 
       - name: Run test suite (SQLite unit/feature + MariaDB upgrade)
         env:

@@ -35,17 +35,20 @@
             <div class="text-xs uppercase tracking-wider text-muted-foreground font-semibold mb-4"><?= esc($lang['label_votes']) ?></div>
             
             <?php if (is_logged_in()): ?>
-            <!-- This form will be replaced by the VoteButton Island in Phase 3.3 -->
-            <form method="post" action="<?= base_url('action/vote') ?>" class="flex flex-col items-center w-full">
-                <?= csrf_field() ?>
-                <input type="hidden" name="ideaid" value="<?= (int) $idea->id ?>">
-                <div class="flex w-full overflow-hidden rounded-md border shadow-sm">
-                    <button type="submit" name="votes" value="1" class="flex-1 bg-background hover:bg-muted py-1.5 text-sm font-medium transition-colors border-r">1</button>
-                    <button type="submit" name="votes" value="2" class="flex-1 bg-background hover:bg-muted py-1.5 text-sm font-medium transition-colors border-r">2</button>
-                    <button type="submit" name="votes" value="3" class="flex-1 bg-background hover:bg-muted py-1.5 text-sm font-medium transition-colors">3</button>
-                </div>
-                <div class="text-[10px] uppercase text-muted-foreground mt-2"><?= esc($lang['label_vote']) ?></div>
-            </form>
+            <div data-vue-component="VoteButton" data-props="<?= esc(json_encode([
+                'ideaId' => (int) $idea->id,
+                'initialTotalVotes' => (int) $idea->votes,
+                'initialUserVoteId' => $userVote ? (int) $userVote->id : null,
+                'initialUserVoteAmount' => $userVote ? (int) $userVote->number : 0,
+                'csrfTokenName' => csrf_token(),
+                'initialCsrfHash' => csrf_hash(),
+                'voteUrl' => base_url('action/vote'),
+                'unvoteUrl' => base_url('action/unvote')
+            ]), 'attr') ?>"></div>
+            <?php else: ?>
+            <div class="flex flex-col items-center w-full">
+                <a href="<?= base_url('home/login') ?>" class="text-[10px] uppercase font-semibold text-primary hover:underline">Log in to vote</a>
+            </div>
             <?php endif; ?>
         </div>
 
@@ -132,19 +135,20 @@
                 </button>
             </form>
         <?php elseif ($idea->status !== 'completed' && $idea->status !== 'declined'): ?>
-            <form method="post" action="<?= base_url('adminaction/ideastatus') ?>" class="flex items-center gap-2">
-                <?= csrf_field() ?><input type="hidden" name="id" value="<?= (int) $idea->id ?>">
-                <select name="status" class="flex h-9 w-[150px] rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring">
-                    <option value="declined"><?= esc($lang['idea_declined']) ?></option>
-                    <option value="considered"><?= esc($lang['idea_considered']) ?></option>
-                    <option value="planned"><?= esc($lang['idea_planned']) ?></option>
-                    <option value="started"><?= esc($lang['idea_started']) ?></option>
-                    <option value="completed"><?= esc($lang['idea_completed']) ?></option>
-                </select>
-                <button type="submit" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-secondary text-secondary-foreground hover:bg-secondary/80 h-9 px-4">
-                    <?= esc($lang['label_change_status']) ?>
-                </button>
-            </form>
+            <div data-vue-component="AdminStatusSelect" data-props="<?= esc(json_encode([
+                'ideaId' => (int) $idea->id,
+                'initialStatus' => $idea->status,
+                'csrfTokenName' => csrf_token(),
+                'initialCsrfHash' => csrf_hash(),
+                'updateUrl' => base_url('adminaction/ideastatus'),
+                'statuses' => [
+                    'declined' => $lang['idea_declined'],
+                    'considered' => $lang['idea_considered'],
+                    'planned' => $lang['idea_planned'],
+                    'started' => $lang['idea_started'],
+                    'completed' => $lang['idea_completed']
+                ]
+            ]), 'attr') ?>"></div>
         <?php endif; ?>
         
         <form method="post" action="<?= base_url('adminaction/deleteidea') ?>" onsubmit="return confirm('<?= esc($lang['text_sure_delete_idea'], 'js') ?>');">
@@ -162,73 +166,25 @@
 <?php endif; ?>
 
 <!-- Comments Section -->
-<div class="sm:ml-32">
-    <h3 class="text-xl font-bold mb-6 flex items-center gap-2">
-        <svg class="w-5 h-5 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"></path></svg>
-        Comments (<?= count($comments) ?>)
-    </h3>
-
-    <?php if (is_logged_in()): ?>
-    <div class="bg-card text-card-foreground border rounded-lg p-4 mb-8 shadow-sm">
-        <!-- This form will be replaced by the CommentForm Island in Phase 3.3 -->
-        <form method="post" action="<?= base_url('action/comment') ?>" class="space-y-4">
-            <?= csrf_field() ?>
-            <input type="hidden" name="idea_id" value="<?= (int) $idea->id ?>">
-            <div>
-                <label class="block text-sm font-medium mb-2">Leave a comment</label>
-                <textarea name="content" required rows="4" class="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"></textarea>
-            </div>
-            <button type="submit" name="commentbutton" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
-                <?= esc($lang['label_submit']) ?>
-            </button>
-        </form>
-    </div>
-    <?php endif; ?>
-
-    <div class="space-y-4">
-        <?php foreach ($comments as $comment): ?>
-        <div class="bg-background border rounded-lg p-4 shadow-sm relative group">
-            <div class="flex items-center gap-3 mb-3">
-                <div class="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-sm uppercase">
-                    <?= substr(esc($comment->user), 0, 1) ?>
-                </div>
-                <div>
-                    <a href="<?= base_url('home/profile/' . $comment->userid . '/' . url_title((string) $comment->user, '-', true)) ?>" class="font-semibold text-sm hover:underline"><?= esc($comment->user) ?></a>
-                    <div class="text-xs text-muted-foreground"><?= esc($comment->date) ?></div>
-                </div>
-                
-                <div class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
-                    <?php if (is_admin(1)): ?>
-                        <form method="post" action="<?= base_url('adminaction/deletecomment') ?>" onsubmit="return confirm('<?= esc($lang['text_sure_delete_comment'], 'js') ?>');">
-                            <?= csrf_field() ?><input type="hidden" name="id" value="<?= (int) $comment->id ?>">
-                            <button type="submit" class="text-xs text-destructive hover:underline p-1">
-                                <?= esc($lang['label_delete_comment']) ?>
-                            </button>
-                        </form>
-                    <?php else: ?>
-                        <form method="post" action="<?= base_url('action/flag') ?>">
-                            <?= csrf_field() ?><input type="hidden" name="cid" value="<?= (int) $comment->id ?>"><input type="hidden" name="idea_id" value="<?= (int) $idea->id ?>">
-                            <button type="submit" class="text-xs text-muted-foreground hover:text-destructive hover:underline p-1 flex items-center gap-1">
-                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"></path></svg>
-                                <?= esc($lang['text_flag_comment']) ?>
-                            </button>
-                        </form>
-                    <?php endif; ?>
-                </div>
-            </div>
-            <div class="text-sm whitespace-pre-wrap text-foreground/90 pl-11">
-                <?= nl2br(esc($comment->content)) ?>
-            </div>
-        </div>
-        <?php endforeach; ?>
-        
-        <?php if (empty($comments)): ?>
-            <div class="text-center py-12 text-muted-foreground bg-muted/20 rounded-lg border border-dashed">
-                <svg class="w-12 h-12 mx-auto mb-3 text-muted-foreground/50" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-                <p>No comments yet. Be the first to share your thoughts!</p>
-            </div>
-        <?php endif; ?>
-    </div>
-</div>
+<div data-vue-component="CommentSection" data-props="<?= esc(json_encode([
+    'ideaId' => (int) $idea->id,
+    'isLoggedIn' => is_logged_in(),
+    'isAdmin' => is_admin(1),
+    'initialComments' => array_map(function($c) {
+        return [
+            'id' => (int) $c->id,
+            'user' => $c->user,
+            'userid' => (int) $c->userid,
+            'date' => $c->date,
+            'content' => $c->content
+        ];
+    }, $comments),
+    'csrfTokenName' => csrf_token(),
+    'initialCsrfHash' => csrf_hash(),
+    'submitUrl' => base_url('action/comment'),
+    'deleteUrl' => base_url('adminaction/deletecomment'),
+    'flagUrl' => base_url('action/flag'),
+    'baseUrl' => base_url()
+]), 'attr') ?>"></div>
 
 <?= $this->endSection() ?>
