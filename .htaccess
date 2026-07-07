@@ -1,4 +1,14 @@
-RewriteEngine on
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php?/$0
+# PHPBack (CodeIgniter 4) — forward all requests into the public/ web root.
+# Ideal is to point your web server's document root directly at public/.
+# On shared hosting where that is not possible, this rewrite makes the app
+# work from the project root while keeping app/, system(vendor)/, writable/
+# and .env outside the served directory.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+# Block direct access to sensitive files just in case.
+<FilesMatch "^\.env|composer\.(json|lock)$">
+    Require all denied
+</FilesMatch>
