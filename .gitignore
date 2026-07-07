@@ -26,3 +26,4 @@ sftp-config.json
 *.log
 .DS_Store
 Thumbs.db
+*.sql
