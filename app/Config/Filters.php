@@ -108,4 +108,19 @@ class Filters extends BaseFilters
      * @var array<string, array<string, list<string>>>
      */
     public array $filters = [];
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        // During the automated test suite, drop the global CSRF filter so
+        // feature tests can POST without juggling per-request tokens. CSRF
+        // rejection is covered by a dedicated test (see tests/feature/SecurityTest).
+        if (ENVIRONMENT === 'testing') {
+            $this->globals['before'] = array_values(array_filter(
+                $this->globals['before'],
+                static fn ($filter): bool => $filter !== 'csrf'
+            ));
+        }
+    }
 }

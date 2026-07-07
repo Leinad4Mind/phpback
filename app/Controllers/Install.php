@@ -104,12 +104,15 @@ class Install extends BaseController
 
         $hasUsers = $db->tableExists('users');
         $pending  = $this->pendingMigrations($db);
+        $hasAdmin = $hasUsers && model(UserModel::class)->getAdmins() !== [];
 
-        if (! $hasUsers) {
-            return ['state' => 'install', 'pending' => $pending];
+        // No tables yet, or tables exist but no administrator (e.g. someone ran
+        // `spark migrate` by hand): treat as a fresh install so the admin can be
+        // created and any remaining migrations applied.
+        if (! $hasUsers || ! $hasAdmin) {
+            return ['state' => 'install', 'pending' => $pending, 'hasAdmin' => $hasAdmin];
         }
 
-        $hasAdmin = $db->tableExists('users') && model(UserModel::class)->getAdmins() !== [];
         if ($pending > 0) {
             return ['state' => 'upgrade', 'pending' => $pending, 'hasAdmin' => $hasAdmin];
         }
