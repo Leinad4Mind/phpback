@@ -26,21 +26,23 @@ class Admin extends BaseController
         $data          = ['lang' => $this->langArray(), 'title' => (string) model(SettingModel::class)->get('title')];
         $data['error'] = $error !== '' ? $error : (session('error') ?? '');
 
-        return view('admin/header', $data) . view('admin/login', $data);
+        return view('admin/login', $data);
     }
 
     public function dashboard()
     {
         $data         = $this->adminData();
         $data['logs'] = model(LogModel::class)->latest();
+        $data['active'] = 'dashboard';
 
-        return view('admin/dashboard/header', $data) . view('admin/dashboard/index', $data);
+        return view('admin/dashboard/index', $data);
     }
 
     public function ideas()
     {
         $ideas = model(IdeaModel::class);
         $data  = $this->adminData();
+        $data['active'] = 'ideas';
 
         $data['newideas']     = $ideas->newIdeas(150);
         $data['newideas_num'] = $ideas->newIdeasCount();
@@ -91,13 +93,14 @@ class Admin extends BaseController
         $data['form']  = $form;
         $data['ideas'] = $ideas->getIdeas((string) $form['orderby'], (bool) $form['isdesc'], 0, 150, $statuses, $categoryIds);
 
-        return view('admin/dashboard/header', $data) . view('admin/dashboard/ideas', $data);
+        return view('admin/dashboard/ideas', $data);
     }
 
     public function users($idban = 0)
     {
         $users = model(UserModel::class);
         $data  = $this->adminData();
+        $data['active'] = 'users';
 
         $data['users']  = $users->listActive('id', 200);
         $data['banned'] = $users->listBanned(100);
@@ -105,20 +108,21 @@ class Admin extends BaseController
             $data['idban'] = (int) $idban;
         }
 
-        return view('admin/dashboard/header', $data) . view('admin/dashboard/users', $data);
+        return view('admin/dashboard/users', $data);
     }
 
     public function system()
     {
         $settings = model(SettingModel::class);
         $data     = $this->adminData();
+        $data['active'] = 'system';
 
         $data['settings']    = $settings->all();
         $data['adminusers']  = model(UserModel::class)->getAdmins();
         $data['categories']  = model(CategoryModel::class)->getAllKeyed();
         $data['version']     = self::VERSION;
 
-        return view('admin/dashboard/header', $data) . view('admin/dashboard/system', $data);
+        return view('admin/dashboard/system', $data);
     }
 
     /**

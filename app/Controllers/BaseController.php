@@ -90,10 +90,7 @@ abstract class BaseController extends Controller
      */
     protected function render(string $view, array $data): string
     {
-        return view('templates/header', $data)
-            . view($view, $data)
-            . view('templates/menu', $data)
-            . view('templates/footer', $data);
+        return view($view, $data);
     }
 
     /**
