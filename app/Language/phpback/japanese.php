@@ -151,6 +151,7 @@ return [
     'lang_code' => 'ja',
     'lang_dir' => 'ltr',
     'lang_name' => '日本語',
+    'last_added_ideas' => '最近追加されたアイデア',
     'last_completed_ideas' => '最後に完了したアイデア',
     'last_considered_ideas' => '最後に考えられたアイデア',
     'last_planned_ideas' => '最後に計画したアイデア',

@@ -85,6 +85,31 @@
     </div>
 <?php endif; ?>
 
+<?php
+    // Same badge palette as the status buckets below, keyed by idea status.
+    $statusBadgeClasses = [
+        'completed'  => 'bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300',
+        'started'    => 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300',
+        'planned'    => 'bg-orange-100 text-orange-800 dark:bg-orange-900/50 dark:text-orange-300',
+        'considered' => 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300',
+    ];
+?>
+<?php if (! empty($ideas['recent'])): ?>
+    <div class="mb-8">
+        <h6 class="text-sm font-semibold mb-3 uppercase tracking-wider text-muted-foreground"><?= esc($lang['last_added_ideas']) ?></h6>
+        <div class="space-y-2">
+            <?php foreach ($ideas['recent'] as $idea): ?>
+                <div class="flex items-center gap-2">
+                    <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold <?= $statusBadgeClasses[$idea->status] ?? 'bg-secondary text-secondary-foreground' ?>">
+                        <?= esc($lang['idea_' . $idea->status]) ?>
+                    </span>
+                    <a href="<?= esc($idea->url, 'attr') ?>" class="text-sm hover:underline text-foreground truncate"><?= esc($idea->title) ?></a>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+<?php endif; ?>
+
 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
     <div class="space-y-8">
         <div>

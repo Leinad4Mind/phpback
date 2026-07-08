@@ -151,6 +151,7 @@ return [
     'lang_code' => 'id',
     'lang_dir' => 'ltr',
     'lang_name' => 'Bahasa Indonesia',
+    'last_added_ideas' => 'Ide yang baru ditambahkan',
     'last_completed_ideas' => 'Ide yang baru diselesaikan',
     'last_considered_ideas' => 'Ide yang baru dipertimbangkan',
     'last_planned_ideas' => 'Ide yang baru direncanakan',

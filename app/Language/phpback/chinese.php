@@ -151,6 +151,7 @@ return [
     'lang_code' => 'zh',
     'lang_dir' => 'ltr',
     'lang_name' => '中文',
+    'last_added_ideas' => '最近新增',
     'last_completed_ideas' => '最近完成',
     'last_considered_ideas' => '最近讨论',
     'last_planned_ideas' => '最近计划',

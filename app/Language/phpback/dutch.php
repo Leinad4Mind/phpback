@@ -151,6 +151,7 @@ return [
     'lang_code' => 'nl',
     'lang_dir' => 'ltr',
     'lang_name' => 'Nederlands',
+    'last_added_ideas' => 'Meest recent toegevoegde ideeën',
     'last_completed_ideas' => 'Meest recent voltooide ideeën',
     'last_considered_ideas' => 'Meest recent behandelde ideeën',
     'last_planned_ideas' => 'Meest recent ingeplande ideeën',

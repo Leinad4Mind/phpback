@@ -151,6 +151,7 @@ return [
     'lang_code' => 'fr',
     'lang_dir' => 'ltr',
     'lang_name' => 'Français',
+    'last_added_ideas' => 'Dernières idées ajoutées',
     'last_completed_ideas' => 'Dernières idées terminées',
     'last_considered_ideas' => 'Dernières idées considérées',
     'last_planned_ideas' => 'Dernières idées planifiées',

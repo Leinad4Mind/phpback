@@ -151,6 +151,7 @@ return [
     'lang_code' => 'de',
     'lang_dir' => 'ltr',
     'lang_name' => 'Deutsch',
+    'last_added_ideas' => 'Neu hinzugefügte Ideen',
     'last_completed_ideas' => 'Fertiggestellte Ideen',
     'last_considered_ideas' => 'In Betracht gezogene Ideen',
     'last_planned_ideas' => 'Geplante Ideen',

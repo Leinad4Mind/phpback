@@ -154,6 +154,7 @@ return [
     'lang_code' => 'en',
     'lang_dir' => 'ltr',
     'lang_name' => 'English',
+    'last_added_ideas' => 'Recently Added Ideas',
     'last_completed_ideas' => 'Last Completed Ideas',
     'last_considered_ideas' => 'Last Considered Ideas',
     'last_planned_ideas' => 'Last Planned Ideas',

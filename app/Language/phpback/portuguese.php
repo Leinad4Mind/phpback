@@ -154,6 +154,7 @@ return [
     'lang_code' => 'pt-BR',
     'lang_dir' => 'ltr',
     'lang_name' => 'Português (Brasil)',
+    'last_added_ideas' => 'Últimas Idéias Adicionadas',
     'last_completed_ideas' => 'Últimas Idéias Finalizadas',
     'last_considered_ideas' => 'Últimas Idéias Consideradas',
     'last_planned_ideas' => 'Últimas Idéias Planejadas',

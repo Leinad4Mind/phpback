@@ -58,6 +58,7 @@ class Home extends BaseController
             'started'    => $ideas->getIdeas('id', true, 0, 10, ['started']),
             'planned'    => $ideas->getIdeas('id', true, 0, 10, ['planned']),
             'considered' => $ideas->getIdeas('id', true, 0, 10, ['considered']),
+            'recent'     => $ideas->getIdeas('id', true, 0, 10, ['considered', 'planned', 'started', 'completed']),
         ];
 
         return $this->render('home/index', $data);
