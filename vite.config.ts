@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vitest/config';
 import vue from '@vitejs/plugin-vue';
 import tailwindcss from '@tailwindcss/vite';
 import { resolve } from 'path';
@@ -23,5 +23,10 @@ export default defineConfig(({ command }) => ({
     rollupOptions: {
       input: 'resources/js/main.ts',
     },
+  },
+  test: {
+    environment: 'jsdom',
+    setupFiles: ['resources/js/__tests__/setup.ts'],
+    include: ['resources/js/**/*.spec.ts'],
   },
 }));
