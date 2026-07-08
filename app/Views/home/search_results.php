@@ -59,8 +59,8 @@
                         <span class="absolute inset-0" aria-hidden="true"></span>
                         <?= esc($idea->title) ?>
                     </a>
-                    <p class="text-sm text-muted-foreground line-clamp-2 mb-3 flex-1">
-                        <?= esc($idea->content) ?>
+                    <p class="mt-2 text-sm text-muted-foreground line-clamp-3">
+                        <?= esc(strip_tags($idea->content)) ?>
                     </p>
                     
                     <div class="flex items-center text-xs text-muted-foreground gap-1 mt-auto">

@@ -8,6 +8,7 @@ import AdminStatusSelect from './components/AdminStatusSelect.vue';
 import TabNav from './components/TabNav.vue';
 import UserDropdownIsland from './components/UserDropdownIsland.vue';
 import CheckboxIsland from './components/CheckboxIsland.vue';
+import WysiwygEditorIsland from './components/WysiwygEditorIsland.vue';
 
 // Define a registry of island components
 const components: Record<string, Component> = {
@@ -19,6 +20,7 @@ const components: Record<string, Component> = {
     TabNav,
     UserDropdownIsland,
     CheckboxIsland,
+    WysiwygEditorIsland,
 };
 
 export function mountIslands(root: ParentNode = document): void {

@@ -67,8 +67,8 @@
         <div class="flex-1">
             <h1 class="text-2xl font-bold mb-4"><?= esc($idea->title) ?></h1>
             
-            <div class="prose prose-sm dark:prose-invert max-w-none mb-6">
-                <?= nl2br(esc($idea->content)) ?>
+            <div class="prose dark:prose-invert max-w-none text-muted-foreground whitespace-pre-wrap">
+                <?= purify_html($idea->content) ?>
             </div>
             
             <div class="flex flex-wrap items-center gap-4 text-sm mb-6">

@@ -65,7 +65,14 @@
         
         <div class="space-y-2">
             <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"><?= esc($lang['label_description']) ?></label>
-            <textarea name="description" rows="5" class="flex min-h-[120px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2" minlength="20" maxlength="1500" required><?= esc($POST['desc'] ?? '') ?></textarea>
+            <div data-vue-component="WysiwygEditorIsland" data-props="<?= esc(json_encode([
+                'name' => 'description',
+                'initialContent' => $POST['desc'] ?? '',
+                'placeholder' => $lang['text_write_idea'] ?? 'Write your idea description here...',
+                'minlength' => 20,
+                'maxlength' => 1500,
+                'required' => true
+            ]), 'attr') ?>"></div>
         </div>
         
         <div class="space-y-2">

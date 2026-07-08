@@ -209,7 +209,7 @@ class Action extends BaseController
         if (mb_strlen($title) < 9) {
             return redirect()->to('home/postidea/errortitle')->withInput();
         }
-        if (mb_strlen($desc) < 20) {
+        if (mb_strlen(strip_tags($desc)) < 20) {
             return redirect()->to('home/postidea/errordesc')->withInput();
         }
 

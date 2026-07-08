@@ -145,3 +145,16 @@
   background-color: var(--color-muted-foreground);
   opacity: 0.5;
 }
+@plugin "@tailwindcss/typography";
+
+/* ProseMirror WYSIWYG overrides */
+.ProseMirror {
+  @apply outline-none min-h-[120px] max-w-none prose dark:prose-invert;
+}
+.ProseMirror p.is-editor-empty:first-child::before {
+  color: var(--color-muted-foreground);
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
