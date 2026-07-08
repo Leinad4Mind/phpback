@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v2.0.1] - 2026-07-08
+### Features
+- **Multi-CAPTCHA Support:** Added native support for reCAPTCHA v2 (checkbox and invisible), reCAPTCHA v3, and Cloudflare Turnstile directly from the Admin Panel.
+- **Admin Panel Refinements:** Modernized admin panel layout, removed redundant navigation links, and preserved original application logo colors without inversion.
+- **Category Management:** Administrators can now edit Category descriptions directly from the Admin Panel.
+- **Language Support:** Added missing translations for all CAPTCHA options across all languages with sorted language arrays.
+- **Idea Status Management:** Administrators can now change the status of an idea even if it's already in the 'declined' (recusada) or 'completed' (finalizada) state.
+
+### Bug Fixes
+- **Wysiwyg Editor Styling:** Fixed editor colors to respect light/dark themes and ensure text remains readable (especially bold text).
+- **Settings Duplication:** Fixed an issue where the application title would appear twice in the Admin Panel due to a database seeder duplication.
+
+---
+
 ## [v2.0.0] - 2026-07-07
 ### Major Changes
 - **Framework Upgrade:** Migrated from legacy CodeIgniter 2 to CodeIgniter 4.
