@@ -13,7 +13,7 @@ import {
   Undo,
   Redo,
   Heading2
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 
 const props = defineProps<{
   name: string

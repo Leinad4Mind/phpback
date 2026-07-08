@@ -5,7 +5,7 @@ import {
   useForwardProps,
 } from 'reka-ui'
 import { computed, type HTMLAttributes } from 'vue'
-import { ChevronRight } from 'lucide-vue-next'
+import { ChevronRight } from '@lucide/vue'
 import { cn } from '@/lib/utils'
 
 const props = defineProps<DropdownMenuSubTriggerProps & { class?: HTMLAttributes['class'], inset?: boolean }>()
