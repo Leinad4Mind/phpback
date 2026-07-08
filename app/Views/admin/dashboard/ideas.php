@@ -65,10 +65,12 @@
                     <h3 class="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-3"><?= esc($lang['label_status'] ?? 'Status') ?></h3>
                     <div class="space-y-2">
                         <?php foreach (['completed' => $lang['idea_completed'] ?? 'Completed', 'started' => $lang['idea_started'] ?? 'Started', 'planned' => $lang['idea_planned'] ?? 'Planned', 'considered' => $lang['idea_considered'] ?? 'Under Consideration', 'declined' => $lang['idea_declined'] ?? 'Declined'] as $key => $label): ?>
-                            <div class="flex items-center space-x-2">
-                                <input type="checkbox" id="status-<?= $key ?>" name="status-<?= $key ?>" <?= ! empty($form['status-' . $key]) ? 'checked' : '' ?> class="h-4 w-4 rounded border-input bg-background text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-                                <label for="status-<?= $key ?>" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"><?= esc($label) ?></label>
-                            </div>
+                            <div data-vue-component="CheckboxIsland" data-props="<?= esc(json_encode([
+                                'id' => 'status-' . $key,
+                                'name' => 'status-' . $key,
+                                'label' => $label,
+                                'checked' => ! empty($form['status-' . $key])
+                            ]), 'attr') ?>"></div>
                         <?php endforeach; ?>
                     </div>
                 </div>
@@ -77,10 +79,12 @@
                     <h3 class="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-3"><?= esc($lang['label_categories'] ?? 'Categories') ?></h3>
                     <div class="space-y-2 max-h-60 overflow-y-auto pr-2">
                         <?php foreach ($categories as $category): ?>
-                            <div class="flex items-center space-x-2">
-                                <input type="checkbox" id="category-<?= (int) $category->id ?>" name="category-<?= (int) $category->id ?>" <?= ! empty($form['category-' . $category->id]) ? 'checked' : '' ?> class="h-4 w-4 rounded border-input bg-background text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-                                <label for="category-<?= (int) $category->id ?>" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"><?= esc($category->name) ?></label>
-                            </div>
+                            <div data-vue-component="CheckboxIsland" data-props="<?= esc(json_encode([
+                                'id' => 'category-' . (int) $category->id,
+                                'name' => 'category-' . (int) $category->id,
+                                'label' => $category->name,
+                                'checked' => ! empty($form['category-' . $category->id])
+                            ]), 'attr') ?>"></div>
                         <?php endforeach; ?>
                     </div>
                 </div>
@@ -93,10 +97,12 @@
                             <option value="id" <?= ($form['orderby'] === 'id') ? 'selected' : '' ?>><?= esc($lang['label_order_by_date'] ?? 'Order by Date') ?></option>
                             <option value="title" <?= ($form['orderby'] === 'title') ? 'selected' : '' ?>><?= esc($lang['label_order_by_title'] ?? 'Order by Title') ?></option>
                         </select>
-                        <div class="flex items-center space-x-2">
-                            <input type="checkbox" id="isdesc" name="isdesc" <?= ! empty($form['isdesc']) ? 'checked' : '' ?> class="h-4 w-4 rounded border-input bg-background text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-                            <label for="isdesc" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"><?= esc($lang['label_decreasing_order'] ?? 'Decreasing order') ?></label>
-                        </div>
+                        <div data-vue-component="CheckboxIsland" data-props="<?= esc(json_encode([
+                            'id' => 'isdesc',
+                            'name' => 'isdesc',
+                            'label' => $lang['label_decreasing_order'] ?? 'Decreasing order',
+                            'checked' => ! empty($form['isdesc'])
+                        ]), 'attr') ?>"></div>
                     </div>
                 </div>
 

@@ -77,10 +77,7 @@
         'tabs' => [
             ['id' => 'reset-votes', 'label' => $lang['label_reset_votes']],
             ['id' => 'change-password', 'label' => $lang['label_change_password']],
-        ],
-        'links' => is_admin(1) ? [
-            ['label' => mb_strtoupper($lang['label_admin_panel']), 'href' => base_url('admin'), 'external' => true],
-        ] : [],
+        ]
     ]), 'attr') ?>"></div>
 
     <div id="reset-votes-panel" class="settings-panel block">

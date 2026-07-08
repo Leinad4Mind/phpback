@@ -26,7 +26,7 @@
             <div class="space-y-4">
                 <?php foreach ($settings as $setting): ?>
                 <div class="grid gap-2">
-                    <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"><?= esc($setting->name) ?></label>
+                    <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"><?= esc($lang['setting_' . $setting->name] ?? $setting->name) ?></label>
                     <?php if ($setting->name === 'language' && ! empty($availableLanguages)): ?>
                     <select name="setting-<?= (int) $setting->id ?>" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
                         <?php foreach ($availableLanguages as $slug => $nativeName): ?>
@@ -149,10 +149,13 @@
                             <option value="<?= (int) $cat->id ?>"><?= esc($cat->name) ?></option>
                             <?php endforeach; ?>
                         </select>
-                        <div class="flex items-center space-x-2">
-                            <input type="checkbox" id="delete-ideas" name="ideas" value="1" class="h-4 w-4 rounded border-destructive bg-background text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 accent-destructive">
-                            <label for="delete-ideas" class="text-sm font-medium leading-none text-destructive"><?= esc($lang['label_also_delete_ideas'] ?? 'Also delete all ideas in this category') ?></label>
-                        </div>
+                        <div data-vue-component="CheckboxIsland" data-props="<?= esc(json_encode([
+                            'id' => 'delete-ideas',
+                            'name' => 'ideas',
+                            'label' => $lang['label_also_delete_ideas'] ?? 'Also delete all ideas in this category',
+                            'value' => '1',
+                            'checked' => false
+                        ]), 'attr') ?>"></div>
                     </div>
                     <button name="delete-category" type="submit" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-destructive text-destructive-foreground hover:bg-destructive/90 h-10 px-4 py-2 mt-2">
                         <?= esc($lang['label_delete_category'] ?? 'Delete Category') ?>

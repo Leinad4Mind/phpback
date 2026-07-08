@@ -38,18 +38,21 @@
                     ],
                 ]), 'attr') ?>"></div>
                 <?php if (is_logged_in()): ?>
-                    <div class="text-sm">
-                        <span class="text-muted-foreground"><?= esc($lang['label_logged_as']) ?></span>
-                        <a href="<?= base_url('home/profile/' . current_user_id() . '/' . url_title((string) current_username(), '-', true)) ?>" class="font-medium hover:underline ml-1">
-                            <?= esc(current_username()) ?>
-                        </a>
-                    </div>
-                    <form action="<?= base_url('action/logout') ?>" method="post" class="inline">
-                        <?= csrf_field() ?>
-                        <button type="submit" class="text-sm font-medium text-destructive hover:underline">
-                            <?= esc($lang['label_log_out']) ?>
-                        </button>
-                    </form>
+                    <div data-vue-component="UserDropdownIsland" data-props="<?= esc(json_encode([
+                        'username' => current_username(),
+                        'profileUrl' => base_url('home/profile/' . current_user_id() . '/' . url_title((string) current_username(), '-', true)),
+                        'isAdmin' => is_admin(1),
+                        'adminUrl' => base_url('admin/dashboard'),
+                        'logoutUrl' => base_url('action/logout'),
+                        'csrfTokenName' => csrf_token(),
+                        'csrfHash' => csrf_hash(),
+                        'labels' => [
+                            'logged_as' => $lang['label_logged_as'] ?? 'Logged in as',
+                            'view_profile' => $lang['label_view_profile'] ?? 'View Profile',
+                            'admin_panel' => $lang['label_admin_panel'] ?? 'Admin Panel',
+                            'logout' => $lang['label_log_out'] ?? 'Log out',
+                        ]
+                    ]), 'attr') ?>"></div>
                 <?php else: ?>
                     <a href="<?= base_url('home/login') ?>" class="text-sm font-medium hover:underline">
                         <?= esc($lang['label_log_in']) ?>

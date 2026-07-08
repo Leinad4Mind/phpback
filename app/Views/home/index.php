@@ -2,12 +2,26 @@
 <?= $this->section('content') ?>
 
 <?php if (is_admin(1)): ?>
-    <div class="mb-6 p-4 bg-primary/10 text-primary border border-primary/20 rounded-lg flex items-center justify-between">
+    <div id="admin-banner" class="mb-6 p-4 bg-primary/10 text-primary border border-primary/20 rounded-lg flex items-center justify-between hidden">
         <span><?= esc($lang['text_admin_greeting']) ?> 🎉</span>
-        <a href="<?= base_url('admin/dashboard') ?>" class="text-sm font-medium bg-primary text-primary-foreground px-3 py-1.5 rounded-md hover:bg-primary/90">
-            <?= esc($lang['label_admin_panel']) ?>
-        </a>
+        <div class="flex items-center gap-3">
+            <a href="<?= base_url('admin/dashboard') ?>" class="text-sm font-medium bg-primary text-primary-foreground px-3 py-1.5 rounded-md hover:bg-primary/90">
+                <?= esc($lang['label_admin_panel']) ?>
+            </a>
+            <button onclick="dismissAdminBanner()" class="text-primary hover:text-primary/70 focus:outline-none" aria-label="Close">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
     </div>
+    <script>
+        if (localStorage.getItem('hide_admin_banner') !== 'true') {
+            document.getElementById('admin-banner').classList.remove('hidden');
+        }
+        function dismissAdminBanner() {
+            localStorage.setItem('hide_admin_banner', 'true');
+            document.getElementById('admin-banner').style.display = 'none';
+        }
+    </script>
 <?php endif; ?>
 
 <div class="mb-6">

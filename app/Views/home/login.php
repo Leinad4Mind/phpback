@@ -60,11 +60,14 @@
                 <input type="password" id="InputPassword" name="password" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2" placeholder="<?= esc($lang['form_password'], 'attr') ?>" required>
             </div>
             
-            <div class="flex items-center space-x-2 pt-2">
-                <input type="checkbox" id="checkbox1" name="rememberme" value="1" class="h-4 w-4 rounded border-input bg-background text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-                <label for="checkbox1" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                    <?= esc($lang['form_remember']) ?>
-                </label>
+            <div class="pt-2">
+                <div data-vue-component="CheckboxIsland" data-props="<?= esc(json_encode([
+                    'id' => 'checkbox1',
+                    'name' => 'rememberme',
+                    'label' => $lang['form_remember'],
+                    'value' => '1',
+                    'checked' => false
+                ]), 'attr') ?>"></div>
             </div>
             
             <button type="submit" class="inline-flex w-full mt-4 items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
