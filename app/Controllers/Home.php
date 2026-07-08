@@ -211,7 +211,8 @@ class Home extends BaseController
         }
 
         $data                    = $this->defaultData();
-        $data['recaptchapublic'] = (string) model(SettingModel::class)->get('recaptchapublic');
+        $data['recaptchapublic']  = (string) model(SettingModel::class)->get('recaptchapublic');
+        $data['captcha_provider'] = (string) (model(SettingModel::class)->get('captcha_provider') ?? 'recaptcha_v2');
         $data['error']           = $error;
 
         return $this->render('home/register', $data);

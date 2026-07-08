@@ -33,6 +33,13 @@
                             <option value="<?= esc($slug, 'attr') ?>" <?= $setting->value === $slug ? 'selected' : '' ?>><?= esc($nativeName) ?></option>
                         <?php endforeach; ?>
                     </select>
+                    <?php elseif ($setting->name === 'captcha_provider'): ?>
+                    <select name="setting-<?= (int) $setting->id ?>" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+                        <option value="recaptcha_v2" <?= $setting->value === 'recaptcha_v2' ? 'selected' : '' ?>><?= esc($lang['label_captcha_provider_recaptcha_v2'] ?? 'reCAPTCHA v2') ?></option>
+                        <option value="recaptcha_invisible" <?= $setting->value === 'recaptcha_invisible' ? 'selected' : '' ?>><?= esc($lang['label_captcha_provider_recaptcha_invisible'] ?? 'reCAPTCHA v2 (Invisible)') ?></option>
+                        <option value="recaptcha_v3" <?= $setting->value === 'recaptcha_v3' ? 'selected' : '' ?>><?= esc($lang['label_captcha_provider_recaptcha_v3'] ?? 'reCAPTCHA v3') ?></option>
+                        <option value="turnstile" <?= $setting->value === 'turnstile' ? 'selected' : '' ?>><?= esc($lang['label_captcha_provider_turnstile'] ?? 'Cloudflare Turnstile') ?></option>
+                    </select>
                     <?php else: ?>
                     <input type="text" name="setting-<?= (int) $setting->id ?>" value="<?= esc($setting->value, 'attr') ?>" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
                     <?php endif; ?>

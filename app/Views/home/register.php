@@ -71,8 +71,45 @@
             
             <?php if ($recaptchapublic !== ''): ?>
                 <div class="pt-2 flex justify-center">
-                    <script type="text/javascript" src="https://www.google.com/recaptcha/api.js" async defer></script>
-                    <div class="g-recaptcha" data-sitekey="<?= esc($recaptchapublic, 'attr') ?>"></div>
+                    <?php if ($captcha_provider === 'turnstile'): ?>
+                        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+                        <div class="cf-turnstile" data-sitekey="<?= esc($recaptchapublic, 'attr') ?>"></div>
+                    <?php elseif ($captcha_provider === 'recaptcha_v3'): ?>
+                        <script src="https://www.google.com/recaptcha/api.js?render=<?= esc($recaptchapublic, 'attr') ?>"></script>
+                        <script>
+                            document.querySelector('form').addEventListener('submit', function(e) {
+                                e.preventDefault();
+                                grecaptcha.ready(function() {
+                                    grecaptcha.execute('<?= esc($recaptchapublic, 'attr') ?>', {action: 'submit'}).then(function(token) {
+                                        let input = document.createElement('input');
+                                        input.type = 'hidden';
+                                        input.name = 'g-recaptcha-response';
+                                        input.value = token;
+                                        e.target.appendChild(input);
+                                        e.target.submit();
+                                    });
+                                });
+                            });
+                        </script>
+                    <?php elseif ($captcha_provider === 'recaptcha_invisible'): ?>
+                        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+                        <div class="g-recaptcha" data-sitekey="<?= esc($recaptchapublic, 'attr') ?>" data-size="invisible" data-callback="onSubmitRecaptchaInvisible"></div>
+                        <script>
+                            document.querySelector('form').addEventListener('submit', function(e) {
+                                if (!document.querySelector('[name="g-recaptcha-response"]').value) {
+                                    e.preventDefault();
+                                    grecaptcha.execute();
+                                }
+                            });
+                            function onSubmitRecaptchaInvisible(token) {
+                                document.querySelector('form').submit();
+                            }
+                        </script>
+                    <?php else: ?>
+                        <!-- reCAPTCHA v2 (default) -->
+                        <script type="text/javascript" src="https://www.google.com/recaptcha/api.js" async defer></script>
+                        <div class="g-recaptcha" data-sitekey="<?= esc($recaptchapublic, 'attr') ?>"></div>
+                    <?php endif; ?>
                 </div>
             <?php endif; ?>
             

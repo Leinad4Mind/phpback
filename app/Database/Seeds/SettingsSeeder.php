@@ -26,6 +26,7 @@ class SettingsSeeder extends Seeder
             'smtp-pass'               => '',
             'recaptchapublic'         => '',
             'recaptchaprivate'        => '',
+            'captcha_provider'        => 'recaptcha_v2',
         ];
 
         $table = $this->db->table('settings');
