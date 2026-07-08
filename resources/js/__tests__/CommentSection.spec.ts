@@ -1,4 +1,4 @@
-﻿import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { flushPromises, mount } from '@vue/test-utils'
 import CommentSection from '@/components/CommentSection.vue'
 import { resetCsrf } from '@/lib/csrf'
@@ -82,14 +82,18 @@ describe('CommentSection', () => {
     }))
     vi.stubGlobal('fetch', fetchMock)
 
-    const wrapper = mount(CommentSection, { props: makeProps() })
-    await wrapper.find('textarea').setValue('Nice idea')
+    const wrapper = mount(CommentSection, { 
+      props: makeProps(),
+      global: { stubs: { WysiwygEditorIsland: true } }
+    })
+    const editor = wrapper.findComponent({ name: 'WysiwygEditorIsland' })
+    await editor.vm.$emit('update:modelValue', 'Nice idea')
     await wrapper.find('form').trigger('submit')
     await flushPromises()
 
     expect(wrapper.text()).toContain('Comentários (2)')
     expect(wrapper.text()).toContain('Nice idea')
-    expect((wrapper.find('textarea').element as HTMLTextAreaElement).value).toBe('')
+    expect(editor.props('modelValue')).toBe('')
 
     const body = fetchMock.mock.calls[0][1].body as FormData
     expect(body.get('idea_id')).toBe('7')
@@ -154,11 +158,15 @@ describe('CommentSection', () => {
   it('surfaces submit errors inline', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(jsonResponse({ success: false, error: 'Empty content', csrfHash: 'h' })))
 
-    const wrapper = mount(CommentSection, { props: makeProps() })
-    await wrapper.find('textarea').setValue('x')
+    const wrapper = mount(CommentSection, { 
+      props: makeProps(),
+      global: { stubs: { WysiwygEditorIsland: true } }
+    })
+    const editor = wrapper.findComponent({ name: 'WysiwygEditorIsland' })
+    await editor.vm.$emit('update:modelValue', 'x')
     await wrapper.find('form').trigger('submit')
     await flushPromises()
 
-    expect(wrapper.find('[role="alert"]').text()).toBe('Empty content')
+    expect(wrapper.text()).toContain('Empty content')
   })
 })

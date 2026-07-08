@@ -111,9 +111,10 @@ class Action extends BaseController
 
         if (model(VoteModel::class)->castVote($ideaId, $userId, $votes)) {
             model(LogModel::class)->add(
-                str_replace(['%s1', '%s2'], ["#{$ideaId}", (string) $votes], (string) $this->lang('log_idea_voted')),
+                str_replace(['%s1', '%s2', '%s3'], ["#{$ideaId}", (string) $votes, current_username()], (string) $this->lang('log_idea_voted')),
                 'user',
-                $userId
+                $userId,
+                $ideaId
             );
             $success = true;
         } else {
@@ -252,9 +253,9 @@ class Action extends BaseController
         $content = trim((string) $this->request->getPost('content'));
         $userId  = current_user_id();
 
-        if ($content === '') {
+        if (trim(strip_tags($content)) === '' || mb_strlen(strip_tags($content)) > 2000) {
             if ($this->request->isAJAX() || $this->request->getHeaderLine('Accept') === 'application/json') {
-                return $this->response->setJSON(['success' => false, 'error' => 'Empty content', 'csrfHash' => csrf_hash()]);
+                return $this->response->setJSON(['success' => false, 'error' => 'Invalid or empty content', 'csrfHash' => csrf_hash()]);
             }
             $idea = model(IdeaModel::class)->getIdea($ideaId);
             return redirect()->to($idea?->url ?? base_url('home'));
@@ -265,7 +266,8 @@ class Action extends BaseController
         model(LogModel::class)->add(
             str_replace('%s', '#' . $ideaId, (string) $this->lang('log_commented')),
             'user',
-            $userId
+            $userId,
+            $ideaId
         );
 
         $this->notifyCommentParticipants($ideaId);
@@ -279,7 +281,7 @@ class Action extends BaseController
                     'user' => $user->name,
                     'userid' => $user->id,
                     'date' => date('Y-m-d H:i:s'),
-                    'content' => $content
+                    'content' => purify_html($content)
                 ],
                 'csrfHash' => csrf_hash()
             ]);

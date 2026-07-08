@@ -70,3 +70,37 @@ if (! function_exists('phpback_logout')) {
         session()->destroy();
     }
 }
+
+if (! function_exists('link_idea_logs')) {
+    /**
+     * Safely escapes log content and links the idea if idea_id is present.
+     */
+    function link_idea_logs(object $log): string
+    {
+        $escaped = esc($log->content);
+        if (!empty($log->idea_id)) {
+            $url = base_url('home/idea/' . $log->idea_id);
+            $linkText = !empty($log->idea_title) ? '#' . (int)$log->idea_id . ' - ' . esc($log->idea_title) : '#' . (int)$log->idea_id;
+            $link = '<a href="' . esc($url) . '" class="text-primary hover:underline" title="' . esc($log->idea_title ?? '') . '">' . $linkText . '</a>';
+            // Replace only the first instance of #idea_id in case there are multiple, but there's typically one.
+            $escaped = preg_replace('/#' . preg_quote((string)$log->idea_id, '/') . '/', $link, $escaped, 1);
+        }
+
+        if (!empty($log->toid) && !empty($log->user_name)) {
+            $userName = esc($log->user_name);
+            $userUrl = base_url('home/profile/' . $log->toid);
+            $userLink = '<a href="' . esc($userUrl) . '" class="text-primary hover:underline">' . $userName . '</a>';
+            
+            // Try to replace the user name at the end of the string first
+            $replaced = preg_replace('/' . preg_quote($userName, '/') . '$/', $userLink, $escaped, 1);
+            if ($replaced === $escaped) {
+                // If it wasn't at the end, replace the first occurrence
+                $escaped = preg_replace('/\b' . preg_quote($userName, '/') . '\b/', $userLink, $escaped, 1);
+            } else {
+                $escaped = $replaced;
+            }
+        }
+
+        return $escaped;
+    }
+}

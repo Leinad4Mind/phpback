@@ -105,7 +105,7 @@ class Adminaction extends BaseController
     {
         $id = (int) $this->request->getPost('id');
         model(IdeaModel::class)->approve($id);
-        $this->log(str_replace('%s', "#{$id}", (string) $this->lang('log_idea_approved')));
+        $this->log(str_replace('%s', "#{$id}", (string) $this->lang('log_idea_approved')), 'user', null, $id);
 
         return redirect()->to('home/idea/' . $id);
     }
@@ -123,7 +123,7 @@ class Adminaction extends BaseController
         }
 
         model(\App\Models\IdeaModel::class)->changeStatus($id, $status);
-        $this->log(str_replace(['%s1', '%s2'], ["#{$id}", $status], (string) $this->lang('log_idea_status')));
+        $this->log(str_replace(['%s1', '%s2'], ["#{$id}", $status], (string) $this->lang('log_idea_status')), 'user', null, $id);
 
         if ($this->request->isAJAX() || $this->request->getHeaderLine('Accept') === 'application/json') {
             return $this->response->setJSON(['success' => true, 'csrfHash' => csrf_hash(), 'newStatus' => $status]);
@@ -212,9 +212,9 @@ class Adminaction extends BaseController
 
     /* ------------------------------------------------------------------ */
 
-    private function log(string $content, string $type = 'user', ?int $toid = null): void
+    private function log(string $content, string $type = 'user', ?int $toid = null, ?int $ideaId = null): void
     {
-        model(LogModel::class)->add($content, $type, $toid ?? (current_user_id() ?? 0));
+        model(LogModel::class)->add($content, $type, $toid ?? (current_user_id() ?? 0), $ideaId);
     }
 
     private function lang(string $key): string

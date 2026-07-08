@@ -11,6 +11,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
+import WysiwygEditorIsland from '@/components/WysiwygEditorIsland.vue'
 
 interface Comment {
   id: number
@@ -163,18 +164,16 @@ function getInitial(name: string) {
       <form @submit.prevent="submitComment" class="space-y-4">
         <div>
           <label class="block text-sm font-medium mb-2">{{ props.labels?.leaveComment || 'Leave a comment' }}</label>
-          <textarea
+          <WysiwygEditorIsland
             v-model="newCommentContent"
-            required
-            rows="4"
-            :disabled="isSubmitting"
-            class="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50"
-          ></textarea>
+            :placeholder="props.labels?.leaveComment || 'Leave a comment'"
+            :required="true"
+          />
         </div>
         <button
           type="submit"
           :disabled="isSubmitting"
-          class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 disabled:opacity-50 cursor-pointer"
+          class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 disabled:opacity-50 cursor-pointer mt-2"
         >
           {{ isSubmitting ? (props.labels?.submitting || 'Submitting...') : (props.labels?.submit || 'Submit') }}
         </button>
@@ -212,7 +211,7 @@ function getInitial(name: string) {
             </template>
           </div>
         </div>
-        <div class="text-sm whitespace-pre-wrap text-foreground/90 pl-11">{{ comment.content }}</div>
+        <div class="text-sm text-foreground/90 pl-11 prose prose-sm max-w-none" v-html="comment.content"></div>
       </div>
 
       <div v-if="comments.length === 0" class="text-center py-12 text-muted-foreground bg-muted/20 rounded-lg border border-dashed">

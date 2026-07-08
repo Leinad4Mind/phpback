@@ -169,7 +169,7 @@
                 <tbody class="divide-y">
                     <?php foreach ($logs as $log): ?>
                     <tr class="bg-background hover:bg-muted/50 transition-colors">
-                        <td class="px-4 py-3 text-foreground"><?= esc($log->content) ?></td>
+                        <td class="px-4 py-3 text-foreground"><?= link_idea_logs($log) ?></td>
                         <td class="px-4 py-3 text-muted-foreground text-xs"><?= esc($log->date) ?></td>
                     </tr>
                     <?php endforeach; ?>

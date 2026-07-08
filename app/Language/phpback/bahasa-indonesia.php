@@ -160,7 +160,7 @@ return [
     'log_idea_approved' => 'Menyetujui ide %s',
     'log_idea_deleted' => 'Menghapus ide %s',
     'log_idea_status' => 'Merubah status ide %s1 ke %s2',
-    'log_idea_voted' => 'Ide %s1 divoting oleh %s2 pengguna',
+    'log_idea_voted' => 'Ide %s1 divoting %s2 kali oleh %s3',
     'log_new_comment_mail_content' => 'Komentar baru telah diposting di sistem umpan balik Anda %s. Untuk melihatnya, klik tautan berikut : %s.',
     'log_new_idea' => 'Ide baru dibuat',
     'log_new_idea_mail_content' => 'Ide baru telah diposting di sistem umpan balik Anda %s. Untuk melihatnya, klik tautan berikut : %s.',

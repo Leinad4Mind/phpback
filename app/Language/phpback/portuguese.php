@@ -163,7 +163,7 @@ return [
     'log_idea_approved' => 'Idéia aprovada %s',
     'log_idea_deleted' => 'Idéia removida %s',
     'log_idea_status' => 'Alterado status da idéia %s1 para %s2',
-    'log_idea_voted' => 'Idéia %s1 votada com %s2 votos',
+    'log_idea_voted' => 'Idéia %s1 votada com %s2 votos por %s3',
     'log_new_comment_mail_content' => 'Um novo comentário foi publicado no seu sistema de feedback %s. Para o ver, clique na hiperligação seguinte : %s.',
     'log_new_idea' => 'Nova idéia criada',
     'log_new_idea_mail_content' => 'Uma nova ideia foi publicada no seu sistema de feedback %s. Para a ver, clique na hiperligação seguinte : %s.',

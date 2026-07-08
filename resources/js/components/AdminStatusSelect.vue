@@ -37,6 +37,7 @@ async function changeStatus(event: Event) {
     })
     if (data.success && data.newStatus) {
       currentStatus.value = data.newStatus
+      window.location.reload()
     } else {
       target.value = currentStatus.value
       errorMessage.value = data.error || props.errorLabel || 'Something went wrong. Please try again.'

@@ -160,7 +160,7 @@ return [
     'log_idea_approved' => '同意想法 %s',
     'log_idea_deleted' => '删除想法 %s',
     'log_idea_status' => '状态从 %s1 变更到 %s2',
-    'log_idea_voted' => '想法 %s1 收到 %s2 投票',
+    'log_idea_voted' => '想法 %s1 收到 %s2 投票，来自 %s3',
     'log_new_comment_mail_content' => '您的反馈系统 %s 中发布了一条新评论。请点击以下链接查看：%s。',
     'log_new_idea' => '新的想法已经创建',
     'log_new_idea_mail_content' => '您的反馈系统 %s 中发布了一个新主意。请点击以下链接查看：%s。',
