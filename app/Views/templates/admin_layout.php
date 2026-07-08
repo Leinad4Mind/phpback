@@ -29,25 +29,25 @@
                 <div class="flex items-center gap-8">
                     <a href="<?= base_url('admin/dashboard') ?>" class="flex items-center gap-3 hover:opacity-90">
                         <img src="<?= base_url('img/logo_small_free.png') ?>" alt="PHPBack" class="h-8 brightness-0 invert">
-                        <span class="font-bold tracking-tight">Admin Panel</span>
+                        <span class="font-bold tracking-tight"><?= esc($lang['label_admin_panel'] ?? 'Admin Panel') ?></span>
                     </a>
                     
                     <nav class="hidden md:flex items-center gap-1">
-                        <a href="<?= base_url('admin/dashboard') ?>" class="px-3 py-2 rounded-md text-sm font-medium <?= ($active === 'dashboard') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white transition-colors' ?>">Dashboard</a>
+                        <a href="<?= base_url('admin/dashboard') ?>" class="px-3 py-2 rounded-md text-sm font-medium <?= ($active === 'dashboard') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white transition-colors' ?>"><?= esc($lang['label_dashboard'] ?? 'Dashboard') ?></a>
                         
-                        <a href="<?= base_url('admin/ideas') ?>" class="px-3 py-2 rounded-md text-sm font-medium <?= ($active === 'ideas') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white transition-colors' ?>">Ideas and Comments</a>
+                        <a href="<?= base_url('admin/ideas') ?>" class="px-3 py-2 rounded-md text-sm font-medium <?= ($active === 'ideas') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white transition-colors' ?>"><?= esc($lang['label_ideas_comments'] ?? 'Ideas and Comments') ?></a>
                         
                         <?php if (is_admin(2)): ?>
-                            <a href="<?= base_url('admin/users') ?>" class="px-3 py-2 rounded-md text-sm font-medium <?= ($active === 'users') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white transition-colors' ?>">Users Management</a>
+                            <a href="<?= base_url('admin/users') ?>" class="px-3 py-2 rounded-md text-sm font-medium <?= ($active === 'users') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white transition-colors' ?>"><?= esc($lang['label_users_management'] ?? 'Users Management') ?></a>
                         <?php endif; ?>
                         
                         <?php if (is_admin(3)): ?>
-                            <a href="<?= base_url('admin/system') ?>" class="px-3 py-2 rounded-md text-sm font-medium <?= ($active === 'system') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white transition-colors' ?>">System Settings</a>
+                            <a href="<?= base_url('admin/system') ?>" class="px-3 py-2 rounded-md text-sm font-medium <?= ($active === 'system') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white transition-colors' ?>"><?= esc($lang['label_system_settings'] ?? 'System Settings') ?></a>
                         <?php endif; ?>
                         
                         <div class="h-4 w-px bg-slate-700 mx-2"></div>
                         <a href="<?= base_url() ?>" class="px-3 py-2 rounded-md text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
-                            View Site
+                            <?= esc($lang['label_view_site'] ?? 'View Site') ?>
                         </a>
                     </nav>
                 </div>
@@ -59,13 +59,13 @@
                     ]), 'attr') ?>"></div>
                     
                     <div class="flex items-center gap-3 text-sm">
-                        <span class="text-slate-400">Signed in as</span>
+                        <span class="text-slate-400"><?= esc($lang['label_signed_in_as'] ?? 'Signed in as') ?></span>
                         <span class="font-medium text-emerald-400"><?= esc(session('username')) ?></span>
                         
                         <form action="<?= base_url('action/logout') ?>" method="post" class="ml-2 border-l border-slate-700 pl-4">
                             <?= csrf_field() ?>
                             <button type="submit" class="text-red-400 hover:text-red-300 hover:underline font-medium transition-colors">
-                                Log out
+                                <?= esc($lang['label_log_out'] ?? 'Log out') ?>
                             </button>
                         </form>
                     </div>

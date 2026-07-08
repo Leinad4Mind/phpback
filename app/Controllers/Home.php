@@ -29,8 +29,16 @@ class Home extends BaseController
         $ideas    = model(IdeaModel::class);
 
         $data                       = $this->defaultData();
-        $data['welcomeTitle']       = (string) $settings->get('welcometext-title');
-        $data['welcomeDescription'] = (string) $settings->get('welcometext-description');
+        
+        $welcomeTitle = (string) $settings->get('welcometext-title');
+        $data['welcomeTitle'] = ($welcomeTitle === 'Welcome to our feedback') 
+            ? ($data['lang']['text_welcome_title'] ?? $welcomeTitle) 
+            : $welcomeTitle;
+
+        $welcomeDescription = (string) $settings->get('welcometext-description');
+        $data['welcomeDescription'] = ($welcomeDescription === 'Share your ideas and vote for the ones you like the most.') 
+            ? ($data['lang']['text_welcome_description'] ?? $welcomeDescription) 
+            : $welcomeDescription;
 
         $filters = [
             'category' => $this->request->getGet('category'),

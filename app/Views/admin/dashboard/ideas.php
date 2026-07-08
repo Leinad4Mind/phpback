@@ -3,16 +3,16 @@
 
 <div class="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
     <div>
-        <h2 class="text-2xl font-bold tracking-tight">Ideas and Comments</h2>
-        <p class="text-muted-foreground mt-1 text-sm">Manage feedback, moderate comments, and track feature requests.</p>
+        <h2 class="text-2xl font-bold tracking-tight"><?= esc($lang['label_ideas_comments'] ?? 'Ideas and Comments') ?></h2>
+        <p class="text-muted-foreground mt-1 text-sm"><?= esc($lang['text_ideas_desc'] ?? 'Manage feedback, moderate comments, and track feature requests.') ?></p>
     </div>
 </div>
 
 <div data-vue-component="TabNav" data-props="<?= esc(json_encode([
     'tabs' => [
-        ['id' => 'new-ideas', 'label' => 'New Ideas', 'count' => (int) $newideas_num, 'countClass' => 'bg-primary/20 text-primary'],
-        ['id' => 'all-ideas', 'label' => 'All Ideas'],
-        ['id' => 'flagged-comments', 'label' => 'Flagged Comments', 'count' => count($flags) > 0 ? count($flags) : null, 'countClass' => 'bg-destructive/20 text-destructive'],
+        ['id' => 'new-ideas', 'label' => $lang['label_new_ideas'] ?? 'New Ideas', 'count' => (int) $newideas_num, 'countClass' => 'bg-primary/20 text-primary'],
+        ['id' => 'all-ideas', 'label' => $lang['label_all_ideas'] ?? 'All Ideas'],
+        ['id' => 'flagged-comments', 'label' => $lang['label_flagged_comments'] ?? 'Flagged Comments', 'count' => count($flags) > 0 ? count($flags) : null, 'countClass' => 'bg-destructive/20 text-destructive'],
     ],
     'initialTab' => ! empty($toall) ? 'all-ideas' : null,
 ]), 'attr') ?>"></div>
@@ -24,11 +24,11 @@
             <table class="w-full text-sm text-left">
                 <thead class="text-xs text-muted-foreground uppercase bg-muted/50 border-b">
                     <tr>
-                        <th scope="col" class="px-6 py-4 font-semibold">Idea</th>
-                        <th scope="col" class="px-6 py-4 font-semibold w-48">Category</th>
-                        <th scope="col" class="px-6 py-4 font-semibold w-32">Comments</th>
-                        <th scope="col" class="px-6 py-4 font-semibold w-32">Votes</th>
-                        <th scope="col" class="px-6 py-4 font-semibold w-40">Date</th>
+                        <th scope="col" class="px-6 py-4 font-semibold"><?= esc($lang['label_idea'] ?? 'Idea') ?></th>
+                        <th scope="col" class="px-6 py-4 font-semibold w-48"><?= esc($lang['label_category'] ?? 'Category') ?></th>
+                        <th scope="col" class="px-6 py-4 font-semibold w-32"><?= esc($lang['label_comments'] ?? 'Comments') ?></th>
+                        <th scope="col" class="px-6 py-4 font-semibold w-32"><?= esc($lang['label_votes'] ?? 'Votes') ?></th>
+                        <th scope="col" class="px-6 py-4 font-semibold w-40"><?= esc($lang['label_date'] ?? 'Date') ?></th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-border/50">
@@ -44,7 +44,7 @@
                     </tr>
                     <?php endforeach; ?>
                     <?php if (empty($newideas)): ?>
-                        <tr><td colspan="5" class="px-6 py-8 text-center text-muted-foreground">No new ideas pending review.</td></tr>
+                        <tr><td colspan="5" class="px-6 py-8 text-center text-muted-foreground"><?= esc($lang['text_no_new_ideas'] ?? 'No new ideas pending review.') ?></td></tr>
                     <?php endif; ?>
                 </tbody>
             </table>
@@ -62,19 +62,19 @@
                 <?= csrf_field() ?>
                 
                 <div>
-                    <h3 class="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-3">Status</h3>
+                    <h3 class="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-3"><?= esc($lang['label_status'] ?? 'Status') ?></h3>
                     <div class="space-y-2">
-                        <?php foreach (['completed' => 'Completed', 'started' => 'Started', 'planned' => 'Planned', 'considered' => 'Under Consideration', 'declined' => 'Declined'] as $key => $label): ?>
+                        <?php foreach (['completed' => $lang['idea_completed'] ?? 'Completed', 'started' => $lang['idea_started'] ?? 'Started', 'planned' => $lang['idea_planned'] ?? 'Planned', 'considered' => $lang['idea_considered'] ?? 'Under Consideration', 'declined' => $lang['idea_declined'] ?? 'Declined'] as $key => $label): ?>
                             <div class="flex items-center space-x-2">
                                 <input type="checkbox" id="status-<?= $key ?>" name="status-<?= $key ?>" <?= ! empty($form['status-' . $key]) ? 'checked' : '' ?> class="h-4 w-4 rounded border-input bg-background text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-                                <label for="status-<?= $key ?>" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"><?= $label ?></label>
+                                <label for="status-<?= $key ?>" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"><?= esc($label) ?></label>
                             </div>
                         <?php endforeach; ?>
                     </div>
                 </div>
 
                 <div>
-                    <h3 class="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-3">Categories</h3>
+                    <h3 class="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-3"><?= esc($lang['label_categories'] ?? 'Categories') ?></h3>
                     <div class="space-y-2 max-h-60 overflow-y-auto pr-2">
                         <?php foreach ($categories as $category): ?>
                             <div class="flex items-center space-x-2">
@@ -86,22 +86,22 @@
                 </div>
 
                 <div>
-                    <h3 class="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-3">Sorting</h3>
+                    <h3 class="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-3"><?= esc($lang['label_sorting'] ?? 'Sorting') ?></h3>
                     <div class="space-y-3">
                         <select name="orderby" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-                            <option value="votes">Order by Votes</option>
-                            <option value="id" <?= ($form['orderby'] === 'id') ? 'selected' : '' ?>>Order by Date</option>
-                            <option value="title" <?= ($form['orderby'] === 'title') ? 'selected' : '' ?>>Order by Title</option>
+                            <option value="votes"><?= esc($lang['label_order_by_votes'] ?? 'Order by Votes') ?></option>
+                            <option value="id" <?= ($form['orderby'] === 'id') ? 'selected' : '' ?>><?= esc($lang['label_order_by_date'] ?? 'Order by Date') ?></option>
+                            <option value="title" <?= ($form['orderby'] === 'title') ? 'selected' : '' ?>><?= esc($lang['label_order_by_title'] ?? 'Order by Title') ?></option>
                         </select>
                         <div class="flex items-center space-x-2">
                             <input type="checkbox" id="isdesc" name="isdesc" <?= ! empty($form['isdesc']) ? 'checked' : '' ?> class="h-4 w-4 rounded border-input bg-background text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-                            <label for="isdesc" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Decreasing order</label>
+                            <label for="isdesc" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"><?= esc($lang['label_decreasing_order'] ?? 'Decreasing order') ?></label>
                         </div>
                     </div>
                 </div>
 
                 <button type="submit" class="inline-flex w-full items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
-                    Apply Filters
+                    <?= esc($lang['label_apply_filters'] ?? 'Apply Filters') ?>
                 </button>
             </form>
         </div>
@@ -113,10 +113,10 @@
                     <table class="w-full text-sm text-left">
                         <thead class="text-xs text-muted-foreground uppercase bg-muted/50 border-b">
                             <tr>
-                                <th scope="col" class="px-6 py-4 font-semibold">Idea</th>
-                                <th scope="col" class="px-6 py-4 font-semibold w-40">Category</th>
-                                <th scope="col" class="px-6 py-4 font-semibold w-24">Votes</th>
-                                <th scope="col" class="px-6 py-4 font-semibold w-32">Date</th>
+                                <th scope="col" class="px-6 py-4 font-semibold"><?= esc($lang['label_idea'] ?? 'Idea') ?></th>
+                                <th scope="col" class="px-6 py-4 font-semibold w-40"><?= esc($lang['label_category'] ?? 'Category') ?></th>
+                                <th scope="col" class="px-6 py-4 font-semibold w-24"><?= esc($lang['label_votes'] ?? 'Votes') ?></th>
+                                <th scope="col" class="px-6 py-4 font-semibold w-32"><?= esc($lang['label_date'] ?? 'Date') ?></th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-border/50">
@@ -153,7 +153,7 @@
                             </tr>
                             <?php endforeach; ?>
                             <?php if (empty($ideas)): ?>
-                                <tr><td colspan="4" class="px-6 py-8 text-center text-muted-foreground">No ideas matched the criteria.</td></tr>
+                                <tr><td colspan="4" class="px-6 py-8 text-center text-muted-foreground"><?= esc($lang['text_no_ideas_matched'] ?? 'No ideas matched the criteria.') ?></td></tr>
                             <?php endif; ?>
                         </tbody>
                     </table>
@@ -171,9 +171,9 @@
             <table class="w-full text-sm text-left">
                 <thead class="text-xs text-muted-foreground uppercase bg-muted/50 border-b">
                     <tr>
-                        <th scope="col" class="px-6 py-4 font-semibold w-64">Context</th>
-                        <th scope="col" class="px-6 py-4 font-semibold">Comment Content</th>
-                        <th scope="col" class="px-6 py-4 font-semibold w-72 text-right">Actions</th>
+                        <th scope="col" class="px-6 py-4 font-semibold w-64"><?= esc($lang['label_context'] ?? 'Context') ?></th>
+                        <th scope="col" class="px-6 py-4 font-semibold"><?= esc($lang['label_comment_content'] ?? 'Comment Content') ?></th>
+                        <th scope="col" class="px-6 py-4 font-semibold w-72 text-right"><?= esc($lang['label_actions'] ?? 'Actions') ?></th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-border/50">
@@ -195,18 +195,18 @@
                         </td>
                         <td class="px-6 py-4 text-right">
                             <div class="mb-3 text-destructive font-semibold">
-                                Flagged <span class="inline-flex items-center rounded-full bg-destructive/20 px-2 py-0.5 text-xs ml-1"><?= (int) $comment->votes ?></span> times
+                                <?= esc($lang['text_flagged_times'] ?? 'Flagged') ?> <span class="inline-flex items-center rounded-full bg-destructive/20 px-2 py-0.5 text-xs mx-1"><?= (int) $comment->votes ?></span>
                             </div>
                             <div class="flex items-center justify-end gap-2 flex-wrap">
-                                <form method="post" action="<?= base_url('adminaction/deletecomment') ?>" onsubmit="return confirm('Are you sure you want to delete this comment?');">
+                                <form method="post" action="<?= base_url('adminaction/deletecomment') ?>" onsubmit="return confirm('<?= esc(addslashes($lang['text_confirm_delete_comment'] ?? 'Are you sure you want to delete this comment?')) ?>');">
                                     <?= csrf_field() ?><input type="hidden" name="id" value="<?= (int) $comment->id ?>">
                                     <button type="submit" class="inline-flex items-center justify-center rounded-md text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-8 px-3">
-                                        Delete Comment
+                                        <?= esc($lang['label_delete_comment'] ?? 'Delete Comment') ?>
                                     </button>
                                 </form>
                                 <?php if (is_admin(2)): ?>
                                     <a href="<?= base_url('admin/users/' . $comment->userid) ?>" class="inline-flex items-center justify-center rounded-md text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-destructive text-destructive-foreground hover:bg-destructive/90 h-8 px-3">
-                                        Ban User
+                                        <?= esc($lang['label_ban_user'] ?? 'Ban User') ?>
                                     </a>
                                 <?php endif; ?>
                             </div>
@@ -214,7 +214,7 @@
                     </tr>
                     <?php endforeach; ?>
                     <?php if (empty($flags)): ?>
-                        <tr><td colspan="3" class="px-6 py-8 text-center text-muted-foreground">No flagged comments to review.</td></tr>
+                        <tr><td colspan="3" class="px-6 py-8 text-center text-muted-foreground"><?= esc($lang['text_no_flagged_comments'] ?? 'No flagged comments to review.') ?></td></tr>
                     <?php endif; ?>
                 </tbody>
             </table>

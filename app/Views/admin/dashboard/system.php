@@ -3,17 +3,17 @@
 
 <div class="mb-6">
     <h2 class="text-2xl font-bold tracking-tight flex items-center gap-2">
-        System Settings
+        <?= esc($lang['label_system_settings'] ?? 'System Settings') ?>
         <span class="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">v<?= esc($version) ?></span>
     </h2>
-    <p class="text-muted-foreground mt-1 text-sm">Configure global application settings and manage categories.</p>
+    <p class="text-muted-foreground mt-1 text-sm"><?= esc($lang['text_system_desc'] ?? 'Configure global application settings and manage categories.') ?></p>
 </div>
 
 <div data-vue-component="TabNav" data-props="<?= esc(json_encode([
     'tabs' => [
-        ['id' => 'general', 'label' => 'General Settings'],
-        ['id' => 'admin', 'label' => 'Admin Management'],
-        ['id' => 'categories', 'label' => 'Categories'],
+        ['id' => 'general', 'label' => $lang['label_general_settings'] ?? 'General Settings'],
+        ['id' => 'admin', 'label' => $lang['label_admin_management'] ?? 'Admin Management'],
+        ['id' => 'categories', 'label' => $lang['label_categories'] ?? 'Categories'],
     ],
 ]), 'attr') ?>"></div>
 
@@ -41,7 +41,7 @@
             </div>
             
             <button name="submit-changes" type="submit" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
-                Save Changes
+                <?= esc($lang['label_save_changes'] ?? 'Save Changes') ?>
             </button>
         </form>
     </div>
@@ -58,9 +58,9 @@
                         <thead class="text-xs text-muted-foreground uppercase bg-muted/50 border-b">
                             <tr>
                                 <th scope="col" class="px-6 py-4 font-semibold w-24">ID</th>
-                                <th scope="col" class="px-6 py-4 font-semibold">Name</th>
-                                <th scope="col" class="px-6 py-4 font-semibold">Email</th>
-                                <th scope="col" class="px-6 py-4 font-semibold w-32">Level</th>
+                                <th scope="col" class="px-6 py-4 font-semibold"><?= esc($lang['label_name'] ?? 'Name') ?></th>
+                                <th scope="col" class="px-6 py-4 font-semibold"><?= esc($lang['label_email'] ?? 'Email') ?></th>
+                                <th scope="col" class="px-6 py-4 font-semibold w-32"><?= esc($lang['label_level'] ?? 'Level') ?></th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-border/50">
@@ -73,7 +73,7 @@
                                 <td class="px-6 py-4 text-muted-foreground"><?= esc($user->email) ?></td>
                                 <td class="px-6 py-4">
                                     <span class="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
-                                        Level <?= esc($user->isadmin) ?>
+                                        <?= esc($lang['label_level'] ?? 'Level') ?> <?= esc($user->isadmin) ?>
                                     </span>
                                 </td>
                             </tr>
@@ -86,24 +86,24 @@
 
         <div>
             <div class="bg-card text-card-foreground border shadow-sm rounded-lg p-6 sticky top-24">
-                <h3 class="text-lg font-semibold tracking-tight mb-4">Edit Admin Privileges</h3>
+                <h3 class="text-lg font-semibold tracking-tight mb-4"><?= esc($lang['label_edit_admin_privileges'] ?? 'Edit Admin Privileges') ?></h3>
                 <form role="form" method="post" action="<?= base_url('adminaction/editadmin') ?>" class="space-y-4">
                     <?= csrf_field() ?>
                     <div class="space-y-2">
-                        <label class="text-sm font-medium leading-none">User ID</label>
+                        <label class="text-sm font-medium leading-none"><?= esc($lang['label_user_id'] ?? 'User ID') ?></label>
                         <input type="number" name="id" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2" required>
                     </div>
                     <div class="space-y-2">
-                        <label class="text-sm font-medium leading-none">Admin Level</label>
+                        <label class="text-sm font-medium leading-none"><?= esc($lang['label_admin_level'] ?? 'Admin Level') ?></label>
                         <select name="level" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-                            <option value="0">0 - No Administration Rights</option>
-                            <option value="1">1 - Ideas and Comments</option>
-                            <option value="2">2 - Level 1 + User Management</option>
-                            <option value="3">3 - Full Administration Rights</option>
+                            <option value="0"><?= esc($lang['label_admin_level_0'] ?? '0 - No Administration Rights') ?></option>
+                            <option value="1"><?= esc($lang['label_admin_level_1'] ?? '1 - Ideas and Comments') ?></option>
+                            <option value="2"><?= esc($lang['label_admin_level_2'] ?? '2 - Level 1 + User Management') ?></option>
+                            <option value="3"><?= esc($lang['label_admin_level_3'] ?? '3 - Full Administration Rights') ?></option>
                         </select>
                     </div>
                     <button name="submit-create-admin" type="submit" class="inline-flex w-full items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 mt-2">
-                        Apply Changes
+                        <?= esc($lang['label_apply_changes'] ?? 'Apply Changes') ?>
                     </button>
                 </form>
             </div>
@@ -118,20 +118,20 @@
         
         <div class="space-y-8">
             <div class="bg-card text-card-foreground border shadow-sm rounded-lg p-6">
-                <h3 class="text-lg font-semibold tracking-tight mb-4">Add or Update Category</h3>
+                <h3 class="text-lg font-semibold tracking-tight mb-4"><?= esc($lang['label_add_update_category'] ?? 'Add or Update Category') ?></h3>
                 <form role="form" method="post" action="<?= base_url('adminaction/addcategory') ?>" class="space-y-4">
                     <?= csrf_field() ?>
                     <div class="space-y-2">
-                        <label class="text-sm font-medium leading-none">Category Name</label>
+                        <label class="text-sm font-medium leading-none"><?= esc($lang['label_category_name'] ?? 'Category Name') ?></label>
                         <input type="text" name="name" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2" required>
-                        <p class="text-[0.8rem] text-muted-foreground">Tip: Enter an existing category name to update its description.</p>
+                        <p class="text-[0.8rem] text-muted-foreground"><?= esc($lang['text_tip_category'] ?? 'Tip: Enter an existing category name to update its description.') ?></p>
                     </div>
                     <div class="space-y-2">
-                        <label class="text-sm font-medium leading-none">Description</label>
+                        <label class="text-sm font-medium leading-none"><?= esc($lang['label_description'] ?? 'Description') ?></label>
                         <textarea name="description" rows="3" class="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"></textarea>
                     </div>
                     <button name="add-category" type="submit" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
-                        Save Category
+                        <?= esc($lang['label_save_category'] ?? 'Save Category') ?>
                     </button>
                 </form>
             </div>
@@ -139,9 +139,9 @@
             <div class="bg-destructive/5 border border-destructive/20 rounded-lg p-6">
                 <h3 class="text-lg font-semibold tracking-tight mb-4 text-destructive flex items-center gap-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                    Delete Category
+                    <?= esc($lang['label_delete_category'] ?? 'Delete Category') ?>
                 </h3>
-                <form role="form" method="post" action="<?= base_url('adminaction/deletecategory') ?>" class="space-y-4" onsubmit="return confirm('Are you sure you want to delete this category?');">
+                <form role="form" method="post" action="<?= base_url('adminaction/deletecategory') ?>" class="space-y-4" onsubmit="return confirm('<?= esc(addslashes($lang['text_confirm_delete_category'] ?? 'Are you sure you want to delete this category?')) ?>');">
                     <?= csrf_field() ?>
                     <div class="space-y-3">
                         <select name="catid" class="flex h-10 w-full rounded-md border border-destructive/50 bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
@@ -151,11 +151,11 @@
                         </select>
                         <div class="flex items-center space-x-2">
                             <input type="checkbox" id="delete-ideas" name="ideas" value="1" class="h-4 w-4 rounded border-destructive bg-background text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 accent-destructive">
-                            <label for="delete-ideas" class="text-sm font-medium leading-none text-destructive">Also delete all ideas in this category</label>
+                            <label for="delete-ideas" class="text-sm font-medium leading-none text-destructive"><?= esc($lang['label_also_delete_ideas'] ?? 'Also delete all ideas in this category') ?></label>
                         </div>
                     </div>
                     <button name="delete-category" type="submit" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-destructive text-destructive-foreground hover:bg-destructive/90 h-10 px-4 py-2 mt-2">
-                        Delete Category
+                        <?= esc($lang['label_delete_category'] ?? 'Delete Category') ?>
                     </button>
                 </form>
             </div>
@@ -163,7 +163,7 @@
 
         <div>
             <div class="bg-card text-card-foreground border shadow-sm rounded-lg p-6">
-                <h3 class="text-lg font-semibold tracking-tight mb-4">Rename Categories</h3>
+                <h3 class="text-lg font-semibold tracking-tight mb-4"><?= esc($lang['label_rename_categories'] ?? 'Rename Categories') ?></h3>
                 <form role="form" name="update-form" method="post" action="<?= base_url('adminaction/updatecategories') ?>" class="space-y-4">
                     <?= csrf_field() ?>
                     <div class="space-y-3 max-h-[500px] overflow-y-auto pr-2">
@@ -174,7 +174,7 @@
                         <?php endforeach; ?>
                     </div>
                     <button name="update-names" type="submit" class="inline-flex w-full items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
-                        Update All Names
+                        <?= esc($lang['label_update_all_names'] ?? 'Update All Names') ?>
                     </button>
                 </form>
             </div>

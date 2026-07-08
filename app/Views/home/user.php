@@ -35,7 +35,7 @@
             <?= esc($user->name) ?>
             <?php if ($user->isadmin): ?>
                 <span class="inline-flex items-center rounded-full bg-destructive/10 px-2.5 py-0.5 text-xs font-semibold text-destructive">
-                    Admin
+                    <?= esc($lang['label_admin'] ?? 'Admin') ?>
                 </span>
             <?php endif; ?>
         </h2>
@@ -55,7 +55,7 @@
 
 <?php if ($isOwner): ?>
 <div class="bg-card text-card-foreground rounded-lg border shadow-sm p-6 mb-8">
-    <h3 class="text-xl font-bold mb-4">Account Settings</h3>
+    <h3 class="text-xl font-bold mb-4"><?= esc($lang['label_account_settings']) ?></h3>
     
     <?php if ($err > 0): ?>
         <div class="bg-destructive/10 text-destructive border border-destructive/20 p-3 rounded-md mb-6 text-sm font-medium flex items-center gap-2">

@@ -120,7 +120,7 @@
     <ul class="inline-flex -space-x-px text-sm">
         <li>
             <a href="<?= $page > 1 ? $pageLink($page - 1) : '#' ?>" class="flex items-center justify-center px-3 h-8 ml-0 leading-tight text-muted-foreground bg-background border border-input rounded-l-lg hover:bg-muted hover:text-foreground <?= $page <= 1 ? 'opacity-50 pointer-events-none' : '' ?>">
-                <span class="sr-only">Previous</span>
+                <span class="sr-only"><?= esc($lang['label_previous']) ?></span>
                 <svg class="w-2.5 h-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/></svg>
             </a>
         </li>
@@ -133,7 +133,7 @@
         <?php endfor; ?>
         <li>
             <a href="<?= $page < $pages ? $pageLink($page + 1) : '#' ?>" class="flex items-center justify-center px-3 h-8 leading-tight text-muted-foreground bg-background border border-input rounded-r-lg hover:bg-muted hover:text-foreground <?= $page >= $pages ? 'opacity-50 pointer-events-none' : '' ?>">
-                <span class="sr-only">Next</span>
+                <span class="sr-only"><?= esc($lang['label_next']) ?></span>
                 <svg class="w-2.5 h-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/></svg>
             </a>
         </li>
