@@ -57,12 +57,13 @@ final class SecurityTest extends CIUnitTestCase
 
         $this->withSession($this->sessionFor($userId))->post('action/comment', [
             'idea_id' => $ideaId,
-            'content' => '<img src=x onerror=alert(2)>',
+            'content' => 'Some text <img src=x onerror=alert(2)>',
         ]);
 
         $html = $this->get('home/idea/' . $ideaId)->getBody();
+        $this->assertStringContainsString('Some text', $html);
         $this->assertStringNotContainsString('<img src=x onerror=alert(2)>', $html);
-        $this->assertStringContainsString('&lt;img', $html);
+        $this->assertStringNotContainsString('&lt;img', $html);
     }
 
     public function testCsrfRejectsPostWithoutToken(): void
