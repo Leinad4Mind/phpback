@@ -6,7 +6,7 @@ PHPBack is an open source feedback system you can use for your website. It gives
 
 This repository has been **migrated from the legacy CodeIgniter 2 codebase to CodeIgniter 4**, with a full security pass (CSRF protection, output escaping, modern password hashing, hardened file uploads) and the tags / attachments / status-filter features rebuilt to actually work on the new framework.
 
-The frontend was rebuilt with **Tailwind CSS v4 + Vue 3 islands** (shadcn-vue components) replacing the old Bootstrap 3 / jQuery stack, with dark mode and the 12 interface languages from 1.3.x.
+The frontend was rebuilt with **Tailwind CSS v4 + Vue 3 islands** (shadcn-vue components) replacing the old Bootstrap 3 / jQuery stack, with dark mode, the 12 interface languages from 1.3.x, and native integration for modern CAPTCHA providers (reCAPTCHA v2/v3 and Cloudflare Turnstile).
 
 Please, visit the project website for more information: [http://www.phpback.org/](http://www.phpback.org/)
 
