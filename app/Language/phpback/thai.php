@@ -151,6 +151,7 @@ return [
     'lang_code' => 'th',
     'lang_dir' => 'ltr',
     'lang_name' => 'ไทย',
+    'last_added_ideas' => 'ไอเดียที่เพิ่มล่าสุด',
     'last_completed_ideas' => 'ไอเดียล่าสุดที่เสร็จสมบูรณ์',
     'last_considered_ideas' => 'ไอเดียที่พิจารณาครั้งล่าสุด',
     'last_planned_ideas' => 'ไอเดียที่วางแผนไว้ล่าสุด',

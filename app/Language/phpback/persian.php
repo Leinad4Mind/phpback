@@ -151,6 +151,7 @@ return [
     'lang_code' => 'fa',
     'lang_dir' => 'rtl',
     'lang_name' => 'فارسی',
+    'last_added_ideas' => 'اخرین ایده های اضافه شده',
     'last_completed_ideas' => 'اخرین ایده های تکمیل شده',
     'last_considered_ideas' => 'اخرین ایده های در نظر گرفته شده',
     'last_planned_ideas' => 'اخرین ایده های برنامه ریزی شده',
