@@ -94,7 +94,7 @@
 
         <div class="mt-6 text-center text-sm">
             <span class="text-muted-foreground"><?= esc($lang['text_no_account']) ?></span>
-            <a href="<?= base_url('home/register') ?>" class="font-medium text-primary hover:underline ml-1">
+            <a href="<?= base_url('register') ?>" class="font-medium text-primary hover:underline ml-1">
                 <?= esc($lang['text_create_an_account']) ?>
             </a>
         </div>

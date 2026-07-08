@@ -26,12 +26,12 @@ class Action extends BaseController
     public function register()
     {
         if (is_logged_in()) {
-            return redirect()->to('home');
+            return redirect()->to('/');
         }
 
         // Throttle registrations per IP.
         if (! service('throttler')->check(md5('register_' . $this->request->getIPAddress()), 5, MINUTE)) {
-            return redirect()->to('home/register')->with('error', 'toomany');
+            return redirect()->to('register')->with('error', 'toomany');
         }
 
         $settings = model(SettingModel::class);
@@ -41,41 +41,41 @@ class Action extends BaseController
         $name     = trim((string) $this->request->getPost('name'));
 
         if ((string) $settings->get('recaptchapublic') !== '' && ! $this->verifyRecaptcha()) {
-            return redirect()->to('home/register/recaptcha');
+            return redirect()->to('register/recaptcha');
         }
         if (mb_strlen($name) < 3) {
-            return redirect()->to('home/register/name');
+            return redirect()->to('register/name');
         }
         if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            return redirect()->to('home/register/email');
+            return redirect()->to('register/email');
         }
         if (mb_strlen($pass) < 6) {
-            return redirect()->to('home/register/pass');
+            return redirect()->to('register/pass');
         }
         if ($pass !== $pass2) {
-            return redirect()->to('home/register/pass2');
+            return redirect()->to('register/pass2');
         }
 
         $votes = (int) ($settings->get('maxvotes') ?: 10);
         $newId = model(UserModel::class)->createUser($name, $email, $pass, $votes, 0);
         if ($newId === false) {
-            return redirect()->to('home/register/exists');
+            return redirect()->to('register/exists');
         }
 
         model(LogModel::class)->add(($this->lang('log_user_registered') ?: 'New user') . ": {$name}({$email})", 'general', 0);
 
         $title   = (string) ($settings->get('title') ?: 'PHPBack');
-        $message = "Welcome to our feedback: {$title}\n\nYour account has been created for {$email}.\n\nPlease log in here: " . base_url('home/login') . "\n";
+        $message = "Welcome to our feedback: {$title}\n\nYour account has been created for {$email}.\n\nPlease log in here: " . base_url('login') . "\n";
         $this->sendMail($message, "New account - {$title}", $email);
 
-        return redirect()->to('home/login/register');
+        return redirect()->to('login/register');
     }
 
     public function login()
     {
         // Throttle login attempts per IP to slow brute-force.
         if (! service('throttler')->check(md5('login_' . $this->request->getIPAddress()), 8, MINUTE)) {
-            return redirect()->to('home/login/toomany');
+            return redirect()->to('login/toomany');
         }
 
         $email = trim((string) $this->request->getPost('email'));
@@ -83,7 +83,7 @@ class Action extends BaseController
 
         $user = model(UserModel::class)->attemptLogin($email, $pass);
         if ($user === null) {
-            return redirect()->to('home/login/errorlogin');
+            return redirect()->to('login/errorlogin');
         }
 
         phpback_login($user);
@@ -92,7 +92,7 @@ class Action extends BaseController
             $this->issueRememberCookie((int) $user->id);
         }
 
-        return redirect()->to('home');
+        return redirect()->to('/');
     }
 
     public function logout()
@@ -100,7 +100,7 @@ class Action extends BaseController
         $this->clearRememberCookie();
         phpback_logout();
 
-        return redirect()->to('home');
+        return redirect()->to('/');
     }
 
     public function vote()
@@ -135,7 +135,7 @@ class Action extends BaseController
         }
 
         $idea = model(IdeaModel::class)->getIdea($ideaId);
-        return redirect()->to($idea?->url ?? base_url('home'));
+        return redirect()->to($idea?->url ?? base_url());
     }
 
     public function unvote()
@@ -163,7 +163,7 @@ class Action extends BaseController
             ]);
         }
 
-        return redirect()->to(base_url('home/profile/' . $userId));
+        return redirect()->to(base_url('profile/' . $userId));
     }
 
     public function changepassword()
@@ -172,7 +172,7 @@ class Action extends BaseController
         $old    = (string) $this->request->getPost('old');
         $new    = (string) $this->request->getPost('new');
         $rnew   = (string) $this->request->getPost('rnew');
-        $back   = base_url('home/profile/' . $userId);
+        $back   = base_url('profile/' . $userId);
 
         if (mb_strlen($new) < 6) {
             return redirect()->to($back)->with('error', 3);
@@ -205,13 +205,13 @@ class Action extends BaseController
         $catId  = (int) $this->request->getPost('category');
 
         if ($catId === 0) {
-            return redirect()->to('home/postidea/errorcat')->withInput();
+            return redirect()->to('postidea/errorcat')->withInput();
         }
         if (mb_strlen($title) < 9) {
-            return redirect()->to('home/postidea/errortitle')->withInput();
+            return redirect()->to('postidea/errortitle')->withInput();
         }
         if (mb_strlen(strip_tags($desc)) < 20) {
-            return redirect()->to('home/postidea/errordesc')->withInput();
+            return redirect()->to('postidea/errordesc')->withInput();
         }
 
         // Validate any attachment BEFORE creating the idea, so a bad file never
@@ -219,13 +219,13 @@ class Action extends BaseController
         $file      = $this->request->getFile('attachment');
         $hasUpload = $file !== null && $file->isValid() && $file->getError() !== UPLOAD_ERR_NO_FILE;
         if ($hasUpload && ($uploadError = $this->validateAttachment($file)) !== null) {
-            return redirect()->to('home/postidea/' . $uploadError)->withInput();
+            return redirect()->to('postidea/' . $uploadError)->withInput();
         }
 
         $ideas  = model(IdeaModel::class);
         $ideaId = $ideas->addIdea($title, $desc, $userId, $catId);
         if ($ideaId === false) {
-            return redirect()->to('home/postidea/errorcat')->withInput();
+            return redirect()->to('postidea/errorcat')->withInput();
         }
 
         model(LogModel::class)->add(($this->lang('log_new_idea') ?: 'New idea') . ": {$title}", 'user', $userId);
@@ -244,7 +244,7 @@ class Action extends BaseController
 
         $this->notifyAdminsOfNewIdea($ideas->getIdea($ideaId));
 
-        return redirect()->to(base_url('home/profile/' . $userId));
+        return redirect()->to(base_url('profile/' . $userId));
     }
 
     public function comment()
@@ -258,7 +258,7 @@ class Action extends BaseController
                 return $this->response->setJSON(['success' => false, 'error' => 'Invalid or empty content', 'csrfHash' => csrf_hash()]);
             }
             $idea = model(IdeaModel::class)->getIdea($ideaId);
-            return redirect()->to($idea?->url ?? base_url('home'));
+            return redirect()->to($idea?->url ?? base_url());
         }
 
         $id = model(CommentModel::class)->add($ideaId, $content, $userId);
@@ -288,7 +288,7 @@ class Action extends BaseController
         }
 
         $idea = model(IdeaModel::class)->getIdea($ideaId);
-        return redirect()->to($idea?->url ?? base_url('home'));
+        return redirect()->to($idea?->url ?? base_url());
     }
 
     public function flag()
@@ -303,7 +303,7 @@ class Action extends BaseController
         }
 
         $idea = model(IdeaModel::class)->getIdea($ideaId);
-        return redirect()->to($idea?->url ?? base_url('home'));
+        return redirect()->to($idea?->url ?? base_url());
     }
 
     /* ------------------------------------------------------------------ */

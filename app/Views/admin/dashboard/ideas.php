@@ -35,7 +35,7 @@
                     <?php foreach ($newideas as $idea): ?>
                     <tr class="transition-colors <?= $idea->status === 'new' ? 'bg-primary/5 hover:bg-primary/10' : 'bg-background hover:bg-muted/50' ?>">
                         <td class="px-6 py-4 font-medium">
-                            <a href="<?= base_url('home/idea/' . $idea->id . '/' . url_title((string) $idea->title, '-', true)) ?>" target="_blank" class="hover:underline text-foreground"><?= esc($idea->title) ?></a>
+                            <a href="<?= base_url('idea/' . $idea->id . '/' . url_title((string) $idea->title, '-', true)) ?>" target="_blank" class="hover:underline text-foreground"><?= esc($idea->title) ?></a>
                         </td>
                         <td class="px-6 py-4 text-muted-foreground"><?= esc($categories[$idea->categoryid]->name ?? '') ?></td>
                         <td class="px-6 py-4 text-muted-foreground"><?= esc($idea->comments) ?></td>
@@ -150,7 +150,7 @@
                                         };
                                         ?>
                                         <span class="inline-block w-2 h-2 rounded-full <?= $statusClass ?>" title="<?= esc($idea->status) ?>"></span>
-                                        <a href="<?= base_url('home/idea/' . $idea->id . '/' . url_title((string) $idea->title, '-', true)) ?>" target="_blank" class="hover:underline text-foreground line-clamp-1"><?= esc($idea->title) ?></a>
+                                        <a href="<?= base_url('idea/' . $idea->id . '/' . url_title((string) $idea->title, '-', true)) ?>" target="_blank" class="hover:underline text-foreground line-clamp-1"><?= esc($idea->title) ?></a>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 text-muted-foreground"><?= esc($categories[$idea->categoryid]->name ?? '') ?></td>
@@ -193,7 +193,7 @@
                             </div>
                             <div>
                                 <span class="font-semibold text-foreground">Idea:</span> 
-                                <a href="<?= base_url('home/idea/' . $comment->ideaid) ?>" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline">#<?= (int) $comment->ideaid ?></a>
+                                <a href="<?= base_url('idea/' . $comment->ideaid) ?>" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline">#<?= (int) $comment->ideaid ?></a>
                             </div>
                         </td>
                         <td class="px-6 py-4">

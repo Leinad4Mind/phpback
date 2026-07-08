@@ -19,36 +19,38 @@
 
 <!-- General Settings Tab -->
 <div id="general-panel" class="system-panel block">
-    <div class="bg-card text-card-foreground border shadow-sm rounded-lg p-6 max-w-2xl">
-        <form role="form" method="post" action="<?= base_url('adminaction/editsettings') ?>" class="space-y-6">
-            <?= csrf_field() ?>
-            
-            <div class="space-y-4">
-                <?php foreach ($settings as $setting): ?>
-                <?php if (str_starts_with($setting->name, 'homepage_show_')) continue; ?>
-                <div class="grid gap-2">
-                    <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"><?= esc($lang['setting_' . $setting->name] ?? $setting->name) ?></label>
-                    <?php if ($setting->name === 'language' && ! empty($availableLanguages)): ?>
-                    <select name="setting-<?= (int) $setting->id ?>" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-                        <?php foreach ($availableLanguages as $slug => $nativeName): ?>
-                            <option value="<?= esc($slug, 'attr') ?>" <?= $setting->value === $slug ? 'selected' : '' ?>><?= esc($nativeName) ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                    <?php elseif ($setting->name === 'captcha_provider'): ?>
-                    <select name="setting-<?= (int) $setting->id ?>" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-                        <option value="recaptcha_v2" <?= $setting->value === 'recaptcha_v2' ? 'selected' : '' ?>><?= esc($lang['label_captcha_provider_recaptcha_v2'] ?? 'reCAPTCHA v2') ?></option>
-                        <option value="recaptcha_invisible" <?= $setting->value === 'recaptcha_invisible' ? 'selected' : '' ?>><?= esc($lang['label_captcha_provider_recaptcha_invisible'] ?? 'reCAPTCHA v2 (Invisible)') ?></option>
-                        <option value="recaptcha_v3" <?= $setting->value === 'recaptcha_v3' ? 'selected' : '' ?>><?= esc($lang['label_captcha_provider_recaptcha_v3'] ?? 'reCAPTCHA v3') ?></option>
-                        <option value="turnstile" <?= $setting->value === 'turnstile' ? 'selected' : '' ?>><?= esc($lang['label_captcha_provider_turnstile'] ?? 'Cloudflare Turnstile') ?></option>
-                    </select>
-                    <?php else: ?>
-                    <input type="text" name="setting-<?= (int) $setting->id ?>" value="<?= esc($setting->value, 'attr') ?>" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-                    <?php endif; ?>
-                    <?php if ($setting->name === 'google_client_id'): ?>
-                    <p class="text-[0.8rem] text-muted-foreground"><?= esc(sprintf($lang['text_google_redirect_hint'] ?? 'Authorized redirect URI for Google Cloud Console: %s', base_url('auth/google/callback'))) ?></p>
-                    <?php endif; ?>
+    <form role="form" method="post" action="<?= base_url('adminaction/editsettings') ?>" class="space-y-6">
+        <?= csrf_field() ?>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+            <div class="bg-card text-card-foreground border shadow-sm rounded-lg p-6">
+                <div class="space-y-4">
+                    <?php foreach ($settings as $setting): ?>
+                    <?php if (str_starts_with($setting->name, 'homepage_show_')) continue; ?>
+                    <div class="grid gap-2">
+                        <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"><?= esc($lang['setting_' . $setting->name] ?? $setting->name) ?></label>
+                        <?php if ($setting->name === 'language' && ! empty($availableLanguages)): ?>
+                        <select name="setting-<?= (int) $setting->id ?>" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+                            <?php foreach ($availableLanguages as $slug => $nativeName): ?>
+                                <option value="<?= esc($slug, 'attr') ?>" <?= $setting->value === $slug ? 'selected' : '' ?>><?= esc($nativeName) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <?php elseif ($setting->name === 'captcha_provider'): ?>
+                        <select name="setting-<?= (int) $setting->id ?>" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+                            <option value="recaptcha_v2" <?= $setting->value === 'recaptcha_v2' ? 'selected' : '' ?>><?= esc($lang['label_captcha_provider_recaptcha_v2'] ?? 'reCAPTCHA v2') ?></option>
+                            <option value="recaptcha_invisible" <?= $setting->value === 'recaptcha_invisible' ? 'selected' : '' ?>><?= esc($lang['label_captcha_provider_recaptcha_invisible'] ?? 'reCAPTCHA v2 (Invisible)') ?></option>
+                            <option value="recaptcha_v3" <?= $setting->value === 'recaptcha_v3' ? 'selected' : '' ?>><?= esc($lang['label_captcha_provider_recaptcha_v3'] ?? 'reCAPTCHA v3') ?></option>
+                            <option value="turnstile" <?= $setting->value === 'turnstile' ? 'selected' : '' ?>><?= esc($lang['label_captcha_provider_turnstile'] ?? 'Cloudflare Turnstile') ?></option>
+                        </select>
+                        <?php else: ?>
+                        <input type="text" name="setting-<?= (int) $setting->id ?>" value="<?= esc($setting->value, 'attr') ?>" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+                        <?php endif; ?>
+                        <?php if ($setting->name === 'google_client_id'): ?>
+                        <p class="text-[0.8rem] text-muted-foreground"><?= esc(sprintf($lang['text_google_redirect_hint'] ?? 'Authorized redirect URI for Google Cloud Console: %s', base_url('auth/google/callback'))) ?></p>
+                        <?php endif; ?>
+                    </div>
+                    <?php endforeach; ?>
                 </div>
-                <?php endforeach; ?>
             </div>
 
             <?php
@@ -64,9 +66,9 @@
                     'homepage_show_recent'     => $lang['last_added_ideas'],
                 ];
             ?>
-            <div class="space-y-2 border-t pt-4">
+            <div class="bg-card text-card-foreground border shadow-sm rounded-lg p-6">
                 <label class="text-sm font-medium leading-none"><?= esc($lang['label_homepage_sections'] ?? 'Homepage Sections') ?></label>
-                <div class="space-y-3 pt-1">
+                <div class="space-y-3 pt-3">
                     <?php foreach ($homepageSections as $settingName => $sectionLabel): ?>
                         <?php $section = $settingsByName[$settingName] ?? null; ?>
                         <?php if ($section !== null): ?>
@@ -82,12 +84,12 @@
                     <?php endforeach; ?>
                 </div>
             </div>
+        </div>
 
-            <button name="submit-changes" type="submit" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
-                <?= esc($lang['label_save_changes'] ?? 'Save Changes') ?>
-            </button>
-        </form>
-    </div>
+        <button name="submit-changes" type="submit" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
+            <?= esc($lang['label_save_changes'] ?? 'Save Changes') ?>
+        </button>
+    </form>
 </div>
 
 <!-- Admin Management Tab -->
@@ -110,7 +112,7 @@
                             <?php foreach ($adminusers as $user): ?>
                             <tr class="bg-background hover:bg-muted/50 transition-colors">
                                 <td class="px-6 py-4">
-                                    <a href="<?= base_url('home/profile/' . $user->id . '/' . url_title((string) $user->name, '-', true)) ?>" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline">#<?= (int) $user->id ?></a>
+                                    <a href="<?= base_url('profile/' . $user->id . '/' . url_title((string) $user->name, '-', true)) ?>" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline">#<?= (int) $user->id ?></a>
                                 </td>
                                 <td class="px-6 py-4 font-medium text-foreground"><?= esc($user->name) ?></td>
                                 <td class="px-6 py-4 text-muted-foreground"><?= esc($user->email) ?></td>

@@ -42,7 +42,7 @@
                 <?php if (is_logged_in()): ?>
                     <div data-vue-component="UserDropdownIsland" data-props="<?= esc(json_encode([
                         'username' => current_username(),
-                        'profileUrl' => base_url('home/profile/' . current_user_id() . '/' . url_title((string) current_username(), '-', true)),
+                        'profileUrl' => base_url('profile/' . current_user_id() . '/' . url_title((string) current_username(), '-', true)),
                         'isAdmin' => is_admin(1),
                         'adminUrl' => base_url('admin/dashboard'),
                         'logoutUrl' => base_url('action/logout'),
@@ -56,7 +56,7 @@
                         ]
                     ]), 'attr') ?>"></div>
                 <?php else: ?>
-                    <a href="<?= base_url('home/login') ?>" class="text-sm font-medium hover:underline">
+                    <a href="<?= base_url('login') ?>" class="text-sm font-medium hover:underline">
                         <?= esc($lang['label_log_in']) ?>
                     </a>
                 <?php endif; ?>
@@ -76,7 +76,7 @@
         <aside class="w-full md:w-1/4 order-1 md:order-2 space-y-8">
             <!-- Search -->
             <div>
-                <form action="<?= base_url('home/search') ?>" method="POST" class="flex gap-2">
+                <form action="<?= base_url('search') ?>" method="POST" class="flex gap-2">
                     <?= csrf_field() ?>
                     <input type="search" name="query" placeholder="<?= esc($lang['label_search']) ?>"
                         class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
@@ -89,7 +89,7 @@
 
             <!-- Post Idea -->
             <div>
-                <a href="<?= base_url('home/postidea') ?>"
+                <a href="<?= base_url('postidea') ?>"
                     class="inline-flex w-full items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
                     <?= esc($lang['label_post_new_idea']) ?>
                 </a>

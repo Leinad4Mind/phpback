@@ -98,7 +98,7 @@ class Adminaction extends BaseController
         model(IdeaModel::class)->deleteIdea($id);
         $this->log(str_replace('%s', "#{$id}", (string) $this->lang('log_idea_deleted')));
 
-        return redirect()->to('home');
+        return redirect()->to('/');
     }
 
     public function approveidea()
@@ -107,7 +107,7 @@ class Adminaction extends BaseController
         model(IdeaModel::class)->approve($id);
         $this->log(str_replace('%s', "#{$id}", (string) $this->lang('log_idea_approved')), 'user', null, $id);
 
-        return redirect()->to('home/idea/' . $id);
+        return redirect()->to('idea/' . $id);
     }
 
     public function ideastatus()
@@ -119,7 +119,7 @@ class Adminaction extends BaseController
             if ($this->request->isAJAX() || $this->request->getHeaderLine('Accept') === 'application/json') {
                 return $this->response->setJSON(['success' => false, 'error' => 'Invalid status']);
             }
-            return redirect()->to('home/idea/' . $id);
+            return redirect()->to('idea/' . $id);
         }
 
         model(\App\Models\IdeaModel::class)->changeStatus($id, $status);

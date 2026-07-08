@@ -31,7 +31,7 @@
 </div>
 
 <!-- Filter form -->
-<form method="GET" action="<?= base_url('home') ?>" class="bg-card text-card-foreground border rounded-lg p-4 mb-8 flex flex-wrap gap-4 items-end">
+<form method="GET" action="<?= base_url() ?>" class="bg-card text-card-foreground border rounded-lg p-4 mb-8 flex flex-wrap gap-4 items-end">
     <div class="space-y-1 flex-1 min-w-[150px]">
         <label class="text-sm font-medium"><?= esc($lang['label_category']) ?>:</label>
         <input type="number" name="category" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2" value="<?= esc($filters['category'] ?? '', 'attr') ?>">

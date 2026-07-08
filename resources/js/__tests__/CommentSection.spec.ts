@@ -61,7 +61,7 @@ describe('CommentSection', () => {
     const wrapper = mount(CommentSection, { props: makeProps() })
     expect(wrapper.text()).toContain('Comentários (1)')
     expect(wrapper.text()).toContain('First!')
-    expect(wrapper.find('a').attributes('href')).toBe('http://localhost/home/profile/2')
+    expect(wrapper.find('a').attributes('href')).toBe('http://localhost/profile/2')
   })
 
   it('shows the empty state when there are no comments', () => {
