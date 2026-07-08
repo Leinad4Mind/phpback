@@ -18,6 +18,7 @@ const props = defineProps<{
   csrfTokenName: string
   csrfHash: string
   labels: Record<string, string>
+  buttonClass?: string
 }>()
 
 function logout() {
@@ -39,8 +40,8 @@ function logout() {
 <template>
   <DropdownMenu>
     <DropdownMenuTrigger as-child>
-      <Button variant="ghost" class="font-medium h-8 px-2 flex items-center gap-1 focus-visible:ring-offset-0 focus-visible:ring-1">
-        <span class="text-muted-foreground font-normal hidden sm:inline">{{ props.labels.logged_as }}</span>
+      <Button variant="ghost" :class="['font-medium h-8 px-2 flex items-center gap-1 focus-visible:ring-offset-0 focus-visible:ring-1', props.buttonClass]">
+        <span class="font-normal hidden sm:inline" :class="props.buttonClass ? 'opacity-70' : 'text-muted-foreground'">{{ props.labels.logged_as }}</span>
         <span>{{ props.username }}</span>
         <svg class="w-4 h-4 ml-1 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
       </Button>
