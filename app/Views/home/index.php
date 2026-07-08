@@ -86,40 +86,37 @@
 <?php endif; ?>
 
 <?php
-    // Same badge palette as the status buckets below, keyed by idea status.
     $statusBadgeClasses = [
         'completed'  => 'bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300',
         'started'    => 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300',
         'planned'    => 'bg-orange-100 text-orange-800 dark:bg-orange-900/50 dark:text-orange-300',
         'considered' => 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300',
     ];
+    // All five "last ideas" sections as siblings of one auto-flowing grid (not
+    // fixed columns / a separate full-width block), so hiding or emptying any
+    // section lets the rest fall into place instead of leaving a gap or an
+    // empty heading behind. Every idea already carries its own real status
+    // (even inside a single-status bucket like "completed"), so one badge
+    // lookup by $idea->status covers "recent" (mixed statuses) and the rest
+    // (always their own status) alike.
+    $homeSections = [
+        'recent'     => $lang['last_added_ideas'],
+        'completed'  => $lang['last_completed_ideas'],
+        'started'    => $lang['last_started_ideas'],
+        'planned'    => $lang['last_planned_ideas'],
+        'considered' => $lang['last_considered_ideas'],
+    ];
 ?>
-<?php if ($showSection['recent'] && ! empty($ideas['recent'])): ?>
-    <div class="mb-8">
-        <h6 class="text-sm font-semibold mb-3 uppercase tracking-wider text-muted-foreground"><?= esc($lang['last_added_ideas']) ?></h6>
-        <div class="space-y-2">
-            <?php foreach ($ideas['recent'] as $idea): ?>
-                <div class="flex items-center gap-2">
-                    <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold <?= $statusBadgeClasses[$idea->status] ?? 'bg-secondary text-secondary-foreground' ?>">
-                        <?= esc($lang['idea_' . $idea->status]) ?>
-                    </span>
-                    <a href="<?= esc($idea->url, 'attr') ?>" class="text-sm hover:underline text-foreground truncate"><?= esc($idea->title) ?></a>
-                </div>
-            <?php endforeach; ?>
-        </div>
-    </div>
-<?php endif; ?>
-
-<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-    <div class="space-y-8">
-        <?php if ($showSection['completed']): ?>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-8">
+    <?php foreach ($homeSections as $key => $label): ?>
+        <?php if ($showSection[$key] && ! empty($ideas[$key])): ?>
         <div>
-            <h6 class="text-sm font-semibold mb-3 uppercase tracking-wider text-muted-foreground"><?= esc($lang['last_completed_ideas']) ?></h6>
+            <h6 class="text-sm font-semibold mb-3 uppercase tracking-wider text-muted-foreground"><?= esc($label) ?></h6>
             <div class="space-y-2">
-                <?php foreach ($ideas['completed'] as $idea): ?>
+                <?php foreach ($ideas[$key] as $idea): ?>
                     <div class="flex items-center gap-2">
-                        <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300">
-                            <?= esc($lang['idea_completed']) ?>
+                        <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold <?= $statusBadgeClasses[$idea->status] ?? 'bg-secondary text-secondary-foreground' ?>">
+                            <?= esc($lang['idea_' . $idea->status]) ?>
                         </span>
                         <a href="<?= esc($idea->url, 'attr') ?>" class="text-sm hover:underline text-foreground truncate"><?= esc($idea->title) ?></a>
                     </div>
@@ -127,55 +124,7 @@
             </div>
         </div>
         <?php endif; ?>
-        <?php if ($showSection['planned']): ?>
-        <div>
-            <h6 class="text-sm font-semibold mb-3 uppercase tracking-wider text-muted-foreground"><?= esc($lang['last_planned_ideas']) ?></h6>
-            <div class="space-y-2">
-                <?php foreach ($ideas['planned'] as $idea): ?>
-                    <div class="flex items-center gap-2">
-                        <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold bg-orange-100 text-orange-800 dark:bg-orange-900/50 dark:text-orange-300">
-                            <?= esc($lang['idea_planned']) ?>
-                        </span>
-                        <a href="<?= esc($idea->url, 'attr') ?>" class="text-sm hover:underline text-foreground truncate"><?= esc($idea->title) ?></a>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        </div>
-        <?php endif; ?>
-    </div>
-
-    <div class="space-y-8">
-        <?php if ($showSection['started']): ?>
-        <div>
-            <h6 class="text-sm font-semibold mb-3 uppercase tracking-wider text-muted-foreground"><?= esc($lang['last_started_ideas']) ?></h6>
-            <div class="space-y-2">
-                <?php foreach ($ideas['started'] as $idea): ?>
-                    <div class="flex items-center gap-2">
-                        <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300">
-                            <?= esc($lang['idea_started']) ?>
-                        </span>
-                        <a href="<?= esc($idea->url, 'attr') ?>" class="text-sm hover:underline text-foreground truncate"><?= esc($idea->title) ?></a>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        </div>
-        <?php endif; ?>
-        <?php if ($showSection['considered']): ?>
-        <div>
-            <h6 class="text-sm font-semibold mb-3 uppercase tracking-wider text-muted-foreground"><?= esc($lang['last_considered_ideas']) ?></h6>
-            <div class="space-y-2">
-                <?php foreach ($ideas['considered'] as $idea): ?>
-                    <div class="flex items-center gap-2">
-                        <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300">
-                            <?= esc($lang['idea_considered']) ?>
-                        </span>
-                        <a href="<?= esc($idea->url, 'attr') ?>" class="text-sm hover:underline text-foreground truncate"><?= esc($idea->title) ?></a>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        </div>
-        <?php endif; ?>
-    </div>
+    <?php endforeach; ?>
 </div>
 
 <?= $this->endSection() ?>
