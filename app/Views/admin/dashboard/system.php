@@ -43,6 +43,9 @@
                     <?php else: ?>
                     <input type="text" name="setting-<?= (int) $setting->id ?>" value="<?= esc($setting->value, 'attr') ?>" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
                     <?php endif; ?>
+                    <?php if ($setting->name === 'google_client_id'): ?>
+                    <p class="text-[0.8rem] text-muted-foreground"><?= esc(sprintf($lang['text_google_redirect_hint'] ?? 'Authorized redirect URI for Google Cloud Console: %s', base_url('auth/google/callback'))) ?></p>
+                    <?php endif; ?>
                 </div>
                 <?php endforeach; ?>
             </div>

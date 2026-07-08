@@ -41,13 +41,19 @@ $routes->get('home/profile/(:num)/(:segment)', 'Home::profile/$1');
 
 $routes->get('home/login', 'Home::login');
 $routes->get('home/login/(:segment)', 'Home::login/$1');
-$routes->get('home/login/(:segment)/(:num)', 'Home::login/$1/$2');
+// (:segment), not (:num): infinite bans redirect here with -1 (cast in Home::login)
+$routes->get('home/login/(:segment)/(:segment)', 'Home::login/$1/$2');
 
 $routes->get('home/postidea', 'Home::postidea');
 $routes->get('home/postidea/(:segment)', 'Home::postidea/$1');
 
 $routes->get('home/register', 'Home::register');
 $routes->get('home/register/(:segment)', 'Home::register/$1');
+
+// Google OAuth2 sign-in. GET by design (outside the POST-only CSRF filter);
+// the flow is protected by the session-bound `state` value plus PKCE.
+$routes->get('auth/google', 'Auth::google');
+$routes->get('auth/google/callback', 'Auth::googleCallback');
 
 /*
  * -------------------------------------------------------------------------

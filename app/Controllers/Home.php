@@ -53,12 +53,21 @@ class Home extends BaseController
         $data['filters']        = $filters;
         $data['hasFilter']      = $hasFilter;
         $data['ideas_filtered'] = $hasFilter ? $ideas->getFiltered($filters) : [];
-        $data['ideas']          = [
-            'completed'  => $ideas->getIdeas('id', true, 0, 10, ['completed']),
-            'started'    => $ideas->getIdeas('id', true, 0, 10, ['started']),
-            'planned'    => $ideas->getIdeas('id', true, 0, 10, ['planned']),
-            'considered' => $ideas->getIdeas('id', true, 0, 10, ['considered']),
-            'recent'     => $ideas->getIdeas('id', true, 0, 10, ['considered', 'planned', 'started', 'completed']),
+
+        $showSection = [
+            'completed'  => $settings->get('homepage_show_completed') !== '0',
+            'started'    => $settings->get('homepage_show_started') !== '0',
+            'planned'    => $settings->get('homepage_show_planned') !== '0',
+            'considered' => $settings->get('homepage_show_considered') !== '0',
+            'recent'     => $settings->get('homepage_show_recent') !== '0',
+        ];
+        $data['showSection'] = $showSection;
+        $data['ideas']       = [
+            'completed'  => $showSection['completed']  ? $ideas->getIdeas('id', true, 0, 10, ['completed']) : [],
+            'started'    => $showSection['started']    ? $ideas->getIdeas('id', true, 0, 10, ['started']) : [],
+            'planned'    => $showSection['planned']    ? $ideas->getIdeas('id', true, 0, 10, ['planned']) : [],
+            'considered' => $showSection['considered'] ? $ideas->getIdeas('id', true, 0, 10, ['considered']) : [],
+            'recent'     => $showSection['recent']     ? $ideas->getIdeas('id', true, 0, 10, ['considered', 'planned', 'started', 'completed']) : [],
         ];
 
         return $this->render('home/index', $data);
@@ -177,9 +186,10 @@ class Home extends BaseController
             return redirect()->to('home');
         }
 
-        $data          = $this->defaultData();
-        $data['error'] = $error;
-        $data['ban']   = (int) $ban;
+        $data                  = $this->defaultData();
+        $data['error']         = $error;
+        $data['ban']           = (int) $ban;
+        $data['googleEnabled'] = $this->googleEnabled();
 
         return $this->render('home/login', $data);
     }
@@ -215,8 +225,20 @@ class Home extends BaseController
         $data['recaptchapublic']  = (string) model(SettingModel::class)->get('recaptchapublic');
         $data['captcha_provider'] = (string) (model(SettingModel::class)->get('captcha_provider') ?? 'recaptcha_v2');
         $data['error']           = $error;
+        $data['googleEnabled']   = $this->googleEnabled();
 
         return $this->render('home/register', $data);
+    }
+
+    /**
+     * "Sign in with Google" is offered once both credentials are configured.
+     */
+    private function googleEnabled(): bool
+    {
+        $settings = model(SettingModel::class);
+
+        return trim((string) $settings->get('google_client_id')) !== ''
+            && trim((string) $settings->get('google_client_secret')) !== '';
     }
 
     /**

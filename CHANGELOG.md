@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v2.0.2] - Unreleased
+### Features
+- **Sign in with Google:** Native Google OAuth2 login (authorization-code flow with PKCE, no new dependencies). Configure the Client ID/Secret in Admin Panel → System Settings; existing accounts are auto-linked by verified email and unknown emails are auto-registered.
+
+### Bug Fixes
+- **Infinite Ban Notice:** Fixed a 404 when indefinitely banned users were redirected to the ban notice page (`home/login/banned/-1`).
+
+---
+
 ## [v2.0.1] - 2026-07-08
 ### Features
 - **Multi-CAPTCHA Support:** Added native support for reCAPTCHA v2 (checkbox and invisible), reCAPTCHA v3, and Cloudflare Turnstile directly from the Admin Panel.

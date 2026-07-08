@@ -8,6 +8,8 @@ This repository has been **migrated from the legacy CodeIgniter 2 codebase to Co
 
 The frontend was rebuilt with **Tailwind CSS v4 + Vue 3 islands** (shadcn-vue components) replacing the old Bootstrap 3 / jQuery stack, with dark mode, the 12 interface languages from 1.3.x, and native integration for modern CAPTCHA providers (reCAPTCHA v2/v3 and Cloudflare Turnstile).
 
+Users can also **Sign in with Google** (OAuth2 + PKCE, no extra dependencies): set the Client ID and Client Secret in Admin Panel → System Settings, and register the redirect URI shown there (`https://your-domain/auth/google/callback`) in the [Google Cloud Console](https://console.cloud.google.com/apis/credentials). Existing accounts are linked automatically by their verified Google email; unknown emails get a new account.
+
 Please, visit the project website for more information: [http://www.phpback.org/](http://www.phpback.org/)
 
 ## Requirements

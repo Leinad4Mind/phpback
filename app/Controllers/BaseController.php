@@ -156,4 +156,23 @@ abstract class BaseController extends Controller
         }
         $this->response->deleteCookie('phpback_remember', '', '/');
     }
+
+    protected function sendMail(string $message, string $subject, string $recipients): bool
+    {
+        if ($recipients === '') {
+            return false;
+        }
+
+        $settings = model(SettingModel::class);
+        $from     = (string) ($settings->get('mainmail') ?: 'noreply@example.com');
+
+        $email = service('email');
+        $email->initialize($settings->emailConfig());
+        $email->setFrom($from, 'PHPBack');
+        $email->setTo($recipients);
+        $email->setSubject($subject);
+        $email->setMessage($message);
+
+        return $email->send(false);
+    }
 }
