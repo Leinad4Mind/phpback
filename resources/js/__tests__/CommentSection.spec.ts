@@ -1,10 +1,20 @@
-﻿import { beforeEach, describe, expect, it, vi } from 'vitest'
+﻿import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { flushPromises, mount } from '@vue/test-utils'
 import CommentSection from '@/components/CommentSection.vue'
 import { resetCsrf } from '@/lib/csrf'
 
 function jsonResponse(body: unknown, ok = true, status = 200) {
   return { ok, status, json: () => Promise.resolve(body) } as Response
+}
+
+// The AlertDialog content teleports into document.body via reka-ui's portal,
+// so modal buttons must be located outside the wrapper.
+function findPortalButton(label: string): HTMLButtonElement {
+  const btn = Array.from(document.body.querySelectorAll('button')).find(
+    b => b.textContent?.trim() === label,
+  )
+  if (!btn) throw new Error(`portal button "${label}" not found`)
+  return btn as HTMLButtonElement
 }
 
 // Factory: CommentSection keeps a live reference to initialComments, so each
@@ -40,6 +50,10 @@ const makeProps = () => ({
 beforeEach(() => {
   resetCsrf()
   vi.restoreAllMocks()
+})
+
+afterEach(() => {
+  document.body.innerHTML = ''
 })
 
 describe('CommentSection', () => {
@@ -83,8 +97,7 @@ describe('CommentSection', () => {
     expect(body.get('csrf_token')).toBe('hash-1')
   })
 
-  it('deletes a comment (admin) after confirmation', async () => {
-    vi.spyOn(window, 'confirm').mockReturnValue(true)
+  it('deletes a comment (admin) after confirming in the modal', async () => {
     const fetchMock = vi.fn().mockResolvedValue(jsonResponse({ success: true, csrfHash: 'hash-2' }))
     vi.stubGlobal('fetch', fetchMock)
 
@@ -94,24 +107,31 @@ describe('CommentSection', () => {
     await deleteButton.trigger('click')
     await flushPromises()
 
-    expect(window.confirm).toHaveBeenCalledWith('Eliminar?')
+    expect(document.body.textContent).toContain('Eliminar?')
+    findPortalButton('Delete').click()
+    await flushPromises()
+
     expect(fetchMock.mock.calls[0][0]).toBe('/adminaction/deletecomment')
     expect(wrapper.text()).toContain('Comentários (0)')
+    wrapper.unmount()
   })
 
   it('does nothing when the confirmation is dismissed', async () => {
-    vi.spyOn(window, 'confirm').mockReturnValue(false)
     const fetchMock = vi.fn()
     vi.stubGlobal('fetch', fetchMock)
 
     const wrapper = mount(CommentSection, { props: { ...makeProps(), isAdmin: true } })
     await wrapper.findAll('button').find(b => b.text() === 'Eliminar')!.trigger('click')
+    await flushPromises()
+
+    findPortalButton('Cancel').click()
+    await flushPromises()
 
     expect(fetchMock).not.toHaveBeenCalled()
+    wrapper.unmount()
   })
 
-  it('flags a comment (logged-in non-admin) and alerts', async () => {
-    vi.spyOn(window, 'confirm').mockReturnValue(true)
+  it('flags a comment (logged-in non-admin) after confirming in the modal', async () => {
     const alertSpy = vi.spyOn(window, 'alert').mockImplementation(() => {})
     const fetchMock = vi.fn().mockResolvedValue(jsonResponse({ success: true, csrfHash: 'hash-2' }))
     vi.stubGlobal('fetch', fetchMock)
@@ -120,10 +140,15 @@ describe('CommentSection', () => {
     await wrapper.findAll('button').find(b => b.text().includes('Denunciar'))!.trigger('click')
     await flushPromises()
 
+    expect(document.body.textContent).toContain('Denunciar?')
+    findPortalButton('Flag Comment').click()
+    await flushPromises()
+
     expect(fetchMock.mock.calls[0][0]).toBe('/action/flag')
     const body = fetchMock.mock.calls[0][1].body as FormData
     expect(body.get('cid')).toBe('1')
     expect(alertSpy).toHaveBeenCalledWith('Denunciado.')
+    wrapper.unmount()
   })
 
   it('surfaces submit errors inline', async () => {

@@ -204,12 +204,17 @@
                                 <?= esc($lang['text_flagged_times'] ?? 'Flagged') ?> <span class="inline-flex items-center rounded-full bg-destructive/20 px-2 py-0.5 text-xs mx-1"><?= (int) $comment->votes ?></span>
                             </div>
                             <div class="flex items-center justify-end gap-2 flex-wrap">
-                                <form method="post" action="<?= base_url('adminaction/deletecomment') ?>" onsubmit="return confirm('<?= esc(addslashes($lang['text_confirm_delete_comment'] ?? 'Are you sure you want to delete this comment?')) ?>');">
-                                    <?= csrf_field() ?><input type="hidden" name="id" value="<?= (int) $comment->id ?>">
-                                    <button type="submit" class="inline-flex items-center justify-center rounded-md text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-8 px-3">
-                                        <?= esc($lang['label_delete_comment'] ?? 'Delete Comment') ?>
-                                    </button>
-                                </form>
+                                <div data-vue-component="ConfirmActionIsland" data-props="<?= esc(json_encode([
+                                    'triggerText' => $lang['label_delete_comment'] ?? 'Delete Comment',
+                                    'triggerClass' => 'inline-flex items-center justify-center rounded-md text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-8 px-3',
+                                    'title' => $lang['label_delete_comment'] ?? 'Delete Comment',
+                                    'description' => $lang['text_confirm_delete_comment'] ?? 'Are you sure you want to delete this comment?',
+                                    'confirmText' => $lang['label_delete_comment'] ?? 'Delete Comment',
+                                    'actionUrl' => base_url('adminaction/deletecomment'),
+                                    'csrfName' => csrf_token(),
+                                    'csrfHash' => csrf_hash(),
+                                    'payload' => ['id' => (int) $comment->id]
+                                ]), 'attr') ?>"></div>
                                 <?php if (is_admin(2)): ?>
                                     <a href="<?= base_url('admin/users/' . $comment->userid) ?>" class="inline-flex items-center justify-center rounded-md text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-destructive text-destructive-foreground hover:bg-destructive/90 h-8 px-3">
                                         <?= esc($lang['label_ban_user'] ?? 'Ban User') ?>

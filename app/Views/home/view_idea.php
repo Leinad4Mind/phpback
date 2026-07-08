@@ -163,12 +163,16 @@
             ]), 'attr') ?>"></div>
         <?php endif; ?>
         
-        <form method="post" action="<?= base_url('adminaction/deleteidea') ?>" onsubmit="return confirm('<?= esc($lang['text_sure_delete_idea'], 'js') ?>');">
-            <?= csrf_field() ?><input type="hidden" name="id" value="<?= (int) $idea->id ?>">
-            <button type="submit" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-destructive text-destructive-foreground hover:bg-destructive/90 h-9 px-4">
-                <?= esc($lang['label_delete_idea']) ?>
-            </button>
-        </form>
+        <div data-vue-component="ConfirmActionIsland" data-props="<?= esc(json_encode([
+            'triggerText' => $lang['label_delete_idea'],
+            'title' => $lang['label_delete_idea'],
+            'description' => $lang['text_sure_delete_idea'],
+            'confirmText' => $lang['label_delete_idea'],
+            'actionUrl' => base_url('adminaction/deleteidea'),
+            'csrfName' => csrf_token(),
+            'csrfHash' => csrf_hash(),
+            'payload' => ['id' => (int) $idea->id]
+        ]), 'attr') ?>"></div>
         
         <a href="<?= base_url('admin/users/' . $idea->authorid) ?>" target="_blank" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-destructive text-destructive-foreground hover:bg-destructive/90 h-9 px-4">
             <?= esc($lang['label_ban_user']) ?>

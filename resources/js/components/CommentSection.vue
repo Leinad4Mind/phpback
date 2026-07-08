@@ -1,6 +1,16 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { initCsrf, postForm, type JsonResponse } from '@/lib/csrf'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 
 interface Comment {
   id: number
@@ -47,6 +57,10 @@ const newCommentContent = ref('')
 const isSubmitting = ref(false)
 const errorMessage = ref('')
 
+const showDeleteModal = ref(false)
+const showFlagModal = ref(false)
+const activeCommentId = ref<number | null>(null)
+
 function genericError(): string {
   return props.labels?.error || 'Something went wrong. Please try again.'
 }
@@ -78,8 +92,15 @@ async function submitComment() {
   }
 }
 
-async function deleteComment(id: number) {
-  if (!confirm(props.labels?.sureDelete || 'Are you sure you want to delete this comment?')) return
+function promptDelete(id: number) {
+  activeCommentId.value = id
+  showDeleteModal.value = true
+}
+
+async function confirmDelete() {
+  if (!activeCommentId.value) return
+  const id = activeCommentId.value
+  showDeleteModal.value = false
   errorMessage.value = ''
 
   try {
@@ -91,11 +112,20 @@ async function deleteComment(id: number) {
     }
   } catch {
     errorMessage.value = genericError()
+  } finally {
+    activeCommentId.value = null
   }
 }
 
-async function flagComment(id: number) {
-  if (!confirm(props.labels?.sureFlag || 'Flag this comment as inappropriate?')) return
+function promptFlag(id: number) {
+  activeCommentId.value = id
+  showFlagModal.value = true
+}
+
+async function confirmFlag() {
+  if (!activeCommentId.value) return
+  const id = activeCommentId.value
+  showFlagModal.value = false
   errorMessage.value = ''
 
   try {
@@ -110,6 +140,8 @@ async function flagComment(id: number) {
     }
   } catch {
     errorMessage.value = genericError()
+  } finally {
+    activeCommentId.value = null
   }
 }
 
@@ -166,12 +198,12 @@ function getInitial(name: string) {
 
           <div class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
             <template v-if="props.isAdmin">
-              <button @click="deleteComment(comment.id)" class="text-xs text-destructive hover:underline p-1 cursor-pointer">
+              <button type="button" @click="promptDelete(comment.id)" class="text-xs text-destructive hover:underline p-1 cursor-pointer">
                 {{ props.labels?.delete || 'Delete' }}
               </button>
             </template>
             <template v-else-if="props.isLoggedIn">
-              <button @click="flagComment(comment.id)" class="text-xs text-muted-foreground hover:text-destructive hover:underline p-1 flex items-center gap-1 cursor-pointer">
+              <button type="button" @click="promptFlag(comment.id)" class="text-xs text-muted-foreground hover:text-destructive hover:underline p-1 flex items-center gap-1 cursor-pointer">
                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"></path>
                 </svg>
@@ -190,5 +222,32 @@ function getInitial(name: string) {
         <p>{{ props.labels?.noComments || 'No comments yet. Be the first to share your thoughts!' }}</p>
       </div>
     </div>
+
+    <!-- Modals -->
+    <AlertDialog :open="showDeleteModal" @update:open="showDeleteModal = $event">
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Delete Comment</AlertDialogTitle>
+          <AlertDialogDescription>{{ props.labels?.sureDelete || 'Are you sure you want to delete this comment? This action cannot be undone.' }}</AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel @click="showDeleteModal = false">Cancel</AlertDialogCancel>
+          <AlertDialogAction @click="confirmDelete" class="bg-destructive text-destructive-foreground hover:bg-destructive/90">Delete</AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+
+    <AlertDialog :open="showFlagModal" @update:open="showFlagModal = $event">
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Flag Comment</AlertDialogTitle>
+          <AlertDialogDescription>{{ props.labels?.sureFlag || 'Flag this comment as inappropriate?' }}</AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel @click="showFlagModal = false">Cancel</AlertDialogCancel>
+          <AlertDialogAction @click="confirmFlag" class="bg-destructive text-destructive-foreground hover:bg-destructive/90">Flag Comment</AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   </div>
 </template>

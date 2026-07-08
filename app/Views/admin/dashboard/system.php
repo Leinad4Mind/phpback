@@ -141,7 +141,7 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                     <?= esc($lang['label_delete_category'] ?? 'Delete Category') ?>
                 </h3>
-                <form role="form" method="post" action="<?= base_url('adminaction/deletecategory') ?>" class="space-y-4" onsubmit="return confirm('<?= esc(addslashes($lang['text_confirm_delete_category'] ?? 'Are you sure you want to delete this category?')) ?>');">
+                <form id="delete-category-form" role="form" method="post" action="<?= base_url('adminaction/deletecategory') ?>" class="space-y-4">
                     <?= csrf_field() ?>
                     <div class="space-y-3">
                         <select name="catid" class="flex h-10 w-full rounded-md border border-destructive/50 bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
@@ -157,10 +157,17 @@
                             'checked' => false
                         ]), 'attr') ?>"></div>
                     </div>
-                    <button name="delete-category" type="submit" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-destructive text-destructive-foreground hover:bg-destructive/90 h-10 px-4 py-2 mt-2">
-                        <?= esc($lang['label_delete_category'] ?? 'Delete Category') ?>
-                    </button>
                 </form>
+                <div class="mt-4">
+                    <div data-vue-component="ConfirmActionIsland" data-props="<?= esc(json_encode([
+                        'triggerText' => $lang['label_delete_category'] ?? 'Delete Category',
+                        'triggerClass' => 'inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-destructive text-destructive-foreground hover:bg-destructive/90 h-10 px-4 py-2',
+                        'title' => $lang['label_delete_category'] ?? 'Delete Category',
+                        'description' => $lang['text_confirm_delete_category'] ?? 'Are you sure you want to delete this category?',
+                        'confirmText' => $lang['label_delete_category'] ?? 'Delete Category',
+                        'existingFormId' => 'delete-category-form'
+                    ]), 'attr') ?>"></div>
+                </div>
             </div>
         </div>
 

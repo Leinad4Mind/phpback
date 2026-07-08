@@ -98,12 +98,17 @@
                             </td>
                             <td class="px-4 py-3"><?= esc($vote['number']) ?></td>
                             <td class="px-4 py-3 text-right">
-                                <form method="post" action="<?= base_url('action/unvote') ?>">
-                                    <?= csrf_field() ?><input type="hidden" name="id" value="<?= (int) $vote['id'] ?>">
-                                    <button type="submit" class="text-orange-600 dark:text-orange-400 hover:underline text-xs font-medium">
-                                        <?= esc($lang['label_delete_votes']) ?>
-                                    </button>
-                                </form>
+                                <div data-vue-component="ConfirmActionIsland" data-props="<?= esc(json_encode([
+                                    'triggerText' => $lang['label_delete_votes'],
+                                    'triggerClass' => 'text-orange-600 dark:text-orange-400 hover:underline text-xs font-medium bg-transparent h-auto px-0 ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+                                    'title' => $lang['label_delete_votes'],
+                                    'description' => 'Are you sure you want to clear your votes for this idea?',
+                                    'confirmText' => $lang['label_delete_votes'],
+                                    'actionUrl' => base_url('action/unvote'),
+                                    'csrfName' => csrf_token(),
+                                    'csrfHash' => csrf_hash(),
+                                    'payload' => ['id' => (int) $vote['id']]
+                                ]), 'attr') ?>"></div>
                             </td>
                         </tr>
                     <?php endforeach; ?>

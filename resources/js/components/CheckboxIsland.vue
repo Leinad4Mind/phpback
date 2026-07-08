@@ -22,10 +22,10 @@ watch(isChecked, (newVal) => {
 
 <template>
   <div class="flex items-center space-x-2">
-    <Checkbox 
-      :id="props.id" 
-      :checked="isChecked" 
-      @update:checked="(v) => isChecked = !!v"
+    <Checkbox
+      :id="props.id"
+      :model-value="isChecked"
+      @update:model-value="(v) => isChecked = v === true"
     />
     <label v-if="props.label" :for="props.id" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
       {{ props.label }}
