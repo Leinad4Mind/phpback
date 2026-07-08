@@ -95,6 +95,7 @@ return [
     'label_flag' => 'Flag',
     'label_flagged_comments' => 'Flagged Comments',
     'label_general_settings' => 'General Settings',
+    'label_homepage_sections' => 'Homepage Sections',
     'label_id' => 'ID',
     'label_idea' => 'Idea',
     'label_idea_approve' => 'Approve idea',

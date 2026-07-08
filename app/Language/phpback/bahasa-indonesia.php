@@ -94,6 +94,7 @@ return [
     'label_flag' => 'Laporkan',
     'label_flagged_comments' => 'Komentar Ditandai',
     'label_general_settings' => 'Pengaturan Umum',
+    'label_homepage_sections' => 'Bagian Halaman Utama',
     'label_id' => 'ID',
     'label_idea' => 'Ide',
     'label_idea_approve' => 'Setujui ide',

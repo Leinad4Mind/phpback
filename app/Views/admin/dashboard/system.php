@@ -25,6 +25,7 @@
             
             <div class="space-y-4">
                 <?php foreach ($settings as $setting): ?>
+                <?php if (str_starts_with($setting->name, 'homepage_show_')) continue; ?>
                 <div class="grid gap-2">
                     <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"><?= esc($lang['setting_' . $setting->name] ?? $setting->name) ?></label>
                     <?php if ($setting->name === 'language' && ! empty($availableLanguages)): ?>
@@ -49,7 +50,39 @@
                 </div>
                 <?php endforeach; ?>
             </div>
-            
+
+            <?php
+                $settingsByName = [];
+                foreach ($settings as $setting) {
+                    $settingsByName[$setting->name] = $setting;
+                }
+                $homepageSections = [
+                    'homepage_show_completed'  => $lang['last_completed_ideas'],
+                    'homepage_show_started'    => $lang['last_started_ideas'],
+                    'homepage_show_planned'    => $lang['last_planned_ideas'],
+                    'homepage_show_considered' => $lang['last_considered_ideas'],
+                    'homepage_show_recent'     => $lang['last_added_ideas'],
+                ];
+            ?>
+            <div class="space-y-2 border-t pt-4">
+                <label class="text-sm font-medium leading-none"><?= esc($lang['label_homepage_sections'] ?? 'Homepage Sections') ?></label>
+                <div class="space-y-3 pt-1">
+                    <?php foreach ($homepageSections as $settingName => $sectionLabel): ?>
+                        <?php $section = $settingsByName[$settingName] ?? null; ?>
+                        <?php if ($section !== null): ?>
+                            <input type="hidden" name="setting-<?= (int) $section->id ?>" value="0">
+                            <div data-vue-component="CheckboxIsland" data-props="<?= esc(json_encode([
+                                'id'      => 'setting-' . $settingName,
+                                'name'    => 'setting-' . $section->id,
+                                'label'   => $sectionLabel,
+                                'value'   => '1',
+                                'checked' => $section->value !== '0',
+                            ]), 'attr') ?>"></div>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+
             <button name="submit-changes" type="submit" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
                 <?= esc($lang['label_save_changes'] ?? 'Save Changes') ?>
             </button>

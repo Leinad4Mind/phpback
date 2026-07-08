@@ -94,6 +94,7 @@ return [
     'label_flag' => 'Signaler',
     'label_flagged_comments' => 'Commentaires Signalés',
     'label_general_settings' => 'Paramètres Généraux',
+    'label_homepage_sections' => 'Sections de la Page d\'Accueil',
     'label_id' => 'ID',
     'label_idea' => 'Idée',
     'label_idea_approve' => 'Approuver idée',

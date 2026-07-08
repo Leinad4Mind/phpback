@@ -94,6 +94,7 @@ return [
     'label_flag' => '举报',
     'label_flagged_comments' => '被举报的评论',
     'label_general_settings' => '常规设置',
+    'label_homepage_sections' => '首页区块',
     'label_id' => 'ID',
     'label_idea' => '想法',
     'label_idea_approve' => '同意',

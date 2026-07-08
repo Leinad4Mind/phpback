@@ -94,6 +94,7 @@ return [
     'label_flag' => 'Melden',
     'label_flagged_comments' => 'Markierte Kommentare',
     'label_general_settings' => 'Allgemeine Einstellungen',
+    'label_homepage_sections' => 'Startseiten-Bereiche',
     'label_id' => 'ID',
     'label_idea' => 'Idee',
     'label_idea_approve' => 'Idee freigeben',

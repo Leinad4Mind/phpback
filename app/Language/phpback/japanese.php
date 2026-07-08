@@ -94,6 +94,7 @@ return [
     'label_flag' => '報告',
     'label_flagged_comments' => '報告されたコメント',
     'label_general_settings' => '一般設定',
+    'label_homepage_sections' => 'ホームページのセクション',
     'label_id' => 'ID',
     'label_idea' => 'アイデア',
     'label_idea_approve' => 'アイデアを承認',
