@@ -44,6 +44,11 @@
                         <?php if (is_admin(3)): ?>
                             <a href="<?= base_url('admin/system') ?>" class="px-3 py-2 rounded-md text-sm font-medium <?= ($active === 'system') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white transition-colors' ?>">System Settings</a>
                         <?php endif; ?>
+                        
+                        <div class="h-4 w-px bg-slate-700 mx-2"></div>
+                        <a href="<?= base_url() ?>" class="px-3 py-2 rounded-md text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
+                            View Site
+                        </a>
                     </nav>
                 </div>
 
