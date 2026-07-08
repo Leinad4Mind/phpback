@@ -28,7 +28,7 @@
                 <!-- Logo & Nav -->
                 <div class="flex items-center gap-8">
                     <a href="<?= base_url('admin/dashboard') ?>" class="flex items-center gap-3 hover:opacity-90">
-                        <img src="<?= base_url('img/logo_small_free.png') ?>" alt="PHPBack" class="h-8 brightness-0 invert">
+                        <img src="<?= base_url('img/logo_small_free.png') ?>" alt="PHPBack" class="h-8">
                         <span class="font-bold tracking-tight"><?= esc($lang['label_admin_panel'] ?? 'Admin Panel') ?></span>
                     </a>
                     
@@ -45,10 +45,6 @@
                             <a href="<?= base_url('admin/system') ?>" class="px-3 py-2 rounded-md text-sm font-medium <?= ($active === 'system') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white transition-colors' ?>"><?= esc($lang['label_system_settings'] ?? 'System Settings') ?></a>
                         <?php endif; ?>
                         
-                        <div class="h-4 w-px bg-slate-700 mx-2"></div>
-                        <a href="<?= base_url() ?>" class="px-3 py-2 rounded-md text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
-                            <?= esc($lang['label_view_site'] ?? 'View Site') ?>
-                        </a>
                     </nav>
                 </div>
 
@@ -58,17 +54,22 @@
                         'buttonClass' => 'text-slate-300 hover:text-white hover:bg-slate-800',
                     ]), 'attr') ?>"></div>
                     
-                    <div class="flex items-center gap-3 text-sm">
-                        <span class="text-slate-400"><?= esc($lang['label_signed_in_as'] ?? 'Signed in as') ?></span>
-                        <span class="font-medium text-emerald-400"><?= esc(session('username')) ?></span>
-                        
-                        <form action="<?= base_url('action/logout') ?>" method="post" class="ml-2 border-l border-slate-700 pl-4">
-                            <?= csrf_field() ?>
-                            <button type="submit" class="text-red-400 hover:text-red-300 hover:underline font-medium transition-colors">
-                                <?= esc($lang['label_log_out'] ?? 'Log out') ?>
-                            </button>
-                        </form>
-                    </div>
+                    <div data-vue-component="UserDropdownIsland" data-props="<?= esc(json_encode([
+                        'username' => current_username(),
+                        'profileUrl' => base_url('home/profile/' . current_user_id() . '/' . url_title((string) current_username(), '-', true)),
+                        'isAdmin' => true,
+                        'adminUrl' => base_url(),
+                        'logoutUrl' => base_url('action/logout'),
+                        'csrfTokenName' => csrf_token(),
+                        'csrfHash' => csrf_hash(),
+                        'buttonClass' => 'text-slate-300 hover:text-white hover:bg-slate-800',
+                        'labels' => [
+                            'logged_as' => $lang['label_signed_in_as'] ?? 'Signed in as',
+                            'view_profile' => $lang['label_view_profile'] ?? 'View Profile',
+                            'admin_panel' => $lang['label_view_site'] ?? 'View Site',
+                            'logout' => $lang['label_log_out'] ?? 'Log out',
+                        ]
+                    ]), 'attr') ?>"></div>
                 </div>
             </div>
         </div>
