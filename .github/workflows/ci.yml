@@ -47,11 +47,29 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: npm
 
-      - name: Install JS dependencies & Build
+      - name: Install JS dependencies
+        run: npm ci
+
+      - name: Typecheck frontend
+        run: npm run typecheck
+
+      - name: Run frontend tests (Vitest)
+        run: npm test
+
+      - name: Build frontend assets
+        run: npm run build
+
+      # public/dist is committed so self-hosted deploys don't need Node.
+      # Fail if the committed build no longer matches the sources.
+      - name: Verify committed frontend build is fresh
         run: |
-          npm ci
-          npm run build
+          if [ -n "$(git status --porcelain public/dist)" ]; then
+            git status --porcelain public/dist
+            echo "::error::public/dist is stale. Run 'npm run build' locally and commit the result."
+            exit 1
+          fi
 
       - name: Run test suite (SQLite unit/feature + MariaDB upgrade)
         env:

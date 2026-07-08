@@ -6,6 +6,8 @@ PHPBack is an open source feedback system you can use for your website. It gives
 
 This repository has been **migrated from the legacy CodeIgniter 2 codebase to CodeIgniter 4**, with a full security pass (CSRF protection, output escaping, modern password hashing, hardened file uploads) and the tags / attachments / status-filter features rebuilt to actually work on the new framework.
 
+The frontend was rebuilt with **Tailwind CSS v4 + Vue 3 islands** (shadcn-vue components) replacing the old Bootstrap 3 / jQuery stack, with dark mode and the 12 interface languages from 1.3.x.
+
 Please, visit the project website for more information: [http://www.phpback.org/](http://www.phpback.org/)
 
 ## Requirements
@@ -44,6 +46,24 @@ php spark migrate
 php spark db:seed SettingsSeeder
 php spark db:seed RolesPermissionsSeeder
 ```
+
+## Frontend development
+Deploys do **not** need Node: the compiled assets are committed in `public/dist`.
+Node (20+) is only required when working on the frontend sources in
+`resources/`:
+
+```
+npm ci
+npm run dev        # Vite dev server with HMR (set VITE_DEV_SERVER = true in .env)
+npm test           # Vitest component tests
+npm run typecheck  # vue-tsc
+npm run build      # rebuild public/dist — commit the result
+```
+
+After changing anything under `resources/`, run `npm run build` and commit the
+updated `public/dist` together with your change — CI fails if the committed
+build is stale. The UI language can be changed in Admin → System Settings;
+language packs live in `app/Language/phpback/`.
 
 ## Upgrading from 1.3.x
 Point `.env` at your **existing** database — including the table prefix your
