@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - **Database:** Implemented database migrations and seeders, configurable table prefix, and safer upgrade paths (e.g. dropping legacy FK constraints).
 - **Rebuilt Features:** Tags, attachments, status filters (including PR #164), and roles/permissions are now fully functional on the new framework.
 - **Testing & CI:** Implemented PHPUnit test harness, extensive unit/feature tests, and GitHub Actions CI.
+- **Modern UI & Vue Islands:** Replaced Bootstrap 3 with Tailwind CSS v4 and introduced progressively enhanced Vue "Islands" using Shadcn-Vue for interactive elements (voting, comments, tags, status).
 - **Cleanup:** Removed insecure legacy HTTP auto-updater, legacy CI2 core files, and development SQLite files from tracking.
 
 ---
