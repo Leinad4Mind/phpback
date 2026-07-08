@@ -160,7 +160,7 @@ return [
     'log_idea_approved' => 'アイデア %s を承認',
     'log_idea_deleted' => 'アイデア %s を削除',
     'log_idea_status' => 'アイデア %s1 のステータスを %s2 に変更',
-    'log_idea_voted' => 'アイデア %s1 に %s2 票投じられました',
+    'log_idea_voted' => 'アイデア %s1 に %s2 票投じられました（%s3 より）',
     'log_new_comment_mail_content' => 'フィードバックシステム %s に新しいコメントが投稿されました。以下のリンクをクリックして確認してください : %s。',
     'log_new_idea' => '新しいアイデアを作成',
     'log_new_idea_mail_content' => 'フィードバックシステム %s に新しいアイデアが投稿されました。以下のリンクをクリックして確認してください : %s。',

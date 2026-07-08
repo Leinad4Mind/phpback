@@ -18,7 +18,7 @@
             <tbody class="divide-y divide-border/50">
                 <?php foreach ($logs as $log): ?>
                 <tr class="bg-background hover:bg-muted/50 transition-colors">
-                    <td class="px-6 py-4 font-medium text-foreground"><?= esc($log->content) ?></td>
+                    <td class="px-6 py-4 font-medium text-foreground"><?= link_idea_logs($log) ?></td>
                     <td class="px-6 py-4 text-muted-foreground text-xs whitespace-nowrap"><?= esc($log->date) ?></td>
                 </tr>
                 <?php endforeach; ?>

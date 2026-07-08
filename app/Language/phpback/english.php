@@ -163,7 +163,7 @@ return [
     'log_idea_approved' => 'Approved idea %s',
     'log_idea_deleted' => 'Deleted idea %s',
     'log_idea_status' => 'Changed status of idea %s1 to %s2',
-    'log_idea_voted' => 'Idea %s1 voted with %s2 votes',
+    'log_idea_voted' => 'Idea %s1 voted with %s2 votes by %s3',
     'log_new_comment_mail_content' => 'A new comment has been posted in your feedback system %s. To find it, click the following link : %s.',
     'log_new_idea' => 'New idea created',
     'log_new_idea_mail_content' => 'A new idea has been posted in your feedback system %s. To find it, click the following link : %s.',

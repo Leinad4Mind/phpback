@@ -67,7 +67,7 @@
         <div class="flex-1">
             <h1 class="text-2xl font-bold mb-4"><?= esc($idea->title) ?></h1>
             
-            <div class="prose dark:prose-invert max-w-none text-muted-foreground whitespace-pre-wrap">
+            <div class="prose max-w-none text-muted-foreground whitespace-pre-wrap">
                 <?= purify_html($idea->content) ?>
             </div>
             
@@ -145,7 +145,7 @@
                     <?= esc($lang['label_idea_approve']) ?>
                 </button>
             </form>
-        <?php elseif ($idea->status !== 'completed' && $idea->status !== 'declined'): ?>
+        <?php else: ?>
             <div data-vue-component="AdminStatusSelect" data-props="<?= esc(json_encode([
                 'ideaId' => (int) $idea->id,
                 'initialStatus' => $idea->status,
@@ -192,7 +192,7 @@
             'user' => $c->user,
             'userid' => (int) $c->userid,
             'date' => $c->date,
-            'content' => $c->content
+            'content' => purify_html($c->content)
         ];
     }, $comments),
     'csrfTokenName' => csrf_token(),

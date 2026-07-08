@@ -10,33 +10,37 @@ class LogModel extends Model
     protected $primaryKey    = 'id';
     protected $returnType    = 'object';
     protected $useTimestamps = false;
-    protected $allowedFields = ['content', 'date', 'type', 'toid'];
+    protected $allowedFields = ['content', 'date', 'type', 'toid', 'idea_id'];
 
-    public function add(string $content, string $type, int $toid): void
+    public function add(string $content, string $type, int $toid, ?int $ideaId = null): void
     {
         $this->insert([
             'content' => $content,
             'date'    => date('d/m/y H:i'),
             'type'    => $type,
             'toid'    => $toid,
+            'idea_id' => $ideaId,
         ]);
     }
 
-    /**
-     * @return list<object>
-     */
     public function forTarget(string $type, int $toid, int $limit = 0): array
     {
-        $builder = $this->where('type', $type)->where('toid', $toid)->orderBy('id', 'DESC');
+        $builder = $this->select('logs.*, users.name as user_name, ideas.title as idea_title')
+                        ->join('users', 'users.id = logs.toid', 'left')
+                        ->join('ideas', 'ideas.id = logs.idea_id', 'left')
+                        ->where('logs.type', $type)
+                        ->where('logs.toid', $toid)
+                        ->orderBy('logs.id', 'DESC');
 
         return $limit > 0 ? $builder->findAll($limit) : $builder->findAll();
     }
 
-    /**
-     * @return list<object>
-     */
     public function latest(int $limit = 30): array
     {
-        return $this->select('content, date')->orderBy('id', 'DESC')->findAll($limit);
+        return $this->select('logs.content, logs.date, logs.idea_id, logs.toid, users.name as user_name, ideas.title as idea_title')
+                    ->join('users', 'users.id = logs.toid', 'left')
+                    ->join('ideas', 'ideas.id = logs.idea_id', 'left')
+                    ->orderBy('logs.id', 'DESC')
+                    ->findAll($limit);
     }
 }

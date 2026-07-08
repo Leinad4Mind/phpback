@@ -160,7 +160,7 @@ return [
     'log_idea_approved' => 'Goedgekeurde ideeën %s',
     'log_idea_deleted' => 'Verwijderde ideeën %s',
     'log_idea_status' => 'Status gewijzigd idee %s1 naar %s2',
-    'log_idea_voted' => 'Idee %s1 heeft %s2 stemmen',
+    'log_idea_voted' => 'Idee %s1 heeft %s2 stemmen door %s3',
     'log_new_comment_mail_content' => 'Een nieuwe reactie is geplaatst in uw feedbacksysteem %s. Klik op de volgende link om het te bekijken : %s.',
     'log_new_idea' => 'Niew idee toegevoegd',
     'log_new_idea_mail_content' => 'Een nieuw idee is geplaatst in uw feedbacksysteem %s. Klik op de volgende link om het te bekijken : %s.',

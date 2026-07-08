@@ -160,7 +160,7 @@ return [
     'log_idea_approved' => 'Idee genehmigt %s',
     'log_idea_deleted' => 'Gelöschte Idee %s',
     'log_idea_status' => 'Statuswechsel von Idee %s1 zu %s2',
-    'log_idea_voted' => 'Idee %s1 gewählt mit %s2 Stimmen',
+    'log_idea_voted' => 'Idee %s1 gewählt mit %s2 Stimmen von %s3',
     'log_new_comment_mail_content' => 'Ein neuer Kommentar wurde in Ihrem Feedback-System %s gepostet. Klicken Sie auf den folgenden Link, um ihn zu finden : %s.',
     'log_new_idea' => 'Neue Idee erstellt',
     'log_new_idea_mail_content' => 'Eine neue Idee wurde in Ihrem Feedback-System %s gepostet. Klicken Sie auf den folgenden Link, um sie zu finden : %s.',

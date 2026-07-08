@@ -16,15 +16,20 @@ import {
 } from '@lucide/vue'
 
 const props = defineProps<{
-  name: string
+  name?: string
   initialContent?: string
+  modelValue?: string
   placeholder?: string
   minlength?: number
   maxlength?: number
   required?: boolean
 }>()
 
-const content = ref(props.initialContent || '')
+const emit = defineEmits<{
+  'update:modelValue': [value: string]
+}>()
+
+const content = ref(props.modelValue ?? props.initialContent ?? '')
 
 const editor = useEditor({
   content: content.value,
@@ -40,15 +45,22 @@ const editor = useEditor({
     if (editor.isEmpty) {
       content.value = ''
     }
+    emit('update:modelValue', content.value)
   },
   editorProps: {
     attributes: {
-      class: 'p-3 focus:outline-none min-h-[120px]',
+      class: 'p-3 focus:outline-none min-h-[120px] prose prose-sm max-w-none',
     },
   },
 })
 
 watch(() => props.initialContent, (newContent) => {
+  if (editor.value && newContent !== editor.value.getHTML()) {
+    editor.value.commands.setContent(newContent || '')
+  }
+})
+
+watch(() => props.modelValue, (newContent) => {
   if (editor.value && newContent !== editor.value.getHTML()) {
     editor.value.commands.setContent(newContent || '')
   }
@@ -151,6 +163,7 @@ onBeforeUnmount(() => {
 
     <!-- Hidden input for form submission -->
     <textarea 
+      v-if="props.name"
       :name="props.name" 
       :required="props.required" 
       :minlength="props.minlength"
