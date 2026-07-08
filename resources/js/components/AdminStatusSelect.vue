@@ -56,7 +56,7 @@ async function changeStatus(event: Event) {
       :value="currentStatus"
       @change="changeStatus"
       :disabled="isUpdating"
-      class="flex h-9 w-[150px] rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:opacity-50 cursor-pointer"
+      class="flex h-9 w-[150px] rounded-md border border-input bg-background text-foreground px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:opacity-50 cursor-pointer"
     >
       <option v-for="(label, value) in props.statuses" :key="value" :value="value">
         {{ label }}
