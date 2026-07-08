@@ -358,12 +358,42 @@ class Action extends BaseController
 
     private function verifyRecaptcha(): bool
     {
-        $secret = (string) model(SettingModel::class)->get('recaptchaprivate');
-        if ($secret === '' || ! class_exists(\ReCaptcha\ReCaptcha::class)) {
+        $settings = model(SettingModel::class);
+        $secret = (string) $settings->get('recaptchaprivate');
+        $provider = (string) ($settings->get('captcha_provider') ?? 'recaptcha_v2');
+        
+        if ($secret === '') {
+            return true;
+        }
+
+        if ($provider === 'turnstile') {
+            try {
+                $client = \Config\Services::curlrequest();
+                $response = $client->post('https://challenges.cloudflare.com/turnstile/v0/siteverify', [
+                    'form_params' => [
+                        'secret'   => $secret,
+                        'response' => (string) $this->request->getPost('cf-turnstile-response'),
+                        'remoteip' => $this->request->getIPAddress(),
+                    ],
+                    'http_errors' => false,
+                ]);
+                $body = json_decode($response->getBody(), true);
+                return isset($body['success']) && $body['success'] === true;
+            } catch (\Exception $e) {
+                return false;
+            }
+        }
+
+        if (! class_exists(\ReCaptcha\ReCaptcha::class)) {
             return true;
         }
 
         $recaptcha = new \ReCaptcha\ReCaptcha($secret);
+        
+        if ($provider === 'recaptcha_v3') {
+            $recaptcha->setScoreThreshold(0.5);
+        }
+
         $response  = $recaptcha->verify(
             (string) $this->request->getPost('g-recaptcha-response'),
             $this->request->getIPAddress()
