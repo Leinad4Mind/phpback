@@ -33,7 +33,7 @@
         </div>
     <?php else: ?>
         <?php foreach ($ideas as $idea): ?>
-            <div class="bg-card text-card-foreground rounded-lg border shadow-sm p-4 flex flex-col sm:flex-row gap-4 transition-colors hover:border-primary/50">
+            <div class="group relative bg-card text-card-foreground rounded-lg border shadow-sm p-4 flex flex-col sm:flex-row gap-4 transition-colors hover:border-primary/50 cursor-pointer hover:bg-muted/30">
                 <!-- Votes & Status -->
                 <div class="flex flex-col items-center justify-center sm:w-24 shrink-0 bg-muted/30 rounded-md p-3">
                     <div class="text-2xl font-bold text-primary"><?= esc(number_format((int) $idea->votes)) ?></div>
@@ -55,7 +55,8 @@
                 
                 <!-- Content -->
                 <div class="flex-1 flex flex-col">
-                    <a href="<?= esc($idea->url, 'attr') ?>" class="text-lg font-semibold hover:underline hover:text-primary transition-colors line-clamp-1 mb-1">
+                    <a href="<?= esc($idea->url, 'attr') ?>" class="text-lg font-semibold group-hover:underline group-hover:text-primary transition-colors line-clamp-1 mb-1 focus:outline-none">
+                        <span class="absolute inset-0" aria-hidden="true"></span>
                         <?= esc($idea->title) ?>
                     </a>
                     <p class="text-sm text-muted-foreground line-clamp-2 mb-3 flex-1">
