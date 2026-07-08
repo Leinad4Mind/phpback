@@ -94,6 +94,7 @@ return [
     'label_flag' => 'Rapporteren',
     'label_flagged_comments' => 'Gemarkeerde Opmerkingen',
     'label_general_settings' => 'Algemene Instellingen',
+    'label_homepage_sections' => 'Homepage-secties',
     'label_id' => 'ID',
     'label_idea' => 'Idee',
     'label_idea_approve' => 'Goedkeuring idee',

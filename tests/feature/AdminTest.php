@@ -100,4 +100,44 @@ final class AdminTest extends CIUnitTestCase
         $this->withSession($this->adminSession())->post('adminaction/unban', ['id' => $victim]);
         $this->assertSame(0, (int) model(UserModel::class)->find($victim)->banned);
     }
+
+    /**
+     * Regression: CheckboxIsland's hidden sync input only exists in the DOM
+     * when checked, so an unchecked box sends no `setting-{id}` field at all.
+     * The view compensates with a static hidden fallback (value 0) rendered
+     * before the island; this proves editsettings() persists whatever value
+     * actually arrives (0 or 1) and that Home::index() honors it.
+     */
+    public function testHomepageSectionToggleTogglesVisibility(): void
+    {
+        $settings = model(SettingModel::class);
+        $settings->insert(['name' => 'homepage_show_started', 'value' => '1']);
+        $settingId = (int) $settings->getInsertID();
+        // The "Recently Added" section independently aggregates every public
+        // status, so it must be off too or it leaks the idea back onto the
+        // page regardless of the "started" toggle under test.
+        $settings->insert(['name' => 'homepage_show_recent', 'value' => '0']);
+
+        $catId  = model(CategoryModel::class)->addCategory('C', 'd');
+        $ideaId = model(IdeaModel::class)->addIdea('Idea shown when started section is on', 'a long enough description', $this->adminId, $catId);
+        model(IdeaModel::class)->update($ideaId, ['status' => 'started']);
+
+        // Unchecked: only the static hidden fallback (value 0) reaches the server.
+        $this->withSession($this->adminSession())
+            ->post('adminaction/editsettings', ['setting-' . $settingId => '0']);
+        $this->assertSame('0', $settings->where('name', 'homepage_show_started')->first()->value);
+
+        $hidden = $this->get('home');
+        $hidden->assertOK();
+        $hidden->assertDontSee('Idea shown when started section is on');
+
+        // Checked: the island's own hidden input (value 1) reaches the server.
+        $this->withSession($this->adminSession())
+            ->post('adminaction/editsettings', ['setting-' . $settingId => '1']);
+        $this->assertSame('1', $settings->where('name', 'homepage_show_started')->first()->value);
+
+        $shown = $this->get('home');
+        $shown->assertOK();
+        $shown->assertSee('Idea shown when started section is on');
+    }
 }

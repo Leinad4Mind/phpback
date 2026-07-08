@@ -94,6 +94,7 @@ return [
     'label_flag' => 'گزارش',
     'label_flagged_comments' => 'نظرات پرچمدار',
     'label_general_settings' => 'تنظیمات عمومی',
+    'label_homepage_sections' => 'بخش‌های صفحه اصلی',
     'label_id' => 'شناسه',
     'label_idea' => 'نظر ',
     'label_idea_approve' => 'تایید ایده',

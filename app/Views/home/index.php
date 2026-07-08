@@ -94,7 +94,7 @@
         'considered' => 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300',
     ];
 ?>
-<?php if (! empty($ideas['recent'])): ?>
+<?php if ($showSection['recent'] && ! empty($ideas['recent'])): ?>
     <div class="mb-8">
         <h6 class="text-sm font-semibold mb-3 uppercase tracking-wider text-muted-foreground"><?= esc($lang['last_added_ideas']) ?></h6>
         <div class="space-y-2">
@@ -112,6 +112,7 @@
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
     <div class="space-y-8">
+        <?php if ($showSection['completed']): ?>
         <div>
             <h6 class="text-sm font-semibold mb-3 uppercase tracking-wider text-muted-foreground"><?= esc($lang['last_completed_ideas']) ?></h6>
             <div class="space-y-2">
@@ -125,6 +126,8 @@
                 <?php endforeach; ?>
             </div>
         </div>
+        <?php endif; ?>
+        <?php if ($showSection['planned']): ?>
         <div>
             <h6 class="text-sm font-semibold mb-3 uppercase tracking-wider text-muted-foreground"><?= esc($lang['last_planned_ideas']) ?></h6>
             <div class="space-y-2">
@@ -138,9 +141,11 @@
                 <?php endforeach; ?>
             </div>
         </div>
+        <?php endif; ?>
     </div>
 
     <div class="space-y-8">
+        <?php if ($showSection['started']): ?>
         <div>
             <h6 class="text-sm font-semibold mb-3 uppercase tracking-wider text-muted-foreground"><?= esc($lang['last_started_ideas']) ?></h6>
             <div class="space-y-2">
@@ -154,6 +159,8 @@
                 <?php endforeach; ?>
             </div>
         </div>
+        <?php endif; ?>
+        <?php if ($showSection['considered']): ?>
         <div>
             <h6 class="text-sm font-semibold mb-3 uppercase tracking-wider text-muted-foreground"><?= esc($lang['last_considered_ideas']) ?></h6>
             <div class="space-y-2">
@@ -167,6 +174,7 @@
                 <?php endforeach; ?>
             </div>
         </div>
+        <?php endif; ?>
     </div>
 </div>
 

@@ -94,6 +94,7 @@ return [
     'label_flag' => 'รายงาน',
     'label_flagged_comments' => 'ความคิดเห็นที่ถูกรายงาน',
     'label_general_settings' => 'การตั้งค่าทั่วไป',
+    'label_homepage_sections' => 'ส่วนต่างๆ ของหน้าแรก',
     'label_id' => 'ID',
     'label_idea' => 'ไอเดีย',
     'label_idea_approve' => 'อนุมัติไอเดีย',

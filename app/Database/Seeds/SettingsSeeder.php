@@ -29,6 +29,11 @@ class SettingsSeeder extends Seeder
             'captcha_provider'        => 'recaptcha_v2',
             'google_client_id'        => '',
             'google_client_secret'    => '',
+            'homepage_show_completed'  => '1',
+            'homepage_show_started'    => '1',
+            'homepage_show_planned'    => '1',
+            'homepage_show_considered' => '1',
+            'homepage_show_recent'     => '1',
         ];
 
         $table = $this->db->table('settings');

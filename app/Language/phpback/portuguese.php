@@ -95,6 +95,7 @@ return [
     'label_flag' => 'Denunciar',
     'label_flagged_comments' => 'Comentários Denunciados',
     'label_general_settings' => 'Configurações Gerais',
+    'label_homepage_sections' => 'Seções da Página Inicial',
     'label_id' => 'ID',
     'label_idea' => 'Idéia',
     'label_idea_approve' => 'Aprovar Idéia',
