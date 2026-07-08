@@ -173,18 +173,19 @@
 
         <div>
             <div class="bg-card text-card-foreground border shadow-sm rounded-lg p-6">
-                <h3 class="text-lg font-semibold tracking-tight mb-4"><?= esc($lang['label_rename_categories'] ?? 'Rename Categories') ?></h3>
+                <h3 class="text-lg font-semibold tracking-tight mb-4"><?= esc($lang['label_edit_categories'] ?? 'Edit Categories') ?></h3>
                 <form role="form" name="update-form" method="post" action="<?= base_url('adminaction/updatecategories') ?>" class="space-y-4">
                     <?= csrf_field() ?>
-                    <div class="space-y-3 max-h-[500px] overflow-y-auto pr-2">
+                    <div class="space-y-4 max-h-[500px] overflow-y-auto pr-2">
                         <?php foreach ($categories as $cat): ?>
-                        <div class="relative">
+                        <div class="relative bg-muted/20 p-3 rounded-md border space-y-2">
                             <input type="text" name="category-<?= (int) $cat->id ?>" value="<?= esc($cat->name, 'attr') ?>" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+                            <textarea name="description-<?= (int) $cat->id ?>" rows="2" class="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2" placeholder="<?= esc($lang['label_description'] ?? 'Description') ?>"><?= esc($cat->description ?? '') ?></textarea>
                         </div>
                         <?php endforeach; ?>
                     </div>
                     <button name="update-names" type="submit" class="inline-flex w-full items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
-                        <?= esc($lang['label_update_all_names'] ?? 'Update All Names') ?>
+                        <?= esc($lang['label_update_all_categories'] ?? 'Update All') ?>
                     </button>
                 </form>
             </div>

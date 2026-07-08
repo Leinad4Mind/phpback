@@ -183,10 +183,22 @@ class Adminaction extends BaseController
     {
         $categories = model(CategoryModel::class);
         foreach ($categories->getAllKeyed() as $cat) {
-            $new = trim((string) $this->request->getPost('category-' . $cat->id));
-            if ($new !== '' && $new !== $cat->name) {
-                $categories->update($cat->id, ['name' => $new]);
-                $this->log(str_replace(['%s1', '%s2'], [$cat->name, $new], (string) $this->lang('log_category_changed')));
+            $newName = trim((string) $this->request->getPost('category-' . $cat->id));
+            $newDesc = trim((string) $this->request->getPost('description-' . $cat->id));
+            
+            $updates = [];
+            if ($newName !== '' && $newName !== $cat->name) {
+                $updates['name'] = $newName;
+            }
+            if ($newDesc !== ($cat->description ?? '')) {
+                $updates['description'] = $newDesc;
+            }
+
+            if (!empty($updates)) {
+                $categories->update($cat->id, $updates);
+                if (isset($updates['name'])) {
+                    $this->log(str_replace(['%s1', '%s2'], [$cat->name, $newName], (string) $this->lang('log_category_changed')));
+                }
             }
         }
 
