@@ -442,25 +442,6 @@ class Action extends BaseController
         $this->sendMail($message, sprintf((string) ($this->lang('log_commented') ?: 'New comment on #%s'), $ideaId), implode(', ', array_keys($emails)));
     }
 
-    private function sendMail(string $message, string $subject, string $recipients): bool
-    {
-        if ($recipients === '') {
-            return false;
-        }
-
-        $settings = model(SettingModel::class);
-        $from     = (string) ($settings->get('mainmail') ?: 'noreply@example.com');
-
-        $email = service('email');
-        $email->initialize($settings->emailConfig());
-        $email->setFrom($from, 'PHPBack');
-        $email->setTo($recipients);
-        $email->setSubject($subject);
-        $email->setMessage($message);
-
-        return $email->send(false);
-    }
-
     private function lang(string $key): string
     {
         $lang = $this->langArray();

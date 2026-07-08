@@ -75,4 +75,29 @@ final class UserModelTest extends CIUnitTestCase
         $this->assertTrue($users->setAdminLevel($id, 3));
         $this->assertSame(1, (int) $users->find($id)->role_id); // admin -> Admin role
     }
+
+    public function testFindByGoogleIdAndLinkGoogle(): void
+    {
+        $users = model(UserModel::class);
+        $id    = $users->createUser('Dave', 'dave@example.com', 'secret123', 10, 0);
+
+        $this->assertNull($users->findByGoogleId('g-sub-42'));
+
+        $this->assertTrue($users->linkGoogle($id, 'g-sub-42'));
+
+        $found = $users->findByGoogleId('g-sub-42');
+        $this->assertNotNull($found);
+        $this->assertSame($id, (int) $found->id);
+    }
+
+    public function testGoogleIdMustBeUnique(): void
+    {
+        $users = model(UserModel::class);
+        $one   = $users->createUser('One', 'one@example.com', 'secret123', 10, 0);
+        $two   = $users->createUser('Two', 'two@example.com', 'secret123', 10, 0);
+        $users->linkGoogle($one, 'g-sub-dup');
+
+        $this->expectException(\CodeIgniter\Database\Exceptions\DatabaseException::class);
+        $users->linkGoogle($two, 'g-sub-dup');
+    }
 }

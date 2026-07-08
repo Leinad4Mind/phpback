@@ -10,7 +10,7 @@ class UserModel extends Model
     protected $primaryKey    = 'id';
     protected $returnType    = 'object';
     protected $useTimestamps = false;
-    protected $allowedFields = ['name', 'email', 'pass', 'votes', 'isadmin', 'banned', 'role_id'];
+    protected $allowedFields = ['name', 'email', 'pass', 'votes', 'isadmin', 'banned', 'role_id', 'google_id'];
 
     public function findUser(int $id): ?object
     {
@@ -20,6 +20,16 @@ class UserModel extends Model
     public function findByEmail(string $email): ?object
     {
         return $this->where('email', $email)->first();
+    }
+
+    public function findByGoogleId(string $googleId): ?object
+    {
+        return $this->where('google_id', $googleId)->first();
+    }
+
+    public function linkGoogle(int $userId, string $googleId): bool
+    {
+        return $this->update($userId, ['google_id' => $googleId]);
     }
 
     /**
