@@ -77,7 +77,7 @@ class Home extends BaseController
     {
         $id = (int) $id;
         if (! model(CategoryModel::class)->exists($id)) {
-            return redirect()->to('home');
+            return redirect()->to('/');
         }
 
         $ideas   = model(IdeaModel::class);
@@ -117,7 +117,7 @@ class Home extends BaseController
         $ideas = model(IdeaModel::class);
         $idea  = $ideas->getIdea((int) $id);
         if ($idea === null) {
-            return redirect()->to('home');
+            return redirect()->to('/');
         }
 
         $users      = model(UserModel::class);
@@ -149,7 +149,7 @@ class Home extends BaseController
         $users = model(UserModel::class);
         $user  = $users->find((int) $id);
         if ($user === null) {
-            return redirect()->to('home');
+            return redirect()->to('/');
         }
 
         $comments = [];
@@ -183,7 +183,7 @@ class Home extends BaseController
             }
         }
         if (is_logged_in()) {
-            return redirect()->to('home');
+            return redirect()->to('/');
         }
 
         $data                  = $this->defaultData();
@@ -200,7 +200,7 @@ class Home extends BaseController
             return $response;
         }
         if (! is_logged_in()) {
-            return redirect()->to('home/login');
+            return redirect()->to('login');
         }
 
         $data            = $this->defaultData();
@@ -218,7 +218,7 @@ class Home extends BaseController
     public function register($error = '')
     {
         if (is_logged_in()) {
-            return redirect()->to('home');
+            return redirect()->to('/');
         }
 
         $data                    = $this->defaultData();
@@ -291,7 +291,7 @@ class Home extends BaseController
         phpback_login($user);
         $this->issueRememberCookie($userId, $cookie);
 
-        return redirect()->to('home');
+        return redirect()->to('/');
     }
 
     /**
@@ -330,6 +330,6 @@ class Home extends BaseController
             $days = $end ? max(0, (int) (new \DateTime('today'))->diff($end)->days) : 0;
         }
 
-        return redirect()->to('home/login/banned/' . $days);
+        return redirect()->to('login/banned/' . $days);
     }
 }

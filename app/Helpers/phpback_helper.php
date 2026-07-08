@@ -79,7 +79,7 @@ if (! function_exists('link_idea_logs')) {
     {
         $escaped = esc($log->content);
         if (!empty($log->idea_id)) {
-            $url = base_url('home/idea/' . $log->idea_id);
+            $url = base_url('idea/' . $log->idea_id);
             $linkText = !empty($log->idea_title) ? '#' . (int)$log->idea_id . ' - ' . esc($log->idea_title) : '#' . (int)$log->idea_id;
             $link = '<a href="' . esc($url) . '" class="text-primary hover:underline" title="' . esc($log->idea_title ?? '') . '">' . $linkText . '</a>';
             // Replace only the first instance of #idea_id in case there are multiple, but there's typically one.
@@ -88,7 +88,7 @@ if (! function_exists('link_idea_logs')) {
 
         if (!empty($log->toid) && !empty($log->user_name)) {
             $userName = esc($log->user_name);
-            $userUrl = base_url('home/profile/' . $log->toid);
+            $userUrl = base_url('profile/' . $log->toid);
             $userLink = '<a href="' . esc($userUrl) . '" class="text-primary hover:underline">' . $userName . '</a>';
             
             // Try to replace the user name at the end of the string first

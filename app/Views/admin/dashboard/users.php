@@ -33,7 +33,7 @@
                     <?php foreach ($users as $user): ?>
                     <tr class="bg-background hover:bg-muted/50 transition-colors">
                         <td class="px-6 py-4">
-                            <a href="<?= base_url('home/profile/' . $user->id . '/' . url_title((string) $user->name, '-', true)) ?>" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline">#<?= (int) $user->id ?></a>
+                            <a href="<?= base_url('profile/' . $user->id . '/' . url_title((string) $user->name, '-', true)) ?>" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline">#<?= (int) $user->id ?></a>
                         </td>
                         <td class="px-6 py-4 font-medium text-foreground"><?= esc($user->name) ?></td>
                         <td class="px-6 py-4 text-muted-foreground"><?= esc($user->email) ?></td>
@@ -76,7 +76,7 @@
                     <?php foreach ($banned as $user): ?>
                     <tr class="bg-red-50/50 dark:bg-red-900/10 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
                         <td class="px-6 py-4">
-                            <a href="<?= base_url('home/profile/' . $user->id . '/' . url_title((string) $user->name, '-', true)) ?>" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline">#<?= (int) $user->id ?></a>
+                            <a href="<?= base_url('profile/' . $user->id . '/' . url_title((string) $user->name, '-', true)) ?>" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline">#<?= (int) $user->id ?></a>
                         </td>
                         <td class="px-6 py-4 font-medium text-foreground"><?= esc($user->name) ?></td>
                         <td class="px-6 py-4 text-muted-foreground"><?= esc($user->email) ?></td>

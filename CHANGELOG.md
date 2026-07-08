@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ## [v2.0.2] - Unreleased
 ### Features
 - **Sign in with Google:** Native Google OAuth2 login (authorization-code flow with PKCE, no new dependencies). Configure the Client ID/Secret in Admin Panel → System Settings; existing accounts are auto-linked by verified email and unknown emails are auto-registered.
+- **Simplified URLs:** Public pages dropped the `home/` prefix (`/login`, `/register`, `/idea/42`, `/category/…`, `/profile/…`, `/postidea`). Old `home/…` URLs (bookmarks, links in sent emails) permanently redirect to the new ones.
 
 ### Bug Fixes
 - **Infinite Ban Notice:** Fixed a 404 when indefinitely banned users were redirected to the ban notice page (`home/login/banned/-1`).

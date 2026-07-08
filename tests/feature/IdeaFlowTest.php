@@ -66,7 +66,7 @@ final class IdeaFlowTest extends CIUnitTestCase
             'description' => 'a long enough description here for sure',
         ]);
 
-        $result->assertRedirectTo(site_url('home/postidea/errortitle'));
+        $result->assertRedirectTo(site_url('postidea/errortitle'));
         $this->assertNull(model(IdeaModel::class)->getLastIdea());
     }
 
@@ -91,7 +91,7 @@ final class IdeaFlowTest extends CIUnitTestCase
             'title'       => 'Guest idea attempt',
             'category'    => $this->catId,
             'description' => 'a long enough description here for sure',
-        ])->assertRedirectTo(site_url('home/login'));
+        ])->assertRedirectTo(site_url('login'));
 
         $this->assertNull(model(IdeaModel::class)->getLastIdea());
     }

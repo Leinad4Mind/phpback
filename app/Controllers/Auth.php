@@ -23,16 +23,16 @@ class Auth extends BaseController
     public function google()
     {
         if (is_logged_in()) {
-            return redirect()->to('home');
+            return redirect()->to('/');
         }
 
         [$clientId, $clientSecret] = $this->credentials();
         if ($clientId === '' || $clientSecret === '') {
-            return redirect()->to('home/login');
+            return redirect()->to('login');
         }
 
         if (! service('throttler')->check(md5('google_' . $this->request->getIPAddress()), 8, MINUTE)) {
-            return redirect()->to('home/login/toomany');
+            return redirect()->to('login/toomany');
         }
 
         $state    = bin2hex(random_bytes(16));
@@ -53,11 +53,11 @@ class Auth extends BaseController
     public function googleCallback()
     {
         if (is_logged_in()) {
-            return redirect()->to('home');
+            return redirect()->to('/');
         }
 
         if (! service('throttler')->check(md5('google_' . $this->request->getIPAddress()), 8, MINUTE)) {
-            return redirect()->to('home/login/toomany');
+            return redirect()->to('login/toomany');
         }
 
         // Requires Config\Cookie::$samesite = 'Lax': 'Strict' would drop the
@@ -122,7 +122,7 @@ class Auth extends BaseController
 
         phpback_login($user);
 
-        return redirect()->to('home');
+        return redirect()->to('/');
     }
 
     /**
@@ -204,7 +204,7 @@ class Auth extends BaseController
         model(LogModel::class)->add((($lang['log_user_registered'] ?? '') ?: 'New user') . ": {$name}({$email})", 'general', 0);
 
         $title   = (string) ($settings->get('title') ?: 'PHPBack');
-        $message = "Welcome to our feedback: {$title}\n\nYour account has been created for {$email}.\n\nPlease log in here: " . base_url('home/login') . "\n";
+        $message = "Welcome to our feedback: {$title}\n\nYour account has been created for {$email}.\n\nPlease log in here: " . base_url('login') . "\n";
         $this->sendMail($message, "New account - {$title}", $email);
 
         return $users->findUser((int) $newId);
@@ -233,13 +233,13 @@ class Auth extends BaseController
             $days = $end ? max(0, (int) (new \DateTime('today'))->diff($end)->days) : 0;
         }
 
-        return redirect()->to('home/login/banned/' . $days);
+        return redirect()->to('login/banned/' . $days);
     }
 
     private function fail(string $detail): ResponseInterface
     {
         log_message('error', 'Google OAuth: ' . $detail);
 
-        return redirect()->to('home/login/googlefail');
+        return redirect()->to('login/googlefail');
     }
 }

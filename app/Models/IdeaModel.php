@@ -24,7 +24,7 @@ class IdeaModel extends Model
         }
 
         $idea->parsedTitle = url_title($idea->title, '-', true);
-        $idea->url         = base_url('home/idea/' . $idea->id . '/' . $idea->parsedTitle);
+        $idea->url         = base_url('idea/' . $idea->id . '/' . $idea->parsedTitle);
 
         return $idea;
     }

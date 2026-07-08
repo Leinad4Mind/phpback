@@ -39,21 +39,21 @@ final class HomeTest extends CIUnitTestCase
 
     public function testHomepageLoadsAndListsIdeas(): void
     {
-        $result = $this->get('home');
+        $result = $this->get('/');
         $result->assertOK();
         $result->assertSee('Dark mode toggle please');
     }
 
     public function testHomepageStatusFilter(): void
     {
-        $result = $this->get('home?status=considered');
+        $result = $this->get('/?status=considered');
         $result->assertOK();
         $result->assertSee('Dark mode toggle please');
     }
 
     public function testCategoryPageLoads(): void
     {
-        $result = $this->get('home/category/' . $this->catId);
+        $result = $this->get('category/' . $this->catId);
         $result->assertOK();
         $result->assertSee('Feature Requests');
         $result->assertSee('Dark mode toggle please');
@@ -68,7 +68,7 @@ final class HomeTest extends CIUnitTestCase
             'file_type' => 'application/pdf', 'file_size' => 1, 'created_at' => date('Y-m-d H:i:s'),
         ]);
 
-        $result = $this->get('home/idea/' . $this->ideaId);
+        $result = $this->get('idea/' . $this->ideaId);
         $result->assertOK();
         $result->assertSee('ui');
         $result->assertSee('spec.pdf');
@@ -77,8 +77,22 @@ final class HomeTest extends CIUnitTestCase
 
     public function testSearchReturnsMatches(): void
     {
-        $result = $this->post('home/search', ['query' => 'dark']);
+        $result = $this->post('search', ['query' => 'dark']);
         $result->assertOK();
         $result->assertSee('Dark mode toggle please');
+    }
+
+    public function testLegacyHomeUrlsRedirectPermanently(): void
+    {
+        $result = $this->get('home/idea/' . $this->ideaId);
+        $result->assertStatus(301);
+        $this->assertSame(site_url('idea/' . $this->ideaId), $result->getRedirectUrl());
+
+        $result = $this->get('home/login');
+        $result->assertStatus(301);
+        $this->assertSame(site_url('login'), $result->getRedirectUrl());
+
+        $result = $this->get('home');
+        $result->assertStatus(301);
     }
 }

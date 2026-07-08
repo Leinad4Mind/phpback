@@ -67,7 +67,7 @@ function genericError(): string {
 }
 
 function profileUrl(userid: number): string {
-  return `${props.baseUrl.replace(/\/$/, '')}/home/profile/${userid}`
+  return `${props.baseUrl.replace(/\/$/, '')}/profile/${userid}`
 }
 
 async function submitComment() {

@@ -25,35 +25,58 @@ $routes->post('install/run', 'Install::run');
  * Public pages (Home)
  * -------------------------------------------------------------------------
  */
-$routes->get('home', 'Home::index');
-$routes->post('home/search', 'Home::search');
+$routes->post('search', 'Home::search');
 
-$routes->get('home/category/(:num)', 'Home::category/$1');
-$routes->get('home/category/(:num)/(:segment)', 'Home::category/$1/$2');
-$routes->get('home/category/(:num)/(:segment)/(:segment)', 'Home::category/$1/$2/$3');
-$routes->get('home/category/(:num)/(:segment)/(:segment)/(:segment)/(:segment)/(:num)', 'Home::category/$1/$2/$3/$4/$5/$6');
+$routes->get('category/(:num)', 'Home::category/$1');
+$routes->get('category/(:num)/(:segment)', 'Home::category/$1/$2');
+$routes->get('category/(:num)/(:segment)/(:segment)', 'Home::category/$1/$2/$3');
+$routes->get('category/(:num)/(:segment)/(:segment)/(:segment)/(:segment)/(:num)', 'Home::category/$1/$2/$3/$4/$5/$6');
 
-$routes->get('home/idea/(:num)', 'Home::idea/$1');
-$routes->get('home/idea/(:num)/(:segment)', 'Home::idea/$1');
+$routes->get('idea/(:num)', 'Home::idea/$1');
+$routes->get('idea/(:num)/(:segment)', 'Home::idea/$1');
 
-$routes->get('home/profile/(:num)', 'Home::profile/$1');
-$routes->get('home/profile/(:num)/(:segment)', 'Home::profile/$1');
+$routes->get('profile/(:num)', 'Home::profile/$1');
+$routes->get('profile/(:num)/(:segment)', 'Home::profile/$1');
 
-$routes->get('home/login', 'Home::login');
-$routes->get('home/login/(:segment)', 'Home::login/$1');
+$routes->get('login', 'Home::login');
+$routes->get('login/(:segment)', 'Home::login/$1');
 // (:segment), not (:num): infinite bans redirect here with -1 (cast in Home::login)
-$routes->get('home/login/(:segment)/(:segment)', 'Home::login/$1/$2');
+$routes->get('login/(:segment)/(:segment)', 'Home::login/$1/$2');
 
-$routes->get('home/postidea', 'Home::postidea');
-$routes->get('home/postidea/(:segment)', 'Home::postidea/$1');
+$routes->get('postidea', 'Home::postidea');
+$routes->get('postidea/(:segment)', 'Home::postidea/$1');
 
-$routes->get('home/register', 'Home::register');
-$routes->get('home/register/(:segment)', 'Home::register/$1');
+$routes->get('register', 'Home::register');
+$routes->get('register/(:segment)', 'Home::register/$1');
 
 // Google OAuth2 sign-in. GET by design (outside the POST-only CSRF filter);
 // the flow is protected by the session-bound `state` value plus PKCE.
 $routes->get('auth/google', 'Auth::google');
 $routes->get('auth/google/callback', 'Auth::googleCallback');
+
+/*
+ * -------------------------------------------------------------------------
+ * Legacy `home/…` URLs (pre-2.0.2 links, bookmarks and sent emails)
+ * -------------------------------------------------------------------------
+ */
+$routes->addRedirect('home', '/', 301);
+$routes->addRedirect('home/category/(:num)', 'category/(:num)', 301);
+$routes->addRedirect('home/category/(:num)/(:segment)', 'category/(:num)/(:segment)', 301);
+$routes->addRedirect('home/category/(:num)/(:segment)/(:segment)', 'category/(:num)/(:segment)/(:segment)', 301);
+$routes->addRedirect('home/category/(:num)/(:segment)/(:segment)/(:segment)/(:segment)/(:num)', 'category/(:num)/(:segment)/(:segment)/(:segment)/(:segment)/(:num)', 301);
+$routes->addRedirect('home/idea/(:num)', 'idea/(:num)', 301);
+$routes->addRedirect('home/idea/(:num)/(:segment)', 'idea/(:num)/(:segment)', 301);
+$routes->addRedirect('home/profile/(:num)', 'profile/(:num)', 301);
+$routes->addRedirect('home/profile/(:num)/(:segment)', 'profile/(:num)/(:segment)', 301);
+$routes->addRedirect('home/login', 'login', 301);
+$routes->addRedirect('home/login/(:segment)', 'login/(:segment)', 301);
+$routes->addRedirect('home/login/(:segment)/(:segment)', 'login/(:segment)/(:segment)', 301);
+$routes->addRedirect('home/postidea', 'postidea', 301);
+$routes->addRedirect('home/postidea/(:segment)', 'postidea/(:segment)', 301);
+$routes->addRedirect('home/register', 'register', 301);
+$routes->addRedirect('home/register/(:segment)', 'register/(:segment)', 301);
+// A 301 would turn the POST into a GET, so keep a working alias instead.
+$routes->post('home/search', 'Home::search');
 
 /*
  * -------------------------------------------------------------------------

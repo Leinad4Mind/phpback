@@ -43,7 +43,7 @@ final class SecurityTest extends CIUnitTestCase
         $idea = model(IdeaModel::class)->getLastIdea();
         $this->assertNotNull($idea);
 
-        $html = $this->get('home/idea/' . $idea->id)->getBody();
+        $html = $this->get('idea/' . $idea->id)->getBody();
         $this->assertStringNotContainsString('<script>alert(1)</script>', $html);
         $this->assertStringContainsString('&lt;script&gt;alert(1)&lt;/script&gt;', $html);
     }
@@ -60,7 +60,7 @@ final class SecurityTest extends CIUnitTestCase
             'content' => 'Some text <img src=x onerror=alert(2)>',
         ]);
 
-        $html = $this->get('home/idea/' . $ideaId)->getBody();
+        $html = $this->get('idea/' . $ideaId)->getBody();
         $this->assertStringContainsString('Some text', $html);
         $this->assertStringNotContainsString('<img src=x onerror=alert(2)>', $html);
         $this->assertStringNotContainsString('&lt;img', $html);

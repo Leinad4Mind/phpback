@@ -60,7 +60,7 @@ final class GoogleAuthTest extends CIUnitTestCase
 
     public function testLoginPageHidesGoogleButtonWithoutCredentials(): void
     {
-        $result = $this->get('home/login');
+        $result = $this->get('login');
 
         $result->assertOK();
         $this->assertStringNotContainsString('auth/google', (string) $result->response()->getBody());
@@ -70,7 +70,7 @@ final class GoogleAuthTest extends CIUnitTestCase
     {
         $this->enableGoogle();
 
-        foreach (['home/login', 'home/register'] as $page) {
+        foreach (['login', 'register'] as $page) {
             $result = $this->get($page);
             $result->assertOK();
             $this->assertStringContainsString('auth/google', (string) $result->response()->getBody());
@@ -98,7 +98,7 @@ final class GoogleAuthTest extends CIUnitTestCase
     {
         $result = $this->get('auth/google');
 
-        $result->assertRedirectTo(site_url('home/login'));
+        $result->assertRedirectTo(site_url('login'));
     }
 
     public function testCallbackRejectsMissingState(): void
@@ -107,7 +107,7 @@ final class GoogleAuthTest extends CIUnitTestCase
 
         $result = $this->get('auth/google/callback', ['state' => 'anything', 'code' => 'x']);
 
-        $result->assertRedirectTo(site_url('home/login/googlefail'));
+        $result->assertRedirectTo(site_url('login/googlefail'));
     }
 
     public function testCallbackRejectsMismatchedState(): void
@@ -117,7 +117,7 @@ final class GoogleAuthTest extends CIUnitTestCase
         $result = $this->withSession(['oauth2_state' => 'expected', 'oauth2_verifier' => 'v'])
             ->get('auth/google/callback', ['state' => 'wrong', 'code' => 'x']);
 
-        $result->assertRedirectTo(site_url('home/login/googlefail'));
+        $result->assertRedirectTo(site_url('login/googlefail'));
         $this->assertNull(session()->get('oauth2_state'), 'state must be single-use');
     }
 
@@ -128,7 +128,7 @@ final class GoogleAuthTest extends CIUnitTestCase
         $result = $this->withSession(['oauth2_state' => 's', 'oauth2_verifier' => 'v'])
             ->get('auth/google/callback', ['error' => 'access_denied']);
 
-        $result->assertRedirectTo(site_url('home/login/googlefail'));
+        $result->assertRedirectTo(site_url('login/googlefail'));
     }
 
     public function testCallbackRedirectsHomeWhenLoggedIn(): void
@@ -137,7 +137,7 @@ final class GoogleAuthTest extends CIUnitTestCase
             'isLoggedIn' => true, 'userid' => 1, 'username' => 'x', 'isadmin' => 0,
         ])->get('auth/google/callback');
 
-        $result->assertRedirectTo(site_url('home'));
+        $result->assertRedirectTo(site_url('/'));
     }
 
     public function testCallbackLogsInUserLinkedByGoogleId(): void
@@ -155,7 +155,7 @@ final class GoogleAuthTest extends CIUnitTestCase
         $result = $this->withSession(['oauth2_state' => 's', 'oauth2_verifier' => 'v'])
             ->get('auth/google/callback', ['state' => 's', 'code' => 'abc']);
 
-        $result->assertRedirectTo(site_url('home'));
+        $result->assertRedirectTo(site_url('/'));
         $this->assertTrue((bool) session()->get('isLoggedIn'));
         $this->assertSame('linked@example.com', session()->get('email'));
     }
@@ -174,7 +174,7 @@ final class GoogleAuthTest extends CIUnitTestCase
         $result = $this->withSession(['oauth2_state' => 's', 'oauth2_verifier' => 'v'])
             ->get('auth/google/callback', ['state' => 's', 'code' => 'abc']);
 
-        $result->assertRedirectTo(site_url('home'));
+        $result->assertRedirectTo(site_url('/'));
         $this->assertTrue((bool) session()->get('isLoggedIn'));
         $this->assertSame('g-sub-2', $users->find($id)->google_id, 'google_id must be persisted on the matched account');
     }
@@ -191,7 +191,7 @@ final class GoogleAuthTest extends CIUnitTestCase
         $result = $this->withSession(['oauth2_state' => 's', 'oauth2_verifier' => 'v'])
             ->get('auth/google/callback', ['state' => 's', 'code' => 'abc']);
 
-        $result->assertRedirectTo(site_url('home'));
+        $result->assertRedirectTo(site_url('/'));
         $this->assertTrue((bool) session()->get('isLoggedIn'));
 
         $user = model(UserModel::class)->findByEmail('new.google@example.com');
@@ -214,7 +214,7 @@ final class GoogleAuthTest extends CIUnitTestCase
         $result = $this->withSession(['oauth2_state' => 's', 'oauth2_verifier' => 'v'])
             ->get('auth/google/callback', ['state' => 's', 'code' => 'abc']);
 
-        $result->assertRedirectTo(site_url('home/login/googlefail'));
+        $result->assertRedirectTo(site_url('login/googlefail'));
         $this->assertNull(session()->get('isLoggedIn'));
         $this->assertNull(model(UserModel::class)->findByEmail('unverified@example.com'));
     }
@@ -235,14 +235,14 @@ final class GoogleAuthTest extends CIUnitTestCase
         $result = $this->withSession(['oauth2_state' => 's', 'oauth2_verifier' => 'v'])
             ->get('auth/google/callback', ['state' => 's', 'code' => 'abc']);
 
-        $result->assertRedirectTo(site_url('home/login/banned/-1'));
+        $result->assertRedirectTo(site_url('login/banned/-1'));
         $this->assertNull(session()->get('isLoggedIn'));
     }
 
     public function testInfiniteBanNoticeRouteResolves(): void
     {
         // Regression: the (:num) placeholder used to 404 on the -1 segment.
-        $result = $this->get('home/login/banned/-1');
+        $result = $this->get('login/banned/-1');
 
         $result->assertOK();
     }

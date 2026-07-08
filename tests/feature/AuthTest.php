@@ -33,7 +33,7 @@ final class AuthTest extends CIUnitTestCase
             'password2' => 'secret123',
         ]);
 
-        $result->assertRedirectTo(site_url('home/login/register'));
+        $result->assertRedirectTo(site_url('login/register'));
         $this->assertNotNull(model(UserModel::class)->findByEmail('new@example.com'));
     }
 
@@ -48,7 +48,7 @@ final class AuthTest extends CIUnitTestCase
             'password2' => 'secret123',
         ]);
 
-        $result->assertRedirectTo(site_url('home/register/exists'));
+        $result->assertRedirectTo(site_url('register/exists'));
     }
 
     public function testRegisterRejectsShortPassword(): void
@@ -60,7 +60,7 @@ final class AuthTest extends CIUnitTestCase
             'password2' => '123',
         ]);
 
-        $result->assertRedirectTo(site_url('home/register/pass'));
+        $result->assertRedirectTo(site_url('register/pass'));
         $this->assertNull(model(UserModel::class)->findByEmail('short@example.com'));
     }
 
@@ -73,7 +73,7 @@ final class AuthTest extends CIUnitTestCase
             'password' => 'secret123',
         ]);
 
-        $result->assertRedirectTo(site_url('home'));
+        $result->assertRedirectTo(site_url('/'));
         $this->assertTrue((bool) session()->get('isLoggedIn'));
         $this->assertSame('login@example.com', session()->get('email'));
     }
@@ -87,7 +87,7 @@ final class AuthTest extends CIUnitTestCase
             'password' => 'wrong-password',
         ]);
 
-        $result->assertRedirectTo(site_url('home/login/errorlogin'));
+        $result->assertRedirectTo(site_url('login/errorlogin'));
         $this->assertNull(session()->get('isLoggedIn'));
     }
 
@@ -97,6 +97,6 @@ final class AuthTest extends CIUnitTestCase
             'isLoggedIn' => true, 'userid' => 1, 'username' => 'x', 'isadmin' => 0,
         ])->post('action/logout');
 
-        $result->assertRedirectTo(site_url('home'));
+        $result->assertRedirectTo(site_url('/'));
     }
 }

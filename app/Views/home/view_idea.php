@@ -12,7 +12,7 @@
                 <svg class="w-3 h-3 mx-1 text-muted-foreground" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
                 </svg>
-                <a href="<?= esc(base_url('home/category/' . $idea->categoryid . '/' . url_title($categories[$idea->categoryid]->name, '-', true)), 'attr') ?>" class="ml-1 hover:text-foreground transition-colors md:ml-2"><?= esc($categories[$idea->categoryid]->name) ?></a>
+                <a href="<?= esc(base_url('category/' . $idea->categoryid . '/' . url_title($categories[$idea->categoryid]->name, '-', true)), 'attr') ?>" class="ml-1 hover:text-foreground transition-colors md:ml-2"><?= esc($categories[$idea->categoryid]->name) ?></a>
             </div>
         </li>
         <li aria-current="page">
@@ -58,7 +58,7 @@
             <div class="text-3xl font-bold text-primary mb-1"><?= esc(number_format((int) $idea->votes)) ?></div>
             <div class="text-xs uppercase tracking-wider text-muted-foreground font-semibold mb-4"><?= esc($lang['label_votes']) ?></div>
             <div class="flex flex-col items-center w-full">
-                <a href="<?= base_url('home/login') ?>" class="text-[10px] uppercase font-semibold text-primary hover:underline"><?= esc($lang['text_login_to_vote']) ?></a>
+                <a href="<?= base_url('login') ?>" class="text-[10px] uppercase font-semibold text-primary hover:underline"><?= esc($lang['text_login_to_vote']) ?></a>
             </div>
         </div>
         <?php endif; ?>
@@ -90,7 +90,7 @@
                     <?= esc($idea->comments) ?> <?= esc($lang['label_comments']) ?>
                 </span>
                 
-                <a href="<?= esc(base_url('home/category/' . $idea->categoryid . '/' . url_title($categories[$idea->categoryid]->name, '-', true)), 'attr') ?>" class="text-muted-foreground hover:text-foreground flex items-center gap-1">
+                <a href="<?= esc(base_url('category/' . $idea->categoryid . '/' . url_title($categories[$idea->categoryid]->name, '-', true)), 'attr') ?>" class="text-muted-foreground hover:text-foreground flex items-center gap-1">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
                     <?= esc($categories[$idea->categoryid]->name) ?>
                 </a>
@@ -98,7 +98,7 @@
 
             <div class="flex items-center text-sm text-muted-foreground bg-muted/30 p-3 rounded-lg border border-dashed">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                <a href="<?= base_url('home/profile/' . $idea->authorid . '/' . url_title((string) $idea->user, '-', true)) ?>" class="font-medium text-foreground hover:underline mr-1"><?= esc($idea->user) ?></a>
+                <a href="<?= base_url('profile/' . $idea->authorid . '/' . url_title((string) $idea->user, '-', true)) ?>" class="font-medium text-foreground hover:underline mr-1"><?= esc($idea->user) ?></a>
                 <span><?= esc($lang['text_shared_this_idea']) ?></span>
                 <span class="mx-2">&bull;</span>
                 <span><?= esc($idea->date) ?></span>

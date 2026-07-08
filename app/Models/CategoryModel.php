@@ -21,7 +21,7 @@ class CategoryModel extends Model
     {
         $list = [];
         foreach ($this->orderBy('name', 'ASC')->findAll() as $category) {
-            $category->url = base_url('home/category/' . $category->id . '/' . url_title($category->name, '-', true));
+            $category->url = base_url('category/' . $category->id . '/' . url_title($category->name, '-', true));
             $list[$category->id] = $category;
         }
 

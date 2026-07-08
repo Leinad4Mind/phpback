@@ -63,7 +63,7 @@
 
                     <div data-vue-component="UserDropdownIsland" data-props="<?= esc(json_encode([
                         'username' => current_username(),
-                        'profileUrl' => base_url('home/profile/' . current_user_id() . '/' . url_title((string) current_username(), '-', true)),
+                        'profileUrl' => base_url('profile/' . current_user_id() . '/' . url_title((string) current_username(), '-', true)),
                         'isAdmin' => true,
                         'adminUrl' => base_url(),
                         'logoutUrl' => base_url('action/logout'),

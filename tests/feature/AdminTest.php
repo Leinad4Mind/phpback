@@ -127,7 +127,7 @@ final class AdminTest extends CIUnitTestCase
             ->post('adminaction/editsettings', ['setting-' . $settingId => '0']);
         $this->assertSame('0', $settings->where('name', 'homepage_show_started')->first()->value);
 
-        $hidden = $this->get('home');
+        $hidden = $this->get('/');
         $hidden->assertOK();
         $hidden->assertDontSee('Idea shown when started section is on');
 
@@ -136,7 +136,7 @@ final class AdminTest extends CIUnitTestCase
             ->post('adminaction/editsettings', ['setting-' . $settingId => '1']);
         $this->assertSame('1', $settings->where('name', 'homepage_show_started')->first()->value);
 
-        $shown = $this->get('home');
+        $shown = $this->get('/');
         $shown->assertOK();
         $shown->assertSee('Idea shown when started section is on');
     }
