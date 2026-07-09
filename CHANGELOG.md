@@ -8,8 +8,11 @@ All notable changes to this project will be documented in this file.
 - **Simplified URLs:** Public pages dropped the `home/` prefix (`/login`, `/register`, `/idea/42`, `/category/…`, `/profile/…`, `/postidea`). Old `home/…` URLs (bookmarks, links in sent emails) permanently redirect to the new ones.
 - **Recently Added Ideas:** New homepage section surfacing the newest approved ideas across every status, so fresh activity doesn't get buried in the status-specific lists.
 - **Configurable Homepage Sections:** Administrators can now choose which of the five homepage sections (Completed, Started, Planned, Considered, Recently Added) are shown, from Admin Panel → System Settings.
+- **Admin Idea Visibility:** Administrators can now view and filter by "New / Pending" ideas directly from the public frontend (homepage and category pages).
+- **Unapprove Ideas:** Administrators can now revert an approved idea back to the "New / Pending" state directly from the idea's status dropdown.
 
 ### Bug Fixes
+- **Category Counters Sync:** Fixed a core logic issue where category idea counters would become permanently desynced (showing incorrect counts) when ideas were repeatedly approved or when their statuses were changed back-and-forth by administrators.
 - **Infinite Ban Notice:** Fixed a 404 when indefinitely banned users were redirected to the ban notice page (`home/login/banned/-1`).
 - **Empty Homepage Sections:** A homepage section no longer shows its heading when it has no ideas or has been disabled; visible sections now flow into a single grid instead of leaving gaps.
 
