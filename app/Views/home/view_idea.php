@@ -153,6 +153,7 @@
                 'initialCsrfHash' => csrf_hash(),
                 'updateUrl' => base_url('adminaction/ideastatus'),
                 'statuses' => [
+                    'new' => $lang['idea_new'] ?? 'New',
                     'declined' => $lang['idea_declined'],
                     'considered' => $lang['idea_considered'],
                     'planned' => $lang['idea_planned'],
