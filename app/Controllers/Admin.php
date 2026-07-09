@@ -11,7 +11,7 @@ use App\Models\UserModel;
 
 class Admin extends BaseController
 {
-    public const VERSION = '2.0.0';
+    public const VERSION = '2.1.0';
 
     /**
      * Admin login screen (public). Authenticated admins are sent to the

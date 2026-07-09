@@ -2,13 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
-## [v2.0.2] - Unreleased
+## [v2.1.0] - 2026-07-08
 ### Features
 - **Sign in with Google:** Native Google OAuth2 login (authorization-code flow with PKCE, no new dependencies). Configure the Client ID/Secret in Admin Panel → System Settings; existing accounts are auto-linked by verified email and unknown emails are auto-registered.
 - **Simplified URLs:** Public pages dropped the `home/` prefix (`/login`, `/register`, `/idea/42`, `/category/…`, `/profile/…`, `/postidea`). Old `home/…` URLs (bookmarks, links in sent emails) permanently redirect to the new ones.
+- **Recently Added Ideas:** New homepage section surfacing the newest approved ideas across every status, so fresh activity doesn't get buried in the status-specific lists.
+- **Configurable Homepage Sections:** Administrators can now choose which of the five homepage sections (Completed, Started, Planned, Considered, Recently Added) are shown, from Admin Panel → System Settings.
 
 ### Bug Fixes
 - **Infinite Ban Notice:** Fixed a 404 when indefinitely banned users were redirected to the ban notice page (`home/login/banned/-1`).
+- **Empty Homepage Sections:** A homepage section no longer shows its heading when it has no ideas or has been disabled; visible sections now flow into a single grid instead of leaving gaps.
 
 ---
 
