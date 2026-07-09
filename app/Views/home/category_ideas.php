@@ -35,6 +35,9 @@
     <span class="text-sm font-medium text-muted-foreground mr-2"><?= esc($lang['label_status']) ?>:</span>
     <?php
         $statusOptions = ['all' => 'All', 'considered' => 'idea_considered', 'planned' => 'idea_planned', 'started' => 'idea_started', 'completed' => 'idea_completed', 'declined' => 'idea_declined'];
+        if (is_admin(1)) {
+            $statusOptions['new'] = 'idea_new';
+        }
     ?>
     <?php foreach ($statusOptions as $value => $labelKey): ?>
         <a href="<?= esc($category->url . '/' . $value . '/' . $order . '/' . $type . '/1', 'attr') ?>" 

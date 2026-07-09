@@ -41,12 +41,13 @@ class Home extends BaseController
             : $welcomeDescription;
 
         $filters = [
-            'category' => $this->request->getGet('category'),
-            'status'   => $this->request->getGet('status'),
-            'tag'      => $this->request->getGet('tag'),
-            'sort'     => $this->request->getGet('sort'),
-            'limit'    => 10,
-            'page'     => $this->request->getGet('page') ?? 1,
+            'category'   => $this->request->getGet('category'),
+            'status'     => $this->request->getGet('status'),
+            'tag'        => $this->request->getGet('tag'),
+            'sort'       => $this->request->getGet('sort'),
+            'limit'      => 10,
+            'page'       => $this->request->getGet('page') ?? 1,
+            'includeNew' => is_admin(1),
         ];
 
         $hasFilter              = ! empty($filters['status']) || ! empty($filters['tag']) || ! empty($filters['category']);
@@ -62,12 +63,17 @@ class Home extends BaseController
             'recent'     => $settings->get('homepage_show_recent') !== '0',
         ];
         $data['showSection'] = $showSection;
+        $recentStatuses = ['considered', 'planned', 'started', 'completed'];
+        if (is_admin(1)) {
+            $recentStatuses[] = 'new';
+        }
+
         $data['ideas']       = [
             'completed'  => $showSection['completed']  ? $ideas->getIdeas('id', true, 0, 10, ['completed']) : [],
             'started'    => $showSection['started']    ? $ideas->getIdeas('id', true, 0, 10, ['started']) : [],
             'planned'    => $showSection['planned']    ? $ideas->getIdeas('id', true, 0, 10, ['planned']) : [],
             'considered' => $showSection['considered'] ? $ideas->getIdeas('id', true, 0, 10, ['considered']) : [],
-            'recent'     => $showSection['recent']     ? $ideas->getIdeas('id', true, 0, 10, ['considered', 'planned', 'started', 'completed']) : [],
+            'recent'     => $showSection['recent']     ? $ideas->getIdeas('id', true, 0, 10, $recentStatuses) : [],
         ];
 
         return $this->render('home/index', $data);
@@ -86,8 +92,8 @@ class Home extends BaseController
 
         $data                = $this->defaultData();
         $data['category']    = $data['categories'][$id];
-        $data['ideas']       = $ideas->getByCategory($id, $order, $type, $page, $status ?: null, $perPage);
-        $total               = $ideas->countApproved($id);
+        $data['ideas']       = $ideas->getByCategory($id, $order, $type, $page, $status ?: null, $perPage, is_admin(1));
+        $total               = $ideas->countApproved($id, is_admin(1));
         $data['max_results'] = $perPage;
         $data['page']        = $page;
         $data['pages']       = (int) ceil($total / max(1, $perPage));
@@ -103,7 +109,7 @@ class Home extends BaseController
         $data          = $this->defaultData();
         $query         = (string) $this->request->getPost('query');
         $data['query'] = $query;
-        $data['ideas'] = model(IdeaModel::class)->search($query);
+        $data['ideas'] = model(IdeaModel::class)->search($query, is_admin(1));
 
         return $this->render('home/search_results', $data);
     }
