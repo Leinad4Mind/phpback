@@ -258,26 +258,20 @@ class IdeaModel extends Model
     }
 
     /**
-     * Approves a 'new' idea (-> considered) and bumps the category counter.
+     * Approves a 'new' idea (-> considered).
      */
     public function approve(int $id): void
     {
-        $idea = $this->find($id);
-        if ($idea === null) {
-            return;
-        }
-
         $this->changeStatus($id, 'considered');
-        model(CategoryModel::class)->adjustCount((int) $idea->categoryid, +1);
     }
 
     /**
      * Changes an idea's status, restoring spent votes when it becomes
      * completed/declined and keeping the category counter in sync.
      */
-    public function changeStatus(int $id, string $status): void
+    public function changeStatus(int $id, string $newStatus): void
     {
-        if (! in_array($status, self::STATUSES, true)) {
+        if (! in_array($newStatus, self::STATUSES, true)) {
             return;
         }
 
@@ -286,15 +280,25 @@ class IdeaModel extends Model
             return;
         }
 
-        if ($status === 'completed' || $status === 'declined') {
-            $this->restoreVotes($id);
-
-            if ($status === 'declined' && $idea->status !== 'new') {
-                model(CategoryModel::class)->adjustCount((int) $idea->categoryid, -1);
-            }
+        $oldStatus = $idea->status;
+        if ($oldStatus === $newStatus) {
+            return;
         }
 
-        $this->update($id, ['status' => $status]);
+        if ($newStatus === 'completed' || $newStatus === 'declined') {
+            $this->restoreVotes($id);
+        }
+
+        $wasCounted = !in_array($oldStatus, ['new', 'declined'], true);
+        $willBeCounted = !in_array($newStatus, ['new', 'declined'], true);
+
+        if ($wasCounted && !$willBeCounted) {
+            model(CategoryModel::class)->adjustCount((int) $idea->categoryid, -1);
+        } elseif (!$wasCounted && $willBeCounted) {
+            model(CategoryModel::class)->adjustCount((int) $idea->categoryid, +1);
+        }
+
+        $this->update($id, ['status' => $newStatus]);
     }
 
     /**
