@@ -83,17 +83,23 @@ class IdeaModel extends Model
      *
      * @return list<object>
      */
-    public function getByCategory(int $categoryId, string $order = 'votes', string $type = 'desc', int $page = 1, ?string $status = null, int $perPage = 20): array
+    public function getByCategory(int $categoryId, string $order = 'votes', string $type = 'desc', int $page = 1, ?string $status = null, int $perPage = 20, bool $includeNew = false): array
     {
         $orderColumn = in_array($order, ['id', 'title', 'votes'], true) ? $order : 'votes';
         $direction   = strtolower($type) === 'asc' ? 'ASC' : 'DESC';
 
         $builder = $this->db->table('ideas')->where('categoryid', $categoryId);
 
-        if ($status !== null && in_array($status, self::STATUSES, true) && $status !== 'new') {
-            $builder->where('status', $status);
+        if ($status !== null && in_array($status, self::STATUSES, true)) {
+            if ($status === 'new' && !$includeNew) {
+                $builder->where('status !=', 'new');
+            } else {
+                $builder->where('status', $status);
+            }
         } else {
-            $builder->where('status !=', 'new');
+            if (!$includeNew) {
+                $builder->where('status !=', 'new');
+            }
         }
 
         $builder->orderBy($orderColumn, $direction);
@@ -105,9 +111,13 @@ class IdeaModel extends Model
         return $this->decorateMany($builder->get()->getResult());
     }
 
-    public function countApproved(int $categoryId): int
+    public function countApproved(int $categoryId, bool $includeNew = false): int
     {
-        return $this->where('categoryid', $categoryId)->where('status !=', 'new')->countAllResults();
+        $builder = $this->where('categoryid', $categoryId);
+        if (!$includeNew) {
+            $builder->where('status !=', 'new');
+        }
+        return $builder->countAllResults();
     }
 
     /**
@@ -130,6 +140,7 @@ class IdeaModel extends Model
     public function getFiltered(array $filters): array
     {
         $builder = $this->db->table('ideas')->select('ideas.*');
+        $includeNew = !empty($filters['includeNew']);
 
         if (! empty($filters['tag'])) {
             $builder->join('idea_tags', 'ideas.id = idea_tags.idea_id')
@@ -145,7 +156,10 @@ class IdeaModel extends Model
                 $builder->where('ideas.status', $filters['status']);
             }
         }
-        $builder->where('ideas.status !=', 'new');
+        
+        if (!$includeNew) {
+            $builder->where('ideas.status !=', 'new');
+        }
 
         if (($filters['sort'] ?? '') === 'votes') {
             $builder->orderBy('ideas.votes', 'DESC');
@@ -163,7 +177,7 @@ class IdeaModel extends Model
     /**
      * @return list<object>
      */
-    public function search(string $query): array
+    public function search(string $query, bool $includeNew = false): array
     {
         $keywords = array_filter(array_map('trim', explode(' ', $query)));
         if ($keywords === []) {
@@ -174,7 +188,13 @@ class IdeaModel extends Model
         foreach ($keywords as $keyword) {
             $builder->orLike('title', $keyword);
         }
-        $builder->groupEnd()->orderBy('votes', 'DESC');
+        $builder->groupEnd();
+        
+        if (!$includeNew) {
+            $builder->where('status !=', 'new');
+        }
+        
+        $builder->orderBy('votes', 'DESC');
 
         return $this->decorateMany($builder->get()->getResult());
     }

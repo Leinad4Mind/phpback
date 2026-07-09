@@ -40,8 +40,14 @@
         <label class="text-sm font-medium"><?= esc($lang['label_status']) ?>:</label>
         <select name="status" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
             <option value="">-- <?= esc($lang['text_all']) ?> --</option>
-            <?php foreach (['completed', 'started', 'planned', 'considered', 'declined'] as $st): ?>
-                <option value="<?= $st ?>" <?= (($filters['status'] ?? '') === $st) ? 'selected' : '' ?>><?= esc($lang['idea_' . $st]) ?></option>
+            <?php 
+                $statusList = ['completed', 'started', 'planned', 'considered', 'declined'];
+                if (is_admin(1)) {
+                    $statusList[] = 'new';
+                }
+                foreach ($statusList as $st): 
+            ?>
+                <option value="<?= $st ?>" <?= (($filters['status'] ?? '') === $st) ? 'selected' : '' ?>><?= esc($lang['idea_' . $st] ?? ucfirst($st)) ?></option>
             <?php endforeach; ?>
         </select>
     </div>
